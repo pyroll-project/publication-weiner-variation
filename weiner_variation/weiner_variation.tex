@@ -1,0 +1,123 @@
+% Preamble
+\documentclass[DIV=13]{scrartcl}
+
+% Packages
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{tabu}
+\usepackage{graphicx}
+\usepackage[expansion=false]{microtype}
+\usepackage[sorting=none, maxbibnames=99, maxcitenames=2,backend=biber]{biblatex}
+\usepackage{subcaption}
+\usepackage[hidelinks]{hyperref}
+\usepackage{csquotes}
+
+%\usepackage[newfloat]{minted}
+%\usemintedstyle{friendly}
+%\setminted{
+%    fontsize={\small}
+%}
+
+\addbibresource{refs.bib}
+\usepackage{symbols}
+
+% Document
+\begin{document}
+    \title{Rolling Process Variation Estimation Using a Monte-Carlo Method}
+    \date{\today}
+    \author{
+        M. Weiner \thanks{Corresponding author}
+        \and
+        C. Renzing
+%        \and
+%        M. Stirl
+        \and
+        M. Schmidtchen
+        \and
+        U. Prahl
+    }
+
+    \extratitle{
+        \minisec{Max Weiner}
+        max.weiner@imf.tu-freiberg.de\\
+        Conceptualization, Methodology, Software, Formal analysis, Validation, Investigation, Writing - Original Draft\\
+        Institute of Metals Forming, TU Bergakademie Freiberg
+
+        \minisec{Christoph Renzing}
+        christoph.renzing@imf.tu-freiberg.de\\
+        Conceptualization, Methodology, Software, Formal analysis, Validation, Investigation, Project administration, Writing - Original Draft\\
+        Institute of Metals Forming, TU Bergakademie Freiberg
+
+%        \minisec{Max Stirl}
+%        max.stirl@imf.tu-freiberg.de\\
+%        Writing - Review \& Editing\\
+%        Institute of Metals Forming, TU Bergakademie Freiberg
+
+        \minisec{Matthias Schmidtchen}
+        matthias.schmidtchen@imf.tu-freiberg.de\\
+        Conceptualization, Supervision, Resources, Project administration, Writing - Review \& Editing\\
+        Institute of Metals Forming, TU Bergakademie Freiberg
+
+        \minisec{Ulrich Prahl}
+        ulrich.prahl@imf.tu-freiberg.de\\
+        Supervision, Resources, Writing - Review \& Editing\\
+        Institute of Metals Forming, TU Bergakademie Freiberg
+
+        \vfill
+
+        \minisec{Funding}
+        Not applicable.
+
+        \minisec{Data Availability}
+        Data openly available in a public repository that does not issue DOIs.
+        Source code and data are available on GitHub at the following URLs:
+        \begin{description}
+            \item[Project Home] \url{https://github.com/pyroll-project}
+            \item[Core Package] \url{https://github.com/pyroll-project/pyroll-core}
+            \item[Benchmark Input and Data] \url{https://github.com/pyroll-project/pyroll-pub1-benchmark}
+        \end{description}
+
+        \minisec{Conflicts of Interest}
+        The authors declare no conflicts of interest.
+
+        \minisec{Acknowledgements}
+        The authors thank Richard Pfeifer and Lukas Göschel for the preparation of the data.
+
+        \minisec{Keywords}
+        Rolling Simulation; Open Source; Groove Rolling
+    }
+
+    \maketitle
+
+    \begin{abstract}
+
+    \end{abstract}
+
+
+    \section{Introduction}\label{sec:introduction}
+
+    \input{sections/introduction}
+
+
+    \section{Methods}\label{sec:methods}
+
+    \input{sections/methods}
+
+
+    \section{Results}\label{sec:results}
+
+    \input{sections/results}
+
+
+    \section{Summary and Outlook}\label{sec:summary}
+
+    \input{sections/summary}
+
+    \printbibliography
+
+\end{document}
