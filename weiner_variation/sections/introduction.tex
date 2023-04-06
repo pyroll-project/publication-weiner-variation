@@ -1,0 +1,28 @@
+The term Monte Carlo Method (MCM) generally refers to a class of methods, which are characterized by the use of random numbers.
+These methods are rather diverse and serve different purposes.
+Here, the term shall be used for the concept of drawing random numbers as input for a function and analysing the results of several evaluations of this function, with different random inputs, with statistical methods.
+A detailed overview on this type of Monte Carlo methods is given by \textcite{Lemieux2009}.
+The nature of the function can be complex, even of a black-box type, where nothing about the internals of the function is known but the input and output interfaces.
+In this case, Monte Carlo methods can provide valuable information about the behavior of the function while altering inputs.
+
+Here, the function equals the simulation procedure, so it is generally known, but complex.
+For example, it is generally not possible, to compute derivatives of the outputs in dependence on the inputs in an analytical way.
+Even numerical derivation is hard, due to the multi-dimensional nature of most natural or technical systems.
+
+The use of Monte Carlo methods for the analysis of variations in technical processes was reported before in the field of assembly of complex structures, like in mechanical engineering and building construction (f.e.~\cite{Lin1997, Shen2005, Dantan2009, Qureshi2012, Yan2015, Rausch2019}).
+However, in the field of rolling processes, there was no such attempt yet to the knowledge of the authors.
+The authors have previously used a similar approach to model powder morphology influences in sintering processes~\cite{Weiner2022, Weiner2022b}.
+The current work shall show the possibility of the application of Monte Carlo methods for the analysis of process variations in rolling processes.
+The focus lies hereby on the estimation of the workpiece temperature evolution.
+The temperature evolution is crucial for the microstructure development of the workpiece, which shall be investigated in a following work.
+The influence of variations in the initial workpiece and within the regarded process route is analysed and evaluated.
+Due to the need of a large number of function evaluations (simulation runs), the evaluation speed of the process model is crucial to the applicability of this approach.
+
+Rolling simulation is currently dominated by the use of finite element (FE) based models.
+These are offering high accuracy and high resolution results at the expense of high computational resource usage.
+So these methods are inconvenient for the current need.
+Therefore, one-dimensional approaches shall be used here.
+These offer less accuracy and limited resolution, but are computable within fractions of seconds on typical personal computer systems.
+The current work is based on the open-source rolling simulation framework PyRolL~\cite{pyroll}, developed by the authors, which is a fast, open and flexible software package mainly aimed at groove rolling in reduction passes.
+The models used for the different parts of the problem can be exchanged and extended with low effort to the users needs.
+
