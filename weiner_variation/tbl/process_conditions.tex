@@ -1,0 +1,10 @@
+\begin{tblr}{colspec={l|XXX}}
+    \toprule
+    \#             & Type                       & Width                                                  & Height                                                 \\
+    &                            & \unit{\milli\meter}                                    & \unit{\milli\meter}                                    \\
+    \midrule
+    {% for p in roll_passes %}
+    {{loop.index}} & {{ p | format_pass_type }} & \num{ {{- (p.out_profile.width * 1e3) | round(1) -}} } & \num{ {{-  (p.out_profile.height * 1e3) | round(1) -}} } \\
+    {% endfor %}
+    \bottomrule
+\end{tblr}

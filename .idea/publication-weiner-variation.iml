@@ -7,4 +7,15 @@
     <orderEntry type="jdk" jdkName="Python 3.10 (publication-weiner-variation)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="TemplatesService">
+    <option name="templateFileTypes">
+      <list>
+        <option value="HTML" />
+        <option value="LaTeX source file" />
+        <option value="XHTML" />
+        <option value="XML" />
+      </list>
+    </option>
+    <option name="TEMPLATE_CONFIGURATION" value="Jinja2" />
+  </component>
 </module>

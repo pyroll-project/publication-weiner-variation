@@ -1,3 +1,4 @@
-#ensure_path('TEXINPUTS', '..:');
+ensure_path('TEXINPUTS', '.');
 $pdf_mode = 4;
 $do_cd = 1;
+$ENV{TEXINPUTS} = "./.build/$search_path_separator$ENV{TEXINPUTS}";

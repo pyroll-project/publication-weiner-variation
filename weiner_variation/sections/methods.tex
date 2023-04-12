@@ -1,10 +1,27 @@
 \subsection{Experimental Procedure}\label{subsec:experimental-procedure}
 
-The Institute of Metal Forming operates a semi-continuous experimental rolling plant, which is the object of the current investigation.
+
+The object of the current investigation is the operation of the experimental semi-continuous rolling plant located at the Institute of Metal Forming, TU Bergakademie Freiberg.
 It consists of a two-high reversing roughing stand and four continuous finishing stands.
 The pass schedule of the current work consists of 10 oval-round reversing passes followed by 4 oval-round continuous finishing passes.
 A \qty{50}{\milli\meter} round workpiece made of a mild structural steel is rolled down to \qty{8}{\milli\meter} diameter.
 Details of the schedule are provided in the supplemental material~\cite{esaform2023_weiner_supp}, as the exact properties of the pass schedule are of minor importance for the statements of this work.
+
+\begin{figure}
+    \centering
+    \includegraphics{img/plot_pass_sequence}
+    \caption{True Scaled Illustration of the Investigated Pass Sequence}
+    \label{fig:plot_pass_sequence}
+\end{figure}
+
+
+\begin{table}
+    \centering
+    \caption{Principal Data of the Investigated Pass Sequence}
+    \label{tab:process_conditions}
+    \input{tbl/process_conditions}
+\end{table}
+
 
 \subsection{Monte-Carlo Approach}\label{subsec:monte-carlo-approach}
 
@@ -67,3 +84,14 @@ They typically combine empirical approaches with simplified analytical solutions
 The simulation was done with the basic configuration of PyRolL, which includes the empirical roll force and torque model of \textcite{Hensel1978}, an integral thermal model approach according to \textcite{Hensel1990}, contact area estimation according to \textcite{Zouhar1960} and roll flattening according to \textcite{Hitchcock1935}.
 Spreading was simulated using the equivalent flat pass according to \citeauthor*{Lendl1948}~\cite{Lendl1948, Lendl1948a, Lendl1949} in conjunction with the spreading equation of \textcite{Wusatowski1969}.
 Details of software construction and model equations are provided in the documentation of PyRolL~\cite{pyroll}.
+
+The object of the current investigation is the operation of the experimental semi-continuous rolling plant located at the Institute of Metal Forming, TU Bergakademie Freiberg.
+The process consists of several reversing passes and up to four continuous finishing passes.
+The feeding in the reversing passes is done manually, so there is an obvious source of variation in process, since the human operator can not achieve precisely a defined duration between the passes.
+In this work the evolution of variation regarding temperature and microstructure state
+
+\begin{enumerate}
+    \item What is the difference in behavior of variations sourced in the input workpiece and arising within the process?
+    \item What is the influence of elastic mill response on the variational behavior of the process?
+    \item Is there a minimum number of passes needed to eliminate variations of the input workpiece?
+\end{enumerate}
