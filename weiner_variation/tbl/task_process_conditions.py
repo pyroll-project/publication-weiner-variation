@@ -5,7 +5,7 @@ import pytask
 from pathlib import Path
 import jinja2
 
-from weiner_variation.config import ROOT_DIR, BUILD_DIR
+from weiner_variation.config import ROOT_DIR, BUILD_DIR, SIM_DIR
 from weiner_variation.sim.process import IN_PROFILE, PASS_SEQUENCE
 import pyroll.core as pr
 
@@ -22,6 +22,7 @@ def format_pass_type(value: pr.RollPass):
 @pytask.mark.task()
 @pytask.mark.depends_on({
     "template": TEMPLATE,
+    "process": SIM_DIR / "process.py"
 })
 @pytask.mark.produces(RESULT)
 def task_process_conditions(depends_on: Path, produces: Path):

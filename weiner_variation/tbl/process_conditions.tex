@@ -1,10 +1,10 @@
-\begin{tblr}{colspec={l|XXX}}
+\begin{tblr}{colspec={l|XXXXXX}}
     \toprule
-    \#             & Type                       & Width                                                  & Height                                                 \\
-    &                            & \unit{\milli\meter}                                    & \unit{\milli\meter}                                    \\
+    \#             & Type                       & $\Width$                                               & $\Height$                                              & $\RollGap$                              & $\RollRadius$                                           & $\Velocity$                          \\
+    &                            & \unit{\milli\meter}                                    & \unit{\milli\meter}                                    & \unit{\milli\meter}                     & \unit{\milli\meter}     & \unit{\meter\per\second}   \\
     \midrule
     {% for p in roll_passes %}
-    {{loop.index}} & {{ p | format_pass_type }} & \num{ {{- (p.out_profile.width * 1e3) | round(1) -}} } & \num{ {{-  (p.out_profile.height * 1e3) | round(1) -}} } \\
+    {{loop.index}} & {{ p | format_pass_type }} & \num{ {{- (p.out_profile.width * 1e3) | round(1) -}} } & \num{ {{-  (p.out_profile.height * 1e3) | round(1) -}} } & \num{ {{-  (p.gap * 1e3) | round(1) -}} } & \num{ {{-  (p.roll.nominal_radius * 1e3) | round(1) -}} } & \num{ {{-  p.velocity | round(1) -}} }\\
     {% endfor %}
     \bottomrule
 \end{tblr}

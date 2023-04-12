@@ -1,0 +1,8 @@
+\begin{tblr}{XXXX}
+        \toprule
+        $\In\Diameter$ & $\In\Temperature$ & $\Density$ & $\ThermalCapacity$ \\
+        \unit{\milli\meter} & \unit{\kelvin} & \unit{\kilo\gram\per\cubic\meter} & \unit{\joule\per\kilo\gram\per\kelvin} \\
+        \midrule
+        \num{ {{- (in_profile.height * 1e3) | round(1) -}} }  & \num{ {{- in_profile.temperature | round(1) -}} } & \num{ {{- in_profile.density | round(1) -}} } & \num{ {{- in_profile.thermal_capacity | round(1) -}} } \\
+        \bottomrule
+\end{tblr}
