@@ -82,8 +82,7 @@ for in_file, out_file in zip(RAW_DATA_FILES, PASSES_FILES):
 def find_passes(torque_series, prominence, max_num=None):
     try:
         abs_data = np.abs(torque_series)
-        resampled = abs_data
-        smooth = np.correlate(resampled, np.full((10,), 1 / 10), mode="same")
+        smooth = np.correlate(abs_data, np.full((10,), 1 / 10), mode="same")
         diff = np.correlate(smooth, [-2, 0, 2], mode="same")
         smooth_diff = np.correlate(diff, stats.norm.pdf(np.linspace(-1, 1, 5)), mode="same")
 
@@ -92,8 +91,8 @@ def find_passes(torque_series, prominence, max_num=None):
         peaks_end, peaks_end_props = signal.find_peaks(-smooth_diff, distance=PEAK_DISTANCE, prominence=prominence,
                                                        wlen=WINDOW_LENGTH)
 
-        starts = resampled.index[peaks_start]
-        ends = resampled.index[peaks_end]
+        starts = torque_series.index[peaks_start]
+        ends = torque_series.index[peaks_end]
 
         if len(starts) != len(ends):
             raise ValueError(f"len(starts) = {len(starts)} != {len(ends)} = len(ends)")
@@ -107,13 +106,12 @@ def find_passes(torque_series, prominence, max_num=None):
         fig: plt.Figure = plt.figure(dpi=300)
         ax: plt.Axes = fig.add_subplot()
         ax.grid(True)
-        ax.plot(torque_series.index, abs_data, lw=1, alpha=0.5, label="roll torque signal")
-        ax.plot(resampled.index, resampled, lw=1, alpha=0.5, label="roll torque signal resampled")
-        ax.plot(resampled.index, smooth, lw=1, label="filtered signal smooth")
-        ax.plot(resampled.index, diff, lw=1, label="filtered signal diff")
-        ax.plot(resampled.index, smooth_diff, lw=1, label="filtered signal smooth diff")
-        ax.scatter(resampled.index[peaks_start], diff[peaks_start], marker="x", c="k", label="starts of passes")
-        ax.scatter(resampled.index[peaks_end], diff[peaks_end], marker="x", c="r", label="ends of passes")
+        ax.plot(torque_series.index, abs_data, lw=1, alpha=0.5, label="abs signal")
+        ax.plot(torque_series.index, smooth, lw=1, label="smooth")
+        ax.plot(torque_series.index, diff, lw=1, label="smooth diff")
+        ax.plot(torque_series.index, smooth_diff, lw=1, label="smooth diff smooth")
+        ax.scatter(torque_series.index[peaks_start], diff[peaks_start], marker="x", c="k", label="starts of passes")
+        ax.scatter(torque_series.index[peaks_end], diff[peaks_end], marker="x", c="r", label="ends of passes")
 
         ax.legend()
         fig.show()
