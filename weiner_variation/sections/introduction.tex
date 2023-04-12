@@ -1,23 +1,36 @@
-All technical processes are subject to certain variations
+All technical processes are subject to certain variations.
+Knowledge and control of these variations is crucial for process stability and product quality.
+Sources of variations in a process are the variations already present in the input workpiece and newly generated variations due to imperfections of the process itself.
+In the case of wire and bar hot rolling industry regarded here, not only the product geometry, but also the final material properties sre highly sensitiv to the process conditions.
+Especially the temperature evolution of the workpiece within the rolling line has high impact on the microstructural transformation processes happening before, during and after forming.
+The product's microstructural state determines the mechanical properties and therefore its behavior in further processing and application.
+Current alloy concepts in the steel industry increase this problem, as the process window gets more narrow to achieve the property requirements for high-tech applications.
+The controlled combination of forming and thermally activated material transformation is commonly subsumed under the term thermo-mechanical treatment.
 
+The classic way of analysing variational behavior with mathematical tooling is the error propagation using first order Taylor series expansions (see f.e.~\cite{Ku1966}).
+This concept is widely used in science and industry, especially to determine the error of indirect measurement processes.
+This procedure has two main problems.
+First, one needs to determine the first derivatives of the regarded function in each dimension, either analytically or numerically, which is rather problematic if the function is complicated.
+Second, the error is commonly represented in terms of the variance, so there is only information about the spread, but not about the shape of the distribution inherent.
 
+The usage of a Monte-Carlo Method circumvents these problems, and shall be proposed with this work.
 The term Monte Carlo Method (MCM) generally refers to a class of methods, which are characterized by the use of random numbers.
 These methods are rather diverse and serve different purposes.
 Here, the term shall be used for the concept of drawing random numbers as input for a function and analysing the results of several evaluations of this function, with different random inputs, with statistical methods.
 A detailed overview on this type of Monte Carlo methods is given by \textcite{Lemieux2009}.
-The nature of the function can be complex, even of a black-box type, where nothing about the internals of the function is known but the input and output interfaces.
+The nature of the function can be complicated, even of a black-box type, where nothing about the internals of the function is known but the input and output interfaces.
 In this case, Monte Carlo methods can provide valuable information about the behavior of the function while altering inputs.
+Also, the complete distribution of the input variables is included in the estimation and is reflected in the results.
 
-Here, the function equals the simulation procedure, so it is generally known, but complex.
+Here, the function equals the simulation procedure, so it is generally known, but complicated.
 For example, it is generally not possible, to compute derivatives of the outputs in dependence on the inputs in an analytical way.
-Even numerical derivation is hard, due to the multi-dimensional nature of most natural or technical systems.
+Even numerical derivation is hard, due to the multi-dimensional nature of most natural or technical systems and the pronounced non-linear behavior of the function.
 
-The use of Monte Carlo methods for the analysis of variations in technical processes was reported before in the field of assembly of complex structures, like in mechanical engineering and building construction (f.e.~\cite{Lin1997, Shen2005, Dantan2009, Qureshi2012, Yan2015, Rausch2019}).
+The use of Monte Carlo methods for the analysis of variations in technical processes was reported before in the field of assembly of complicated structures, like in mechanical engineering and building construction (f.e.~\cite{Lin1997, Shen2005, Dantan2009, Qureshi2012, Yan2015, Rausch2019}).
 However, in the field of rolling processes, there was no such attempt yet to the knowledge of the authors.
 The authors have previously used a similar approach to model powder morphology influences in sintering processes~\cite{Weiner2022, Weiner2022b}.
 The current work shall show the possibility of the application of Monte Carlo methods for the analysis of process variations in rolling processes.
-The focus lies hereby on the estimation of the workpiece temperature evolution.
-The temperature evolution is crucial for the microstructure development of the workpiece, which shall be investigated in a following work.
+The focus lies hereby on the estimation of the workpiece temperature evolution and its impact on the microstructure state of the final product.
 The influence of variations in the initial workpiece and within the regarded process route is analysed and evaluated.
 Due to the need of a large number of function evaluations (simulation runs), the evaluation speed of the process model is crucial to the applicability of this approach.
 
@@ -26,6 +39,6 @@ These are offering high accuracy and high resolution results at the expense of h
 So these methods are inconvenient for the current need.
 Therefore, one-dimensional approaches shall be used here.
 These offer less accuracy and limited resolution, but are computable within fractions of seconds on typical personal computer systems.
-The current work is based on the open-source rolling simulation framework PyRolL~\cite{pyroll}, developed by the authors, which is a fast, open and flexible software package mainly aimed at groove rolling in reduction passes.
+The current work is based on the open-source rolling simulation framework PyRolL~\cite{pyroll2}, developed by the authors, which is a fast, open and flexible software package mainly aimed at groove rolling in reduction passes.
 The models used for the different parts of the problem can be exchanged and extended with low effort to the users needs.
 
