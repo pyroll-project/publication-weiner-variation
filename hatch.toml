@@ -1,7 +1,6 @@
 [build]
 packages = [
-    "esaform2023",
-    "pyroll-presentations/pyroll_presentations"
+    "weiner_variation",
 ]
 
 [envs.default]

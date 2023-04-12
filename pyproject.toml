@@ -1,7 +1,7 @@
 [project]
-name = "esaform2023"
+name = "weiner_variation"
 version = "0"
-description = "Papers and presentations for ESAFORM2023 Conference."
+description = "Papers and presentations for weiner_variation Conference."
 authors = [{ name = "Max Weiner", email = "max.weiner@imf.tu-freiberg.de" }]
 license = "MIT"
 requires-python = ">=3.9, <4.0"
