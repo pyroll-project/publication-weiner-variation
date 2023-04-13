@@ -11,28 +11,19 @@ dependencies = [
     "pandas",
     "coconut",
     "jupyter",
+    "jupyterlab",
     "jupytext",
     "tqdm",
-    "pyroll-export ~= 2.0",
-    "pyroll-report ~= 2.0",
-]
-
-[envs.sim_base.scripts]
-jupyter = "coconut --jupyter notebook"
-
-[envs.sim1]
-template = "sim_base"
-path = ".venv_sim1"
-extra-dependencies = [
     "pyroll-basic ~= 2.0",
 ]
 
-[envs.sim3]
+[envs.sim_base.scripts]
+jupyter = "coconut --jupyter lab"
+
+[envs.sim_elastic]
 template = "sim_base"
-path = ".venv_sim3"
+path = ".venv_sim_elastic"
 extra-dependencies = [
-    "pyroll-hensel-power-and-labour ~= 2.0",
-    "pyroll-pillar-model ~= 2.0",
-    "pyroll-sparling-spreading ~= 2.0",
-    "pyroll-ring-model-thermal ~= 2.0",
+    "pyroll-elastic-mill-spring ~= 2.0",
 ]
+

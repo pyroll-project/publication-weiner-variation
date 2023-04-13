@@ -1,0 +1,3 @@
+property,mean,std
+diameter,50e-3,1e-3
+temperature,1373.15,10

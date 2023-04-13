@@ -3,29 +3,36 @@ from pyroll.freiberg_flow_stress import FreibergFlowStressCoefficients
 
 REVERSING_PAUSE_DURATION = 6.1
 
-IN_PROFILE = pr.Profile.round(
-    diameter=50e-3,
-    temperature=1100 + 273.15,
-    density=7.5e3,
-    thermal_conductivity=23,
-    thermal_capacity=690,
-    material="BST 500",
-    strain=0,
-    freiberg_flow_stress_coefficients=FreibergFlowStressCoefficients(
-        a=4877.12 * 1e6,
-        m1=-0.00273339,
-        m2=0.302309,
-        m3=-0.0407581,
-        m4=0.000222222,
-        m5=-0.000383134,
-        m6=0,
-        m7=-0.492672,
-        m8=0.0000175044,
-        m9=-0.0611783,
-        baseStrain=0.1,
-        baseStrainRate=0.1
-    ),
-)
+
+def create_in_profile(diameter, temperature):
+    return pr.Profile.round(
+        diameter=diameter,
+        temperature=temperature,
+        density=7.5e3,
+        thermal_conductivity=23,
+        thermal_capacity=690,
+        material="BST 500",
+        strain=0,
+        freiberg_flow_stress_coefficients=FreibergFlowStressCoefficients(
+            a=4877.12 * 1e6,
+            m1=-0.00273339,
+            m2=0.302309,
+            m3=-0.0407581,
+            m4=0.000222222,
+            m5=-0.000383134,
+            m6=0,
+            m7=-0.492672,
+            m8=0.0000175044,
+            m9=-0.0611783,
+            baseStrain=0.1,
+            baseStrainRate=0.1
+        ),
+    )
+
+
+DIAMETER = 50e-3
+TEMPERATURE = 1100 + 273.15
+IN_PROFILE = create_in_profile(DIAMETER, TEMPERATURE)
 
 PASS_SEQUENCE = pr.PassSequence([
     pr.RollPass(
@@ -259,6 +266,7 @@ for u in PASS_SEQUENCE:
         u.roll.elastic_modulus = 210e9
         u.roll.poissons_ratio = 0.3
         u.roll.temperature = 273.15
+        u.stand_stiffness = 1e8
     if isinstance(u, pr.Transport):
         u.convection_heat_transfer_coefficient = 150
         u.relative_radiation_coefficient = 0.8

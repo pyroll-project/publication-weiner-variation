@@ -10,7 +10,6 @@ from weiner_variation.config import ROOT_FILE, RC_FILE, ROOT_DIR
     compilation_steps=cs.latexmk(
         options=(
                 "-r", f"{RC_FILE}",
-                "-e", "$ENV{TEXINPUTS} = \"./.build/$search_path_separator.$search_path_separator\";",
         )
     ),
 )

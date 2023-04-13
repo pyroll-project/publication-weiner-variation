@@ -1,0 +1,104 @@
+# ---
+# jupyter:
+#   jupytext:
+#     formats: ipynb,coco:percent
+#     text_representation:
+#       extension: .coco
+#       format_name: percent
+#       format_version: '1.3'
+#       jupytext_version: 1.14.5
+#   kernelspec:
+#     display_name: Coconut
+#     language: coconut
+#     name: coconut
+# ---
+
+# %%
+from weiner_variation.sim.data_structures import DrawInput
+from weiner_variation.sim.process import PASS_SEQUENCE, DIAMETER, TEMPERATURE, create_in_profile
+from weiner_variation.sim.config import SAMPLE_COUNT, FIELDS, SEED
+import pandas as pd
+import numpy as np
+from weiner_variation.config import DATA_DIR
+from scipy.stats import norm
+from copy import deepcopy
+import tqdm
+import pyroll.core as pr
+from multiprocessing import Pool
+import os
+import argparse
+from pathlib import Path
+import importlib
+
+# %%
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--input_file", default=DATA_DIR / "input_dist.csv", type=Path)
+parser.add_argument("-o", "--output-file", default=DATA_DIR / "results.csv", type=Path)
+def plugins_list(s: str):
+    return s.split(",")
+parser.add_argument("-p", "--plugins", default=[], type=plugins_list)
+args = parser.parse_known_args()[0]
+args
+
+# %%
+for p in args.plugins:
+    importlib.import_module("pyroll." + p)
+
+# %%
+nominal = DrawInput(DIAMETER, TEMPERATURE)
+
+# %%
+input_dist = pd.read_csv(args.input_file, index_col=0, header=0)
+input_dist
+
+# %%
+diameter_dist = norm(loc=input_dist.loc["diameter", "mean"], scale=input_dist.loc["diameter", "std"])
+temperature_dist = norm(loc=input_dist.loc["temperature", "mean"], scale=input_dist.loc["temperature", "std"])
+
+# %%
+RNG = np.random.default_rng(SEED)
+
+draws = [nominal] + [
+    DrawInput(
+        diameter_dist.rvs(random_state=RNG),
+        temperature_dist.rvs(random_state=RNG)
+    )
+    for _ in range(SAMPLE_COUNT)
+]
+
+# %%
+def worker(draw: DrawInput):    
+    ip = create_in_profile(
+            diameter=draw.diameter,
+            temperature=draw.temperature,
+    )
+
+    sequence = deepcopy(PASS_SEQUENCE)      
+    sequence.solve(ip)       
+
+    return (
+        draw.__dict__.items() |> map$(t -> (("draw", t[0]), t[1])) |> dict
+    ) | (
+        FIELDS.items()
+        |> starmap$((key, extractor) -> (
+                sequence.units 
+                |> filter$(u -> isinstance(u, pr.RollPass)) 
+                |> map$(u -> ((key, u.label), extractor(u))) 
+                |> filter$(t -> t[1] is not None)
+            )
+        )
+        |> flatten
+        |> dict            
+    )
+
+# %%
+results = tqdm.tqdm(Pool().imap(worker, draws), total=SAMPLE_COUNT) |> list
+
+# %%
+df = results |> filter$(e -> "error" not in e) |> enumerate |> dict |> pd.DataFrame |> .T |> .infer_objects()
+df
+
+# %%
+df.to_csv(args.output_file)
+
+# %%
