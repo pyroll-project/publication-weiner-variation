@@ -34,8 +34,7 @@ def task_plot_pass_sequence(depends_on: dict[str, Path], produces: dict[Any, Pat
     sequence.solve(IN_PROFILE)
     roll_passes = [u for u in sequence if isinstance(u, pr.RollPass)]
 
-    for i, ax in enumerate(axs):
-        ax.set_title(str(i + 1))
+    for ax in axs:
         ax.set_adjustable("box")
         ax.set_aspect("equal")
         ax.axis("off")
@@ -43,6 +42,8 @@ def task_plot_pass_sequence(depends_on: dict[str, Path], produces: dict[Any, Pat
         ax.set_ymargin(0.05)
 
     for ax, rp in zip(axs, roll_passes):
+        ax.set_title(rp.label)
+
         for c in rp.contour_lines:
             ax.plot(*c.xy, c="k", lw=1)
 

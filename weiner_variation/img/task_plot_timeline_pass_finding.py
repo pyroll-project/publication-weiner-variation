@@ -25,16 +25,16 @@ def task_plot_timeline_pass_finding(depends_on: Path, produces: dict[..., Path])
 
     duo_passes = find_passes(raw_data["roll_torque_duo"], PROMINENCE_DUO)
 
-    raw_data["roll_torque_duo"].plot(ax=ax, label="Roll Torque Signal", lw=1)
+    raw_data["roll_torque_duo"].plot(ax=ax, label="Roll Torque Signal", lw=1, c="k")
 
     spans = [
-        ax.axvspan(p.start, p.end, alpha=0.5)
+        ax.axvspan(p.start, p.end, alpha=0.5, fc="C0")
         for p in duo_passes.itertuples()
     ]
     spans[0].set_label("Passes")
 
     mids = [
-        ax.axvline(p.mid, ls="--", lw=1)
+        ax.axvline(p.mid, ls="--", lw=1, c="C0")
         for p in duo_passes.itertuples()
     ]
     mids[0].set_label("Middles")

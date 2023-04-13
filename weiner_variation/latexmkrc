@@ -1,3 +1,2 @@
 $pdf_mode = 4;
 $do_cd = 1;
-$ENV{TEXINPUTS} = "./.build/$search_path_separator.$search_path_separator";

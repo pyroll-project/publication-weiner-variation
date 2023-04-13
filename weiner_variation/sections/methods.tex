@@ -1,11 +1,11 @@
 \subsection{Experimental Procedure}\label{subsec:experimental-procedure}
 
-
 The object of the current investigation is the operation of the experimental semi-continuous rolling plant located at the Institute of Metal Forming, TU Bergakademie Freiberg.
 It consists of a two-high reversing roughing stand and four continuous finishing stands.
 The pass schedule of the current work consists of 10 oval-round reversing passes followed by 4 oval-round continuous finishing passes.
 A \qty{50}{\milli\meter} round workpiece made of a mild structural steel is rolled down to \qty{8}{\milli\meter} diameter.
-Details of the schedule are provided in the supplemental material~\cite{esaform2023_weiner_supp}, as the exact properties of the pass schedule are of minor importance for the statements of this work.
+Details of the schedule are provided in \autoref{tab:process_conditions} and \autoref{tab:in_profile}, as well as in the supplemental material~\cite{WeinerVariationSupplemental2023}.
+The supplemental material includes the whole code for data processing and simulation needed to reproduce the results of this work.
 
 \begin{figure}
     \centering
@@ -31,6 +31,10 @@ Details of the schedule are provided in the supplemental material~\cite{esaform2
     \input{tbl/in_profile}
 \end{table}
 
+To achieve statistical certainty, about 50 rolling trials were performed.
+A major source of variation in these trials is the manual feeding of the workpiece into the reversing passes.
+The duration of those is scheduled with about 6 seconds.
+The actual time needed has to be investigated in this work, see \autoref{subsec:data-acquisition} for details.
 
 \subsection{Monte-Carlo Approach}\label{subsec:monte-carlo-approach}
 
@@ -48,6 +52,8 @@ The principle is shown in \autoref{fig:flow_chart_mc_principle}.
 This approach provides information about the overall variational behavior of the process.
 If a single source of variation is introduced in the input, the reaction of the process on this variable can be analysed.
 The count of variation sources introduced is generally unbounded.
+In contrast to classic Taylor series error propagation, the computational effort does not directly increase remarkably with increasing count of investigated parameters.
+However, an increase in sample size can be necessary to achieve sufficient certainty.
 The tracing back of result variations to the input can be done using classic correlation methods of descriptive statistics, however, with the same typical caveats.
 The main benefit of the approach is, that no information about the internals of the simulation procedure is needed for variational analysis, especially there is no need for derivatives of result values in dependence on the input.
 The simulation procedure can generally be treated as black box with defined input and output interfaces.
@@ -59,17 +65,32 @@ This choice was taken, since two fundamentally different types of variation sour
 First, sources in the initial workpiece, which are applied only once, but traverse the whole process line.
 Second, variations in the process itself, which affect the workpiece state in each process step anew.
 
+\subsection{Statistical Data Acquisition}\label{subsec:data-acquisition}
+
+The pilot plant at IMF is equipped with several measurement and data collection systems.
+Data from a number of rolling trials have been collected and analysed to obtain the interpass durations $\InterpassDuration$ between the reversing passes.
+The complete dataset and analysis routines are available in the supplemental material~\cite{WeinerVariationSupplemental2023}.
+
 The question of varying inter-pass durations is crucial for scientific experiments on microstructure evolution, but currently often neglected.
 Mostly, only flat durations between the reversing passes are included in the design calculations.
 Due to manual transport and feed of the workpiece to the following roll pass, the scheduled inter-pass durations are never realized in practice.
 Although, these deviations from the schedule influence the microstructure evolution of the sample, as well as the actual conditions in the roll passes.
 The current approach is aimed to help quantifying these deviations.
 
-\subsection{Statistical Data Acquisition}\label{subsec:data-acquisition}
+To obtain the pause durations from the timeline data, the passes have to be identified automatically.
+This is done by analysing the roll torque signal as plotted in \autoref{fig:plot_timeline_pass_finding}.
+The original signal is first downsampled and smoothed.
+Then, a difference filter is applied and the peaks of the resulting signal are determined.
+These peaks denote start and end times of the roll passes, the middle time of those is used as time coordinate of the roll pass.
+The distances of those are used as the inter-pass durations.
 
-The pilot plant at IMF is equipped with several measurement and data collection systems.
-Data from a number of rolling trials have been collected and analysed to obtain the interpass durations $\InterpassDuration$ between the reversing passes.
-The complete dataset and analysis routines are available in the supplemental material~\cite{esaform2023_weiner_supp}.
+\begin{figure}
+    \centering
+    \includegraphics{img/plot_timeline_pass_finding}
+    \caption{Example Roll Torque Signal With Automatically Determined Roll Pass Locations}
+    \label{fig:plot_timeline_pass_finding}
+\end{figure}
+
 
 For the approximative description of the durations' distribution, a gamma distribution was used, which is a generalized exponential distribution.
 The probability density function (PDF) of the gamma distribution is defined as in \autoref{eq:gamma-dist}, where $\Gamma$ is the gamma function and $\GammaDistributionAlpha > 0$ and $\GammaDistributionBeta > 0$ are parameters.
@@ -82,6 +103,9 @@ The probability density function (PDF) of the gamma distribution is defined as i
 Since the gamma distribution is only defined for $x>0$, but no interpass durations below a certain value occur due to technical restrictions, the distribution was modified by introducing a minimal interpass duration $\MinInterpassDuration$ with $x = \InterpassDuration - \MinInterpassDuration$.
 So there are three free parameters $\GammaDistributionAlpha$, $\GammaDistributionBeta$ and $\MinInterpassDuration$ for fitting of the distribution function.
 The fitting is done using least squares optimization of the resulting PDF function on the density histogram of the data.
+
+Regarding the geometric variations of the input workpiece, the diameter of the samples was determined at multiple spots using a calibre.
+The initial temperature of the samples was determined using the pyrometer installed near the roll gap entry.
 
 \subsection{Core Simulation Procedure}\label{subsec:simulation-procedure}
 
@@ -99,8 +123,4 @@ The process consists of several reversing passes and up to four continuous finis
 The feeding in the reversing passes is done manually, so there is an obvious source of variation in process, since the human operator can not achieve precisely a defined duration between the passes.
 In this work the evolution of variation regarding temperature and microstructure state
 
-\begin{enumerate}
-    \item What is the difference in behavior of variations sourced in the input workpiece and arising within the process?
-    \item What is the influence of elastic mill response on the variational behavior of the process?
-    \item Is there a minimum number of passes needed to eliminate variations of the input workpiece?
-\end{enumerate}
+

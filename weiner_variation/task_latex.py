@@ -8,7 +8,10 @@ from weiner_variation.config import ROOT_FILE, RC_FILE, ROOT_DIR
     script=ROOT_FILE,
     document=ROOT_FILE.with_suffix(".pdf"),
     compilation_steps=cs.latexmk(
-        options=("-r", f"{RC_FILE}",)
+        options=(
+                "-r", f"{RC_FILE}",
+                "-e", "$ENV{TEXINPUTS} = \"./.build/$search_path_separator.$search_path_separator\";",
+        )
     ),
 )
 def task_latex_compile():
