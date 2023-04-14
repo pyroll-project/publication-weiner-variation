@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import numpy as np
 import pandas as pd
 import pytask
@@ -9,6 +10,8 @@ import pyroll.core as pr
 from weiner_variation.config import SIM_DIR, IMG_DIR, DATA_DIR
 from weiner_variation.data.config import PASSES_DIR
 from weiner_variation.sim.process import PASS_SEQUENCE
+from weiner_variation.sim.task_sim_temperature_stds import FACTORS as T_FACTORS
+from weiner_variation.sim.task_sim_diameter_stds import FACTORS as D_FACTORS
 
 PASSES = [u for u in PASS_SEQUENCE if isinstance(u, pr.RollPass)]
 
@@ -207,3 +210,51 @@ def task_plot_temperature_std(produces, depends_on):
         ]
         spans[-1].set_label("Oval Shape")
         spans[-2].set_label("Round Shape")
+
+
+@pytask.mark.depends_on({
+                            "exp": EXP_FILES
+                        } | {
+                            ("input", f): DATA_DIR / "sim_temperature_stds_results" / f"{f}.csv"
+                            for f in T_FACTORS
+                        })
+@pytask.mark.produces([
+    IMG_DIR / f"temperature_stds.{suffix}"
+    for suffix in ["png", "pdf", "svg"]]
+)
+def task_plot_temperature_stds(produces, depends_on):
+    with _plot(produces, (6, 3)) as (fig, ax):
+        ax: plt.Axes
+        ax.set_ylabel("Standard Deviation of\nWorkpiece Temperature in K")
+
+        for i, f in enumerate(T_FACTORS):
+            df_input = _load_sim_data(depends_on["input", f])
+            std = pd.concat([
+                _reindex_in(df_input.in_temperature.std()),
+                _reindex_out(df_input.out_temperature.std())
+            ]).sort_index()
+
+            color = mpl.colormaps["twilight"]((i + 1) / (len(T_FACTORS) + 1))
+            ax.plot(std, label=rf"${f}\sigma(T)$", c=color)
+
+
+@pytask.mark.depends_on({
+                            "exp": EXP_FILES
+                        } | {
+                            ("input", f): DATA_DIR / "sim_diameter_stds_results" / f"{f}.csv"
+                            for f in D_FACTORS
+                        })
+@pytask.mark.produces([
+    IMG_DIR / f"filling_stds.{suffix}"
+    for suffix in ["png", "pdf", "svg"]]
+)
+def task_plot_filling_stds(produces, depends_on):
+    with _plot(produces, (6, 3)) as (fig, ax):
+        ax: plt.Axes
+        ax.set_ylabel("Standard Deviation of\nWorkpiece Temperature in K")
+
+        for i, f in enumerate(D_FACTORS):
+            df_input = _load_sim_data(depends_on["input", f])
+
+            color = mpl.colormaps["twilight"]((i + 1) / (len(D_FACTORS) + 1))
+            ax.plot(PASS_POSITIONS, df_input.filling_ratio.std().dropna(), label=rf"${f}\sigma(T)$", c=color)
