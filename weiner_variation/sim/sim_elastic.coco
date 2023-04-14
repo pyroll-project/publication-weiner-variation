@@ -88,6 +88,6 @@ df = results |> enumerate |> dict |> pd.DataFrame |> .T |> .infer_objects()
 df
 
 # %%
-df.to_csv(DATA_DIR / "sim_input_results.csv")
+df.to_csv(DATA_DIR / "sim_elastic_results.csv")
 
 # %% jupyter={"source_hidden": true}

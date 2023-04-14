@@ -1,7 +1,9 @@
 *.ipynb
+*.log
 
 sim_durations.py
 sim_input.py
+sim_elastic.py
 __coconut__.py
 
 ### JupyterNotebooks template

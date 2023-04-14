@@ -178,10 +178,9 @@ for sim in ["input", "elastic", "durations"]:
 )
 def task_plot_temperature_std(produces, depends_on):
     df_input = _load_sim_data(depends_on["input"])
-    df_elastic = _load_sim_data(depends_on["elastic"])
     df_durations = _load_sim_data(depends_on["durations"])
 
-    with _plot(produces, (6, 2.5)) as (fig, ax):
+    with _plot(produces, (6, 3)) as (fig, ax):
         ax: plt.Axes
         ax.set_ylabel("Standard Deviation of\nWorkpiece Temperature in K")
 
@@ -189,19 +188,13 @@ def task_plot_temperature_std(produces, depends_on):
             _reindex_in(df_input.in_temperature.std()),
             _reindex_out(df_input.out_temperature.std())
         ]).sort_index()
-        ax.plot(std1, label="Input")
-
-        std2 = pd.concat([
-            _reindex_in(df_elastic.in_temperature.std()),
-            _reindex_out(df_elastic.out_temperature.std())
-        ]).sort_index()
-        ax.plot(std2, label="Elastic")
+        ax.plot(std1, label="Only Varied Input")
 
         std2 = pd.concat([
             _reindex_in(df_durations.in_temperature.std()),
             _reindex_out(df_durations.out_temperature.std())
         ]).sort_index()
-        ax.plot(std2, label="Durations")
+        ax.plot(std2, label="With Varied Durations")
 
         spans = [
             ax.axvspan(
