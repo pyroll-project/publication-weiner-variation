@@ -9,7 +9,6 @@ def create_in_profile(diameter, temperature):
         diameter=diameter,
         temperature=temperature,
         density=7.5e3,
-        thermal_conductivity=23,
         thermal_capacity=690,
         material="BST 500",
         strain=0,
@@ -262,11 +261,10 @@ PASS_SEQUENCE = pr.PassSequence([
 
 for u in PASS_SEQUENCE:
     if isinstance(u, pr.RollPass):
-        u.roll.contact_heat_transfer_coefficient = 6000
+        u.roll.contact_heat_transfer_coefficient = 5000
         u.roll.elastic_modulus = 210e9
         u.roll.poissons_ratio = 0.3
-        u.roll.temperature = 273.15
-        u.stand_stiffness = 1e8
+        u.roll.temperature = 293.15
     if isinstance(u, pr.Transport):
-        u.convection_heat_transfer_coefficient = 150
+        u.convection_heat_transfer_coefficient = 10
         u.relative_radiation_coefficient = 0.8

@@ -14,14 +14,8 @@ def task_sim_input(depends_on: Path, produces: Path):
         [
             "hatch",
             "run",
-            "sim_base:python",
+            "sim:python",
             "-m", "weiner_variation.sim.sim_input",
-            "-i", str(depends_on[1]),
-            "-o", str(produces),
-            "-p",
-            ",".join([
-                "basic",
-            ]),
         ]
     )
 

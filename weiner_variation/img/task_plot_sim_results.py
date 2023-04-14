@@ -66,7 +66,7 @@ def _plot(files, figsize=None):
     plt.close(fig)
 
 
-for sim in ["input", "elastic"]:
+for sim in ["input", "elastic", "durations"]:
     @pytask.mark.task(id=sim)
     @pytask.mark.depends_on({"sim": DATA_DIR / f"sim_{sim}_results.csv", "exp": EXP_FILES})
     @pytask.mark.produces([
@@ -167,8 +167,9 @@ for sim in ["input", "elastic"]:
 
 
 @pytask.mark.depends_on({
-    "sim1": DATA_DIR / "sim_input_results.csv",
-    "sim2": DATA_DIR / "sim_elastic_results.csv",
+    "input": DATA_DIR / "sim_input_results.csv",
+    "elastic": DATA_DIR / "sim_elastic_results.csv",
+    "durations": DATA_DIR / "sim_durations_results.csv",
     "exp": EXP_FILES
 })
 @pytask.mark.produces([
@@ -176,24 +177,31 @@ for sim in ["input", "elastic"]:
     for suffix in ["png", "pdf", "svg"]]
 )
 def task_plot_temperature_std(produces, depends_on):
-    df_sim1 = _load_sim_data(depends_on["sim1"])
-    df_sim2 = _load_sim_data(depends_on["sim2"])
+    df_input = _load_sim_data(depends_on["input"])
+    df_elastic = _load_sim_data(depends_on["elastic"])
+    df_durations = _load_sim_data(depends_on["durations"])
 
     with _plot(produces, (6, 2.5)) as (fig, ax):
         ax: plt.Axes
         ax.set_ylabel("Standard Deviation of\nWorkpiece Temperature in K")
 
         std1 = pd.concat([
-            _reindex_in(df_sim1.in_temperature.std()),
-            _reindex_out(df_sim1.out_temperature.std())
+            _reindex_in(df_input.in_temperature.std()),
+            _reindex_out(df_input.out_temperature.std())
         ]).sort_index()
-        ax.plot(std1, label="Case 1")
+        ax.plot(std1, label="Input")
 
         std2 = pd.concat([
-            _reindex_in(df_sim2.in_temperature.std()),
-            _reindex_out(df_sim2.out_temperature.std())
+            _reindex_in(df_elastic.in_temperature.std()),
+            _reindex_out(df_elastic.out_temperature.std())
         ]).sort_index()
-        ax.plot(std2, label="Case 2")
+        ax.plot(std2, label="Elastic")
+
+        std2 = pd.concat([
+            _reindex_in(df_durations.in_temperature.std()),
+            _reindex_out(df_durations.out_temperature.std())
+        ]).sort_index()
+        ax.plot(std2, label="Durations")
 
         spans = [
             ax.axvspan(

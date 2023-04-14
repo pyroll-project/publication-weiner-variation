@@ -6,7 +6,8 @@ packages = [
 [envs.default]
 path = ".venv"
 
-[envs.sim_base]
+[envs.sim]
+path = ".venv_sim"
 dependencies = [
     "pandas",
     "coconut",
@@ -15,15 +16,9 @@ dependencies = [
     "jupytext",
     "tqdm",
     "pyroll-basic ~= 2.0",
-]
-
-[envs.sim_base.scripts]
-jupyter = "coconut --jupyter lab"
-
-[envs.sim_elastic]
-template = "sim_base"
-path = ".venv_sim_elastic"
-extra-dependencies = [
     "pyroll-elastic-mill-spring ~= 2.0",
 ]
+
+[envs.sim.scripts]
+jupyter = "coconut --jupyter lab"
 
