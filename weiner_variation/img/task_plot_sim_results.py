@@ -7,7 +7,7 @@ import pandas as pd
 import pytask
 import pyroll.core as pr
 
-from weiner_variation.config import SIM_DIR, IMG_DIR, DATA_DIR
+from weiner_variation.config import SIM_DIR, IMG_DIR, DATA_DIR, ROOT_DIR
 from weiner_variation.data.config import PASSES_DIR
 from weiner_variation.sim.process import PASS_SEQUENCE
 from weiner_variation.sim.task_sim_temperature_stds import FACTORS as T_FACTORS
@@ -71,7 +71,11 @@ def _plot(files, figsize=None):
 
 for sim in ["input", "elastic", "durations"]:
     @pytask.mark.task(id=sim)
-    @pytask.mark.depends_on({"sim": DATA_DIR / f"sim_{sim}_results.csv", "exp": EXP_FILES})
+    @pytask.mark.depends_on({
+        "sim": DATA_DIR / f"sim_{sim}_results.csv",
+        "exp": EXP_FILES,
+        "config": ROOT_DIR / "config.py"
+    })
     @pytask.mark.produces([
         IMG_DIR / f"{sim}_roll_force.{suffix}"
         for suffix in ["png", "pdf", "svg"]]
@@ -81,7 +85,7 @@ for sim in ["input", "elastic", "durations"]:
         df_exp = _load_exp_data(depends_on["exp"])
 
         with _plot(produces) as (fig, ax):
-            ax.set_ylabel("Roll Force in kN")
+            ax.set_ylabel("Roll Force $\\RollForce$ in \\unit{\\kilo\\newton}")
             ax.set_ylim(0, 400)
 
             ax.boxplot(df_sim.roll_force / 1e3, positions=PASS_POSITIONS, flierprops=FLIER)
@@ -93,7 +97,11 @@ for sim in ["input", "elastic", "durations"]:
 
 
     @pytask.mark.task(id=sim)
-    @pytask.mark.depends_on({"sim": DATA_DIR / f"sim_{sim}_results.csv", "exp": EXP_FILES})
+    @pytask.mark.depends_on({
+        "sim": DATA_DIR / f"sim_{sim}_results.csv",
+        "exp": EXP_FILES,
+        "config": ROOT_DIR / "config.py"
+    })
     @pytask.mark.produces([
         IMG_DIR / f"{sim}_roll_torque.{suffix}"
         for suffix in ["png", "pdf", "svg"]]
@@ -103,8 +111,8 @@ for sim in ["input", "elastic", "durations"]:
         df_exp = _load_exp_data(depends_on["exp"])
 
         with _plot(produces) as (fig, ax):
-            ax.set_ylabel("Roll Torque in kNm")
-            ax.set_ylim(0, 16)
+            ax.set_ylabel("Roll Torque $\\RollTorque$ in \\unit{\\kilo\\newton\\meter}")
+            ax.set_ylim(0, 9)
 
             ax.boxplot(df_sim.roll_torque / 1e3, positions=PASS_POSITIONS, flierprops=FLIER)
             ax.bar(df_sim.roll_torque.columns, df_sim.roll_torque.loc[0] / 1e3, fill="C0", alpha=0.5, label="nominal")
@@ -115,7 +123,11 @@ for sim in ["input", "elastic", "durations"]:
 
 
     @pytask.mark.task(id=sim)
-    @pytask.mark.depends_on({"sim": DATA_DIR / f"sim_{sim}_results.csv", "exp": EXP_FILES})
+    @pytask.mark.depends_on({
+        "sim": DATA_DIR / f"sim_{sim}_results.csv",
+        "exp": EXP_FILES,
+        "config": ROOT_DIR / "config.py"
+    })
     @pytask.mark.produces([
         IMG_DIR / f"{sim}_temperature.{suffix}"
         for suffix in ["png", "pdf", "svg"]]
@@ -125,7 +137,7 @@ for sim in ["input", "elastic", "durations"]:
         df_exp = _load_exp_data(depends_on["exp"])
 
         with _plot(produces) as (fig, ax):
-            ax.set_ylabel("Workpiece Temperature in K")
+            ax.set_ylabel("Workpiece Temperature $\\Temperature$ in \\unit{\\kelvin}")
             ax.set_ylim(1050, 1550)
 
             ax.boxplot(df_sim.in_temperature, positions=PASS_POSITIONS - 0.25, widths=0.25, flierprops=FLIER)
@@ -153,7 +165,11 @@ for sim in ["input", "elastic", "durations"]:
 
 
     @pytask.mark.task(id=sim)
-    @pytask.mark.depends_on({"sim": DATA_DIR / f"sim_{sim}_results.csv", "exp": EXP_FILES})
+    @pytask.mark.depends_on({
+        "sim": DATA_DIR / f"sim_{sim}_results.csv",
+        "exp": EXP_FILES,
+        "config": ROOT_DIR / "config.py"
+    })
     @pytask.mark.produces([
         IMG_DIR / f"{sim}_filling_ratio.{suffix}"
         for suffix in ["png", "pdf", "svg"]]
@@ -162,7 +178,7 @@ for sim in ["input", "elastic", "durations"]:
         df_sim = _load_sim_data(depends_on["sim"])
 
         with _plot(produces) as (fig, ax):
-            ax.set_ylabel("Filling Ratio")
+            ax.set_ylabel("Filling Ratio $\\FillingRatio$")
             ax.set_ylim(0.7, 1.1)
 
             ax.boxplot(df_sim.filling_ratio, positions=PASS_POSITIONS, flierprops=FLIER)
@@ -173,7 +189,8 @@ for sim in ["input", "elastic", "durations"]:
     "input": DATA_DIR / "sim_input_results.csv",
     "elastic": DATA_DIR / "sim_elastic_results.csv",
     "durations": DATA_DIR / "sim_durations_results.csv",
-    "exp": EXP_FILES
+    "exp": EXP_FILES,
+    "config": ROOT_DIR / "config.py"
 })
 @pytask.mark.produces([
     IMG_DIR / f"temperature_std.{suffix}"
@@ -185,7 +202,7 @@ def task_plot_temperature_std(produces, depends_on):
 
     with _plot(produces, (6, 3)) as (fig, ax):
         ax: plt.Axes
-        ax.set_ylabel("Standard Deviation of\nWorkpiece Temperature in K")
+        ax.set_ylabel("Standard Deviation of\nWorkpiece Temperature \\Temperature in \\unit{\\kelvin}")
 
         std1 = pd.concat([
             _reindex_in(df_input.in_temperature.std()),
@@ -213,7 +230,8 @@ def task_plot_temperature_std(produces, depends_on):
 
 
 @pytask.mark.depends_on({
-                            "exp": EXP_FILES
+                            "exp": EXP_FILES,
+                            "config": ROOT_DIR / "config.py"
                         } | {
                             ("input", f): DATA_DIR / "sim_temperature_stds_results" / f"{f}.csv"
                             for f in T_FACTORS
@@ -225,7 +243,7 @@ def task_plot_temperature_std(produces, depends_on):
 def task_plot_temperature_stds(produces, depends_on):
     with _plot(produces, (6, 3)) as (fig, ax):
         ax: plt.Axes
-        ax.set_ylabel("Standard Deviation of\nWorkpiece Temperature in K")
+        ax.set_ylabel("Standard Deviation of\nWorkpiece Temperature \\Temperature in \\unit{\\kelvin}")
 
         for i, f in enumerate(T_FACTORS):
             df_input = _load_sim_data(depends_on["input", f])
@@ -235,7 +253,7 @@ def task_plot_temperature_stds(produces, depends_on):
             ]).sort_index()
 
             color = mpl.colormaps["twilight"]((i + 1) / (len(T_FACTORS) + 1))
-            ax.plot(std, label=rf"${f}\sigma(T)$", c=color)
+            ax.plot(std, label=f"$\\num{{{f}}}\\Variance(\\Temperature)$", c=color)
 
 
 @pytask.mark.depends_on({
@@ -251,10 +269,13 @@ def task_plot_temperature_stds(produces, depends_on):
 def task_plot_filling_stds(produces, depends_on):
     with _plot(produces, (6, 3)) as (fig, ax):
         ax: plt.Axes
-        ax.set_ylabel("Standard Deviation of\nWorkpiece Temperature in K")
+        ax.set_ylabel("Standard Deviation of\nFilling Ratio $\\FillingRatio$")
 
         for i, f in enumerate(D_FACTORS):
             df_input = _load_sim_data(depends_on["input", f])
 
             color = mpl.colormaps["twilight"]((i + 1) / (len(D_FACTORS) + 1))
-            ax.plot(PASS_POSITIONS, df_input.filling_ratio.std().dropna(), label=rf"${f}\sigma(T)$", c=color)
+            ax.plot(
+                PASS_POSITIONS, df_input.filling_ratio.std().dropna(),
+                label=f"$\\num{{{f}}}\\Variance(\\Diameter)$", c=color
+            )

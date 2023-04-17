@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import pytask
@@ -15,7 +16,11 @@ def create_command_def(name: str, code: str):
 @pytask.mark.depends_on("symbols.toml")
 @pytask.mark.produces("symbols.sty")
 def task_symbols(depends_on: Path, produces: Path):
-    data = tomli.loads(depends_on.read_text())
+    input_text = depends_on.read_text()
+    input_lines = input_text.splitlines()
+    depends_on.write_text("\n".join(sorted(input_lines)))
+
+    data = tomli.loads(input_text)
 
     lines = [
         create_command_def(n, c)

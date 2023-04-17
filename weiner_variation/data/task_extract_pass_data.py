@@ -31,7 +31,7 @@ for in_file, out_file in zip(RAW_DATA_FILES, PASSES_FILES):
             )
             p["roll_torque"] = p.apply(
                 lambda row: np.abs(raw_data[f"roll_torque_{key}"][
-                                       (raw_data.index > row.start) & (raw_data.index < row.end)]).median(),
+                                       (raw_data.index > row.start) & (raw_data.index < row.end)]).median() / 2,
                 axis=1
             )
 

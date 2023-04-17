@@ -8,12 +8,16 @@ from pathlib import Path
 
 from scipy import stats
 
-from weiner_variation.config import DATA_DIR, IMG_DIR
+from weiner_variation.config import DATA_DIR, IMG_DIR, ROOT_DIR
 from weiner_variation.data.config import PAUSES_BINS
 
 
 @pytask.mark.task()
-@pytask.mark.depends_on({"data": DATA_DIR / "duo_pauses.csv", "dist": DATA_DIR / "duo_pauses_dist.csv"})
+@pytask.mark.depends_on({
+    "data": DATA_DIR / "duo_pauses.csv",
+    "dist": DATA_DIR / "duo_pauses_dist.csv",
+    "config": ROOT_DIR / "config.py"
+})
 @pytask.mark.produces([IMG_DIR / f"plot_histogram_pauses.{s}" for s in ["png", "pdf", "svg"]])
 def task_histogram_pauses(depends_on: dict[str, Path], produces: dict[Any, Path]):
     fig: plt.Figure = plt.figure(dpi=600, figsize=(6.4, 4.5))
@@ -23,7 +27,7 @@ def task_histogram_pauses(depends_on: dict[str, Path], produces: dict[Any, Path]
 
     ax[1].grid(True)
     ax[1].set_ylabel("Cumulative Density")
-    ax[1].set_xlabel("Pause Duration $t$ in s")
+    ax[1].set_xlabel("Pause Duration $\\PauseDuration$ in s")
     ax[1].set_ylim(0, 1.1)
 
     data = pd.read_csv(depends_on["data"])
@@ -40,8 +44,14 @@ def task_histogram_pauses(depends_on: dict[str, Path], produces: dict[Any, Path]
 
     ax[0].text(12, 0.4, "\n".join(
         [
-            rf"$\hat{{{s}}} = {dist[k].values[0]:.3f}$"
-            for s, k in [(r"\mu", "mean"), (r"\sigma", "std"), (r"\alpha", "alpha"), (r"\beta", "beta"), ("t_0", "loc")]
+            rf"$\Estimated{{{s}}} = \num{{{dist[k].values[0]:.3f}}}$"
+            for s, k in [
+                (r"\Mean", "mean"),
+                (r"\StandardDeviation", "std"),
+                (r"\GammaDistributionAlpha", "alpha"),
+                (r"\GammaDistributionBeta", "beta"),
+                (r"\MinPauseDuration", "loc")
+            ]
         ]
     ), verticalalignment="top", bbox=dict(facecolor="white", boxstyle="round"))
 
