@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import pytask
 import pyroll.core as pr
+from matplotlib.colors import to_rgba
 
 from weiner_variation.config import SIM_DIR, IMG_DIR, DATA_DIR, ROOT_DIR
 from weiner_variation.data.config import PASSES_DIR
@@ -20,10 +21,17 @@ PASS_LABELS = [p.label for p in PASSES]
 
 EXP_FILES = [PASSES_DIR / f"2022-09-26_0{i + 1}.csv" for i in range(4)]
 
-FLIER = dict(
-    marker="+",
-    markersize="4"
-)
+
+def boxplot_props(c):
+    return dict(
+        flierprops=dict(
+            marker="+",
+            markersize="4",
+        ),
+        boxprops=dict(facecolor=to_rgba(c, 0.5)),
+        medianprops=dict(color=c),
+        patch_artist=True,
+    )
 
 
 def _reindex_in(data):
@@ -49,7 +57,7 @@ def _load_exp_data(files):
 
 @contextmanager
 def _plot(files, figsize=None):
-    fig: plt.Figure = plt.figure(figsize=figsize)
+    fig: plt.Figure = plt.figure(figsize=figsize, dpi=600)
     ax: plt.Axes = fig.subplots()
 
     ax.set_xlabel("Roll Pass")
@@ -64,12 +72,12 @@ def _plot(files, figsize=None):
 
     fig.tight_layout()
     for f in files.values():
-        fig.savefig(f, dpi=300)
+        fig.savefig(f)
 
     plt.close(fig)
 
 
-for sim in ["input", "elastic", "durations"]:
+for sim, color in zip(["input", "durations", "elastic"], ["C0", "C1", "C2"]):
     @pytask.mark.task(id=sim)
     @pytask.mark.depends_on({
         "sim": DATA_DIR / f"sim_{sim}_results.csv",
@@ -80,7 +88,7 @@ for sim in ["input", "elastic", "durations"]:
         IMG_DIR / f"{sim}_roll_force.{suffix}"
         for suffix in ["png", "pdf", "svg"]]
     )
-    def task_plot_roll_force(produces, depends_on):
+    def task_plot_roll_force(produces, depends_on, color=color):
         df_sim = _load_sim_data(depends_on["sim"])
         df_exp = _load_exp_data(depends_on["exp"])
 
@@ -88,8 +96,8 @@ for sim in ["input", "elastic", "durations"]:
             ax.set_ylabel("Roll Force $\\RollForce$ in \\unit{\\kilo\\newton}")
             ax.set_ylim(0, 400)
 
-            ax.boxplot(df_sim.roll_force / 1e3, positions=PASS_POSITIONS, flierprops=FLIER)
-            ax.bar(df_sim.roll_force.columns, df_sim.roll_force.loc[0] / 1e3, fill="C0", alpha=0.5, label="nominal")
+            ax.boxplot(df_sim.roll_force / 1e3, positions=PASS_POSITIONS, **boxplot_props(color))
+            ax.bar(df_sim.roll_force.columns, df_sim.roll_force.loc[0] / 1e3, fill=color, alpha=0.5, label="nominal")
 
             for c in df_exp["roll_force"].columns:
                 artist = ax.scatter(df_exp["roll_force"].index, df_exp["roll_force"][c], marker="x", c="r", lw=1)
@@ -106,7 +114,7 @@ for sim in ["input", "elastic", "durations"]:
         IMG_DIR / f"{sim}_roll_torque.{suffix}"
         for suffix in ["png", "pdf", "svg"]]
     )
-    def task_plot_roll_torque(produces, depends_on):
+    def task_plot_roll_torque(produces, depends_on, color=color):
         df_sim = _load_sim_data(depends_on["sim"])
         df_exp = _load_exp_data(depends_on["exp"])
 
@@ -114,8 +122,8 @@ for sim in ["input", "elastic", "durations"]:
             ax.set_ylabel("Roll Torque $\\RollTorque$ in \\unit{\\kilo\\newton\\meter}")
             ax.set_ylim(0, 9)
 
-            ax.boxplot(df_sim.roll_torque / 1e3, positions=PASS_POSITIONS, flierprops=FLIER)
-            ax.bar(df_sim.roll_torque.columns, df_sim.roll_torque.loc[0] / 1e3, fill="C0", alpha=0.5, label="nominal")
+            ax.boxplot(df_sim.roll_torque / 1e3, positions=PASS_POSITIONS, **boxplot_props(color))
+            ax.bar(df_sim.roll_torque.columns, df_sim.roll_torque.loc[0] / 1e3, fill=color, alpha=0.5, label="nominal")
 
             for c in df_exp["roll_torque"].columns:
                 artist = ax.scatter(df_exp["roll_torque"].index, df_exp["roll_torque"][c], marker="x", c="r", lw=1)
@@ -132,28 +140,28 @@ for sim in ["input", "elastic", "durations"]:
         IMG_DIR / f"{sim}_temperature.{suffix}"
         for suffix in ["png", "pdf", "svg"]]
     )
-    def task_plot_temperature(produces, depends_on):
+    def task_plot_temperature(produces, depends_on, color=color):
         df_sim = _load_sim_data(depends_on["sim"])
         df_exp = _load_exp_data(depends_on["exp"])
 
-        with _plot(produces) as (fig, ax):
+        with _plot(produces, (6.4, 3)) as (fig, ax):
             ax.set_ylabel("Workpiece Temperature $\\Temperature$ in \\unit{\\kelvin}")
-            ax.set_ylim(1050, 1550)
+            ax.set_ylim(1100, 1450)
 
-            ax.boxplot(df_sim.in_temperature, positions=PASS_POSITIONS - 0.25, widths=0.25, flierprops=FLIER)
-            ax.boxplot(df_sim.out_temperature, positions=PASS_POSITIONS + 0.25, widths=0.25, flierprops=FLIER)
+            ax.boxplot(df_sim.in_temperature, positions=PASS_POSITIONS - 0.25, widths=0.25, **boxplot_props(color))
+            ax.boxplot(df_sim.out_temperature, positions=PASS_POSITIONS + 0.25, widths=0.25, **boxplot_props(color))
 
             mean = pd.concat([
                 _reindex_in(df_sim.in_temperature.mean()),
                 _reindex_out(df_sim.out_temperature.mean())
             ]).sort_index()
-            ax.plot(mean, c="C1", alpha=0.5, label="mean")
+            ax.plot(mean, c=color, alpha=0.5, label="mean", ls="--")
 
             nominal = pd.concat([
                 _reindex_in(df_sim.in_temperature.loc[0]),
                 _reindex_out(df_sim.out_temperature.loc[0])
             ]).sort_index()
-            ax.plot(nominal, c="C0", alpha=0.5, label="nominal")
+            ax.plot(nominal, c=color, alpha=0.5, label="nominal")
 
             in_temperatures = _reindex_in(df_exp.in_temperature.copy()) + 273.15
             for c in in_temperatures.columns:
@@ -174,15 +182,15 @@ for sim in ["input", "elastic", "durations"]:
         IMG_DIR / f"{sim}_filling_ratio.{suffix}"
         for suffix in ["png", "pdf", "svg"]]
     )
-    def task_plot_filling_ratio(produces, depends_on):
+    def task_plot_filling_ratio(produces, depends_on, color=color):
         df_sim = _load_sim_data(depends_on["sim"])
 
         with _plot(produces) as (fig, ax):
             ax.set_ylabel("Filling Ratio $\\FillingRatio$")
             ax.set_ylim(0.7, 1.1)
 
-            ax.boxplot(df_sim.filling_ratio, positions=PASS_POSITIONS, flierprops=FLIER)
-            ax.bar(df_sim.filling_ratio.columns, df_sim.filling_ratio.loc[0], fill="C0", alpha=0.5, label="nominal")
+            ax.boxplot(df_sim.filling_ratio, positions=PASS_POSITIONS, **boxplot_props(color))
+            ax.bar(df_sim.filling_ratio.columns, df_sim.filling_ratio.loc[0], fill=color, alpha=0.5, label="nominal")
 
 
 @pytask.mark.depends_on({
