@@ -19,7 +19,7 @@ class Run(ElementCompound):
         self.add(Arrow().length(1))
         self.add(d_out := Data().label("result data"))
 
-        self.add(EncircleBox([d_in, d_out]).linewidth(1).linestyle("--").label(f"Run #{i}"))
+        self.add(EncircleBox([d_in, d_out]).linewidth(1).linestyle("--").label(f"Run \\#{i}"))
 
         self.anchors = {
             "start": d_in.W,
