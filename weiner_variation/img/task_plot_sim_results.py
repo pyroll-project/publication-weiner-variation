@@ -7,6 +7,7 @@ import pandas as pd
 import pytask
 import pyroll.core as pr
 from matplotlib.colors import to_rgba
+from scipy.stats import linregress
 
 from weiner_variation.config import SIM_DIR, IMG_DIR, DATA_DIR, ROOT_DIR
 from weiner_variation.data.config import PASSES_DIR
@@ -191,6 +192,64 @@ for sim, color in zip(["input", "durations", "elastic"], ["C0", "C1", "C2"]):
 
             ax.boxplot(df_sim.filling_ratio, positions=PASS_POSITIONS, **boxplot_props(color))
             ax.bar(df_sim.filling_ratio.columns, df_sim.filling_ratio.loc[0], fill=color, alpha=0.5, label="nominal")
+
+
+    @pytask.mark.task(id=sim)
+    @pytask.mark.depends_on({
+        "results": DATA_DIR / f"sim_{sim}_results.csv",
+        "config": ROOT_DIR / "config.py"
+    })
+    @pytask.mark.produces([
+        IMG_DIR / f"{sim}_temperature_correlation.{suffix}"
+        for suffix in ["png", "pdf", "svg"]]
+    )
+    def task_plot_temperature_correlation(produces, depends_on):
+        df_passes = _load_sim_data(depends_on["results"])
+        df_transports = pd.DataFrame({
+                                         ("in_temperature", f"T{i}"): df_passes["out_temperature"].iloc[:, i]
+                                         for i in range(len(df_passes["out_temperature"].columns) - 1)
+                                     } | {
+                                         ("out_temperature", f"T{i}"): df_passes["in_temperature"].iloc[:, i + 1]
+                                         for i in range(len(df_passes["in_temperature"].columns) - 1)
+                                     })
+
+        temperature_changes_rp = (df_passes["out_temperature"] - df_passes["in_temperature"]).mean().abs()
+        temperature_changes_t = (df_transports["out_temperature"] - df_transports["in_temperature"]).mean().abs()
+        std_changes_rp = (df_passes["out_temperature"].std() - df_passes["in_temperature"].std()).abs() / df_passes[
+            "in_temperature"].std()
+        std_changes_t = (df_transports["out_temperature"].std() - df_transports["in_temperature"].std()).abs() / \
+                        df_transports["in_temperature"].std()
+
+        fig: plt.Figure = plt.figure(figsize=(6.4, 4.8), dpi=600)
+        ax: plt.Axes = fig.add_subplot()
+        ax.set_xlabel(
+            "Absolute Change in Workpiece Temperature $\\Delta\\Temperature$ Within the Unit in \\unit{\\kelvin}")
+        ax.set_ylabel(
+            "Absolute Change in Standard Deviation of\\\\Workpiece Temperature $\\Delta\\StandardDeviation(\\Temperature)$ Within the Unit in \\unit{\\kelvin}")
+
+        ax.scatter(temperature_changes_rp, std_changes_rp, label="Roll Passes", c="C0", marker="+")
+        ax.scatter(temperature_changes_t, std_changes_t, label="Transports", c="C1", marker="x")
+
+        temperature_changes = pd.concat([temperature_changes_rp, temperature_changes_t])
+        std_changes = pd.concat([std_changes_rp, std_changes_t])
+
+        rp_regr = linregress(temperature_changes_rp, std_changes_rp)
+        t_regr = linregress(temperature_changes_t, std_changes_t)
+        regr = linregress(temperature_changes, std_changes)
+
+        x = np.linspace(0, temperature_changes.max())
+        ax.plot(x, rp_regr.slope * x + rp_regr.intercept, c="C0", ls="--")
+        ax.plot(x, t_regr.slope * x + t_regr.intercept, c="C1", ls="--")
+        # ax.plot(x, regr.slope * x + regr.intercept, c="C2", ls="--")
+
+        ax.legend()
+        ax.grid(True)
+
+        fig.tight_layout()
+        for f in produces.values():
+            fig.savefig(f)
+
+        plt.close(fig)
 
 
 @pytask.mark.depends_on({

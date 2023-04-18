@@ -16,6 +16,7 @@ dependencies = [
     "scipy ~= 1.9.0",
     "schemdraw ~= 0.15",
     "jinja2 ~= 3.1",
+    "coconut",
 ]
 
 [build-system]
