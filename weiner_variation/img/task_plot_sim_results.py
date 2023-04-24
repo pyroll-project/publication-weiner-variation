@@ -220,12 +220,12 @@ for sim, color in zip(["input", "durations", "elastic"], ["C0", "C1", "C2"]):
         std_changes_t = (df_transports["out_temperature"].std() - df_transports["in_temperature"].std()).abs() / \
                         df_transports["in_temperature"].std()
 
-        fig: plt.Figure = plt.figure(figsize=(6.4, 4.8), dpi=600)
+        fig: plt.Figure = plt.figure(figsize=(6.4, 3), dpi=600)
         ax: plt.Axes = fig.add_subplot()
         ax.set_xlabel(
-            "Absolute Change in Workpiece Temperature $\\Delta\\Temperature$ Within the Unit in \\unit{\\kelvin}")
+            "Absolute Change in Workpiece Temperature $\\Delta\\Temperature$ in \\unit{\\kelvin}")
         ax.set_ylabel(
-            "Absolute Change in Standard Deviation of\\\\Workpiece Temperature $\\Delta\\StandardDeviation(\\Temperature)$ Within the Unit in \\unit{\\kelvin}")
+            "Relative Depression of Workpiece\\\\Temperature Standard Deviation $\\RelativeStandardDeviationDepression$ in \\unit{\\kelvin}")
 
         ax.scatter(temperature_changes_rp, std_changes_rp, label="Roll Passes", c="C0", marker="+")
         ax.scatter(temperature_changes_t, std_changes_t, label="Transports", c="C1", marker="x")
@@ -310,7 +310,7 @@ def task_plot_temperature_std(produces, depends_on):
 def task_plot_temperature_stds(produces, depends_on):
     with _plot(produces, (6, 3)) as (fig, ax):
         ax: plt.Axes
-        ax.set_ylabel("Standard Deviation of\nWorkpiece Temperature \\Temperature in \\unit{\\kelvin}")
+        ax.set_ylabel("Standard Deviation of\nWorkpiece Temperature $\\StandardDeviation(\\Temperature)$ in \\unit{\\kelvin}")
 
         for i, f in enumerate(T_FACTORS):
             df_input = _load_sim_data(depends_on["input", f])
@@ -336,7 +336,7 @@ def task_plot_temperature_stds(produces, depends_on):
 def task_plot_filling_stds(produces, depends_on):
     with _plot(produces, (6, 3)) as (fig, ax):
         ax: plt.Axes
-        ax.set_ylabel("Standard Deviation of\nFilling Ratio $\\FillingRatio$")
+        ax.set_ylabel("Standard Deviation of\nFilling Ratio $\\StandardDeviation(\\FillingRatio)$")
 
         for i, f in enumerate(D_FACTORS):
             df_input = _load_sim_data(depends_on["input", f])

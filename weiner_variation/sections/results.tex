@@ -53,6 +53,7 @@ The temperature evolution of the first case is shown in \autoref{fig:plot_input_
 The variation of the input workpiece was taken as obtained in \autoref{subsubsec:input-workpiece-variation}.
 The box plots in the figure show the variation of the workpiece temperature, where the box marks a distance of $\Estimated\StandardDeviation$ to $\Estimated\Mean$ and the whiskers a distance of $3\Estimated\StandardDeviation$.
 The variation of temperature decreases with each processing step and is remarkably small in the product.
+So there is something like a ``natural'' depression of variation in each process step.
 
 The second case, however, is shown in \autoref{fig:plot_durations_temperature}.
 Here, the variation is not decreasing with each step, but increasing in the transport steps.
@@ -73,12 +74,61 @@ One can see, that the overall variation is increasing solely in the reversing tr
 Note, that the influence of transports in oval cross-section shape is remarkably higher than those in round shape.
 This can be explained by the adverse surface area to volume ratio of oval cross-sections.
 
-% Correlation Temperature Change <-> Variance Influence ?
-% Stellschrauben: Temperaturverlust im Transport begrenzen, Temperaturanstieg im Walzstich erhöhen
+\begin{figure}
+    \begin{subfigure}{\linewidth}
+        \centering
+        \includegraphics{img/plot_input_temperature_correlation}
+        \caption{Under Influence of Input Workpiece Variation}
+        \label{fig:plot_input_temperature_correlation}
+    \end{subfigure}
+    \begin{subfigure}{\linewidth}
+        \centering
+        \includegraphics{img/plot_durations_temperature_correlation}
+        \caption{Under Influence of Input Workpiece Variation and Pause Duration Variation}
+        \label{fig:plot_durations_temperature_correlation}
+    \end{subfigure}
+    \caption{Correlation Between Change in Temperature Standard Deviation and Change in Temperature Per Unit}
+\end{figure}
+
+From this, the hypothesis that process steps with high influence on temperature have also high influence on the variation depression can be stated.
+This is proofed by plotting the relative depression in standard deviation per step as in \autoref{eq:relative-variation-depression} over the change in temperature in the step.
+This correlation can especially be observed in varying only the input workpiece as shown in \autoref{fig:plot_input_temperature_correlation}, where the variation depressions in roll passes and transports show an approximately linear correlation to the temperature changes.
+In the case of varying pause durations, the roll passes still show the same behavior, but the correlation in the transports is destroyed by the introduction of additional variation, as can be seen in \autoref{fig:plot_durations_temperature_correlation}.
+
+\begin{equation}
+    \RelativeStandardDeviationDepression = \frac{\Abs{\Change{\StandardDeviation}}}{\Abs{\StandardDeviation}}
+    \label{eq:relative-variation-depression}
+\end{equation}
 
 % Vergleich Korngröße
 
-\subsubsection{Influence of Elastic Mill Response}\label{subsubsec:influence-of-elastic-mill-response}
-
 \subsubsection{Elimination of Input Variation}\label{subsubsec:elimination-of-input-variation}
 
+A common statement found is that the variations in the input workpiece are eliminated after three to four passes.
+To validate this statement, simulations under different variations of the input workpiece have been carried out.
+
+\autoref{fig:plot_filling_stds} shows the depression of the filling ratio standard deviation along the pass sequence for different initial workpiece diameter variations.
+It is found that the variation decreases rapidly in the first three passes and is negligible small in the fourth, no matter what initial variation was applied.
+So regarding the geometry the validity of the former statement can be confirmed.
+
+\autoref{fig:plot_temperature_stds}, however, shows the depression of temperature variation along the pass sequence for different initial workpiece temperature variations.
+Although, the variation is effectively depressed in the sequence, the variation of the output workpiece is still remarkably higher for higher input variations.
+So regarding the temperature evolutions, the statement can not be confirmed, especially in regard of microstructure evolution heavily effected by the temperature path taken.
+
+\begin{figure}
+    \begin{subfigure}{\linewidth}
+        \centering
+        \includegraphics{img/plot_filling_stds}
+        \caption{Variation of Roll Pass Filling Ratios}
+        \label{fig:plot_filling_stds}
+    \end{subfigure}
+    \begin{subfigure}{\linewidth}
+        \centering
+        \includegraphics{img/plot_temperature_stds}
+        \caption{Variation of Workpiece Temperature}
+        \label{fig:plot_temperature_stds}
+    \end{subfigure}
+    \caption{Depression of Workpiece Variation}
+\end{figure}
+
+% Einfluss auf Mikrostruktur
