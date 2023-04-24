@@ -86,7 +86,7 @@ for sim, color in zip(["input", "durations", "elastic"], ["C0", "C1", "C2"]):
         "config": ROOT_DIR / "config.py"
     })
     @pytask.mark.produces([
-        IMG_DIR / f"{sim}_roll_force.{suffix}"
+        IMG_DIR / f"plot_{sim}_roll_force.{suffix}"
         for suffix in ["png", "pdf", "svg"]]
     )
     def task_plot_roll_force(produces, depends_on, color=color):
@@ -112,7 +112,7 @@ for sim, color in zip(["input", "durations", "elastic"], ["C0", "C1", "C2"]):
         "config": ROOT_DIR / "config.py"
     })
     @pytask.mark.produces([
-        IMG_DIR / f"{sim}_roll_torque.{suffix}"
+        IMG_DIR / f"plot_{sim}_roll_torque.{suffix}"
         for suffix in ["png", "pdf", "svg"]]
     )
     def task_plot_roll_torque(produces, depends_on, color=color):
@@ -138,7 +138,7 @@ for sim, color in zip(["input", "durations", "elastic"], ["C0", "C1", "C2"]):
         "config": ROOT_DIR / "config.py"
     })
     @pytask.mark.produces([
-        IMG_DIR / f"{sim}_temperature.{suffix}"
+        IMG_DIR / f"plot_{sim}_temperature.{suffix}"
         for suffix in ["png", "pdf", "svg"]]
     )
     def task_plot_temperature(produces, depends_on, color=color):
@@ -180,7 +180,7 @@ for sim, color in zip(["input", "durations", "elastic"], ["C0", "C1", "C2"]):
         "config": ROOT_DIR / "config.py"
     })
     @pytask.mark.produces([
-        IMG_DIR / f"{sim}_filling_ratio.{suffix}"
+        IMG_DIR / f"plot_{sim}_filling_ratio.{suffix}"
         for suffix in ["png", "pdf", "svg"]]
     )
     def task_plot_filling_ratio(produces, depends_on, color=color):
@@ -200,7 +200,7 @@ for sim, color in zip(["input", "durations", "elastic"], ["C0", "C1", "C2"]):
         "config": ROOT_DIR / "config.py"
     })
     @pytask.mark.produces([
-        IMG_DIR / f"{sim}_temperature_correlation.{suffix}"
+        IMG_DIR / f"plot_{sim}_temperature_correlation.{suffix}"
         for suffix in ["png", "pdf", "svg"]]
     )
     def task_plot_temperature_correlation(produces, depends_on):
@@ -260,7 +260,7 @@ for sim, color in zip(["input", "durations", "elastic"], ["C0", "C1", "C2"]):
     "config": ROOT_DIR / "config.py"
 })
 @pytask.mark.produces([
-    IMG_DIR / f"temperature_std.{suffix}"
+    IMG_DIR / f"plot_temperature_std.{suffix}"
     for suffix in ["png", "pdf", "svg"]]
 )
 def task_plot_temperature_std(produces, depends_on):
@@ -304,7 +304,7 @@ def task_plot_temperature_std(produces, depends_on):
                             for f in T_FACTORS
                         })
 @pytask.mark.produces([
-    IMG_DIR / f"temperature_stds.{suffix}"
+    IMG_DIR / f"plot_temperature_stds.{suffix}"
     for suffix in ["png", "pdf", "svg"]]
 )
 def task_plot_temperature_stds(produces, depends_on):
@@ -330,7 +330,7 @@ def task_plot_temperature_stds(produces, depends_on):
                             for f in D_FACTORS
                         })
 @pytask.mark.produces([
-    IMG_DIR / f"filling_stds.{suffix}"
+    IMG_DIR / f"plot_filling_stds.{suffix}"
     for suffix in ["png", "pdf", "svg"]]
 )
 def task_plot_filling_stds(produces, depends_on):

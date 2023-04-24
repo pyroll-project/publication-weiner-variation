@@ -70,3 +70,5 @@ def task_plot_pass_sequence(depends_on: dict[str, Path], produces: dict[Any, Pat
 
     for p in produces.values():
         fig.savefig(p)
+
+    plt.close(fig)

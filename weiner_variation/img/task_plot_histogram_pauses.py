@@ -19,7 +19,7 @@ from weiner_variation.data.config import PAUSES_BINS
     "config": ROOT_DIR / "config.py"
 })
 @pytask.mark.produces([IMG_DIR / f"plot_histogram_pauses.{s}" for s in ["png", "pdf", "svg"]])
-def task_histogram_pauses(depends_on: dict[str, Path], produces: dict[Any, Path]):
+def task_plot_histogram_pauses(depends_on: dict[str, Path], produces: dict[Any, Path]):
     fig: plt.Figure = plt.figure(dpi=600, figsize=(6.4, 4.5))
     ax: list[plt.Axes] = fig.subplots(nrows=2, sharex="all")
     ax[0].grid(True)

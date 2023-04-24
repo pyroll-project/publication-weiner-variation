@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Any
 
+import matplotlib.pyplot as plt
 import pytask as pytask
 from schemdraw import Drawing
 from schemdraw.elements import ElementCompound, DotDotDot, EncircleBox
@@ -30,7 +31,7 @@ class Run(ElementCompound):
         self.anchor("start")
 
 
-@pytask.mark.produces("flow_chart_mc_principle." + s for s in ["svg", "pdf", "png"])
+@pytask.mark.produces("chart_mc_principle." + s for s in ["svg", "pdf", "png"])
 def task_flow_chart_mc_principle(produces: dict[Any, Path]):
     with Drawing() as d:
         d.add(b_sample := Box().label("random\nsampling"))
@@ -66,3 +67,4 @@ def task_flow_chart_mc_principle(produces: dict[Any, Path]):
 
         for p in produces.values():
             d.save(str(p))
+
