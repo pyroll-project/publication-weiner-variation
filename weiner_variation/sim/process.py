@@ -259,12 +259,17 @@ PASS_SEQUENCE = pr.PassSequence([
     ),
 ])
 
+CONTACT_HEAT_TRANSFER = 5000
+CONVECTION_HEAT_TRANSFER = 10
+RELATIVE_RADIATION = 0.8
+ROLL_TEMPERATURE = 293.15
+
 for u in PASS_SEQUENCE:
     if isinstance(u, pr.RollPass):
-        u.roll.contact_heat_transfer_coefficient = 5000
+        u.roll.contact_heat_transfer_coefficient = CONTACT_HEAT_TRANSFER
         u.roll.elastic_modulus = 210e9
         u.roll.poissons_ratio = 0.3
-        u.roll.temperature = 293.15
+        u.roll.temperature = ROLL_TEMPERATURE
     if isinstance(u, pr.Transport):
-        u.convection_heat_transfer_coefficient = 10
-        u.relative_radiation_coefficient = 0.8
+        u.convection_heat_transfer_coefficient = CONVECTION_HEAT_TRANSFER
+        u.relative_radiation_coefficient = RELATIVE_RADIATION

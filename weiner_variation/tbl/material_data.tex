@@ -1,0 +1,38 @@
+\begin{subtable}{\linewidth}
+    \caption{Flow Stress Model of C45 acc.~to~\cite{Spittel2009}}
+    \begin{tblr}{
+        colspec={XXXXX},
+        columns={r},
+        row{1}={1cm,m},
+        row{2}={l},
+        row{4}={l},
+        cell{1}{1} = {c=7}{c},
+        cell{4-5}{4,6} = {c=2}{},
+    }
+        \toprule
+        $\displaystyle \FlowStress = \FlowStressA \cdot \E^{\FlowStressM1 \CelsiusTemperature} \cdot \LogStrain^{\FlowStressM2} \cdot \LogStrainRate^{\FlowStressM3} \cdot \E^{\FlowStressM4/\LogStrain} \cdot \left( 1 + \LogStrain \right)^{\FlowStressM5\CelsiusTemperature + \FlowStressM6} \cdot \E^{\FlowStressM7\LogStrain} \cdot \left( 1 + \LogStrainRate \right)^{\FlowStressM8\CelsiusTemperature} \cdot \CelsiusTemperature^{\FlowStressM9}$ \\
+        $\FlowStressA${% for i in range(1, 7) %} & $\FlowStressM{{- i -}}${% endfor %} \\
+            \midrule
+            \num{ {{- c.a / 1e6 -}} }{% for i in range(1, 7) %} & \num{ {{- c["m{}".format(i)] -}} }{% endfor %} \\[3mm]
+            {% for i in range(7, 10) %}$\FlowStressM{{- i -}}$ & {% endfor %} $\CelsiusTemperature$ && $\LogStrain$ \\
+            \midrule
+            {% for i in range(7, 10) %}\num{ {{- c["m{}".format(i)] -}} } & {% endfor %} \qtyrange{820}{1200}{\celsius} && \numrange{0.04}{1.5}\\
+            \bottomrule
+    \end{tblr}
+\end{subtable}
+\\\vspace{1em}
+\begin{subtable}{\linewidth}
+    \caption{Other Material Data and Model Coefficients}
+    \begin{tblr}{
+        colspec={XXXXX},
+        columns={r},
+        row{1-2}={l},
+    }
+        \toprule
+        $\Density$                                  & $\ThermalCapacity$                                   & $\HeatTransferFactor_\Contact$                        & $\HeatTransferFactor_\Convection$ & $\RelativeRadiationCoefficient$                    \\
+        \unit{\kilo\gram\per\cubic\meter}           & \unit{\joule\per\kilo\gram\per\kelvin}               & \unit{\watt\per\square\meter\per\kelvin} & \unit{\watt\per\square\meter\per\kelvin} & \\
+        \midrule
+        \num{ {{- "{:.1f}".format(ip.density) -}} } & \num{ {{- "{:.1f}".format(ip.thermal_capacity) -}} } & \num{ {{- "{:.1f}".format(alpha_cont) -}} } & \num{ {{- "{:.1f}".format(alpha_conv) -}} }  & \num{ {{- "{:.1f}".format(epsr) -}} } \\
+        \bottomrule
+    \end{tblr}
+\end{subtable}
