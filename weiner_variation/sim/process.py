@@ -10,19 +10,19 @@ def create_in_profile(diameter, temperature):
         temperature=temperature,
         density=7.5e3,
         thermal_capacity=690,
-        material="BST 500",
+        material="C45",
         strain=0,
         freiberg_flow_stress_coefficients=FreibergFlowStressCoefficients(
-            a=4877.12 * 1e6,
-            m1=-0.00273339,
-            m2=0.302309,
-            m3=-0.0407581,
-            m4=0.000222222,
-            m5=-0.000383134,
+            a=2731.39 * 1e6,
+            m1=-0.00268,
+            m2=0.31076,
+            m3=0,
+            m4=-0.00056,
+            m5=0.00046,
             m6=0,
-            m7=-0.492672,
-            m8=0.0000175044,
-            m9=-0.0611783,
+            m7=-0.98375,
+            m8=0.000139,
+            m9=0,
             baseStrain=0.1,
             baseStrainRate=0.1
         ),
@@ -30,7 +30,7 @@ def create_in_profile(diameter, temperature):
 
 
 DIAMETER = 50e-3
-TEMPERATURE = 1100 + 273.15
+TEMPERATURE = 1150 + 273.15
 IN_PROFILE = create_in_profile(DIAMETER, TEMPERATURE)
 
 PASS_SEQUENCE = pr.PassSequence([
@@ -201,16 +201,16 @@ PASS_SEQUENCE = pr.PassSequence([
         roll=pr.Roll(
             groove=pr.CircularOvalGroove(
                 r1=2.5e-3,
-                r2=12.5e-3,
-                depth=2.9e-3
+                usable_width=15.6e-3,
+                depth=(8.1e-3 - 2.3e-3) / 2,
             ),
             nominal_radius=107.5e-3,
         ),
-        velocity=4.89,
+        velocity=7.8,
         gap=2.3e-3,
     ),
     pr.Transport(
-        duration=1.5 / 4.89
+        duration=1.5 / 7.8
     ),
     pr.RollPass(
         label="F2",
@@ -218,43 +218,43 @@ PASS_SEQUENCE = pr.PassSequence([
             groove=pr.RoundGroove(
                 r1=0.5e-3,
                 r2=5.1e-3,
-                depth=4.25e-3
+                depth=(10e-3 - 1.5e-3) / 2
             ),
             nominal_radius=107.5e-3,
         ),
-        velocity=6.1,
+        velocity=9.3,
         gap=1.5e-3,
     ),
     pr.Transport(
-        duration=1.5 / 6.1
+        duration=1.5 / 9.3
     ),
     pr.RollPass(
         label="F3",
         roll=pr.Roll(
             groove=pr.CircularOvalGroove(
                 r1=2.5e-3,
-                r2=11e-3,
-                depth=2.12e-3
+                usable_width=12.8e-3,
+                depth=(6.2e-3 - 1.96e-3) / 2,
             ),
             nominal_radius=107.5e-3,
         ),
-        velocity=7.91,
-        gap=1.9e-3,
+        velocity=12.06,
+        gap=1.96e-3,
     ),
     pr.Transport(
-        duration=1.5 / 7.91
+        duration=1.5 / 12.06
     ),
     pr.RollPass(
         label="F4",
         roll=pr.Roll(
             groove=pr.RoundGroove(
                 r1=0.5e-3,
-                r2=4.0e-3,
-                depth=3.7e-3
+                r2=4.1e-3,
+                depth=(8e-3 - 1.5e-3) / 2
             ),
             nominal_radius=85e-3,
         ),
-        velocity=10,
+        velocity=15.75,
         gap=1.5e-3,
     ),
 ])

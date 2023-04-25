@@ -26,3 +26,4 @@ build-backend = "hatchling.build"
 [tool.pytask.ini_options]
 editor_url_scheme = "pycharm"
 paths = ["weiner_variation"]
+show_errors_immediately = true

@@ -1,10 +1,14 @@
-\begin{tblr}{colspec={l|XXXXXX}}
+\begin{tblr}{
+    colspec={l|XXXXXX},
+    column{3-7}={r},
+    row{1-2}={l},
+}
     \toprule
     \#             & Type                       & $\Width$                                               & $\Height$                                              & $\RollGap$                              & $\RollRadius$                                           & $\Velocity$                          \\
     &                            & \unit{\milli\meter}                                    & \unit{\milli\meter}                                    & \unit{\milli\meter}                     & \unit{\milli\meter}     & \unit{\meter\per\second}   \\
     \midrule
     {% for p in roll_passes %}
-    {{ p.label }} & {{ p | format_pass_type }} & \num{ {{- (p.out_profile.width * 1e3) | round(1) -}} } & \num{ {{-  (p.out_profile.height * 1e3) | round(1) -}} } & \num{ {{-  (p.gap * 1e3) | round(1) -}} } & \num{ {{-  (p.roll.nominal_radius * 1e3) | round(1) -}} } & \num{ {{-  p.velocity | round(1) -}} }\\
+    {{ p.label }} & {{ p | format_pass_type }} & \num{ {{- "{:.1f}".format(p.out_profile.width * 1e3) -}} } & \num{ {{-  "{:.1f}".format(p.out_profile.height * 1e3) -}} } & \num{ {{-  "{:.1f}".format(p.gap * 1e3) -}} } & \num{ {{-  "{:.1f}".format(p.roll.nominal_radius * 1e3) -}} } & \num{ {{-  "{:.1f}".format(p.velocity) -}} }\\
     {% endfor %}
     \bottomrule
 \end{tblr}

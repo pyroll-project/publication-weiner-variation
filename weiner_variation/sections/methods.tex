@@ -3,9 +3,8 @@
 The object of the current investigation is the operation of the experimental semi-continuous rolling plant located at the Institute of Metal Forming, TU Bergakademie Freiberg.
 It consists of a two-high reversing roughing stand and four continuous finishing stands.
 The pass schedule of the current work consists of 10 oval-round reversing passes followed by 4 oval-round continuous finishing passes.
-A \qty{50}{\milli\meter} round workpiece made of a mild structural steel is rolled down to \qty{8}{\milli\meter} diameter.
-Details of the schedule are provided in \autoref{tab:process_conditions} and \autoref{tab:in_profile}, as well as in the supplemental material~\cite{WeinerVariationSupplemental2023}.
-The supplemental material includes the whole code for data processing and simulation needed to reproduce the results of this work.
+A \qty{50}{\milli\meter} round workpiece made of C45 carbon steel is rolled down to \qty{8}{\milli\meter} diameter.
+Details of the schedule are provided in \autoref{tab:process_conditions} and \autoref{tab:workpiece}, as well as in the supplemental material~\cite{WeinerVariationSupplemental2023}.
 
 \begin{figure}
     \centering
@@ -22,13 +21,21 @@ The supplemental material includes the whole code for data processing and simula
     \input{tbl/process_conditions}
 \end{table}
 
-
-
 \begin{table}
-    \centering
+    \begin{subtable}{\linewidth}
+        \centering
+        \caption{Principal Data of the Input Workpiece}
+        \label{tab:in_profile}
+        \input{tbl/in_profile}
+    \end{subtable}
+    \begin{subtable}{\linewidth}
+        \centering
+        \caption{Flow Stress Parameters acc.~to~\cite{Spittel2009}}
+        \label{tab:flow_stress}
+        \input{tbl/flow_stress}
+    \end{subtable}
     \caption{Principal Data of the Input Workpiece}
-    \label{tab:in_profile}
-    \input{tbl/in_profile}
+    \label{tab:workpiece}
 \end{table}
 
 To achieve statistical certainty, about 50 rolling trials were performed.
