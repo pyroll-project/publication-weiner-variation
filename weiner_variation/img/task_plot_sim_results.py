@@ -320,7 +320,7 @@ def task_plot_temperature_stds(produces, depends_on):
             ]).sort_index()
 
             color = mpl.colormaps["twilight"]((i + 1) / (len(T_FACTORS) + 1))
-            ax.plot(std, label=f"$\\num{{{f}}}\\Variance(\\Temperature)$", c=color)
+            ax.plot(std, label=f"$\\num{{{f:.1f}}}\\,\\StandardDeviation(\\Temperature)$", c=color)
 
 
 @pytask.mark.depends_on({
@@ -344,5 +344,5 @@ def task_plot_filling_stds(produces, depends_on):
             color = mpl.colormaps["twilight"]((i + 1) / (len(D_FACTORS) + 1))
             ax.plot(
                 PASS_POSITIONS, df_input.filling_ratio.std().dropna(),
-                label=f"$\\num{{{f}}}\\Variance(\\Diameter)$", c=color
+                label=f"$\\num{{{f:.1f}}}\\,\\StandardDeviation(\\Diameter)$", c=color
             )
