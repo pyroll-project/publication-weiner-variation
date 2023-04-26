@@ -90,8 +90,8 @@ The probability density function (PDF) of the gamma distribution is defined as i
     \label{eq:gamma-dist}
 \end{equation}
 
-Since the gamma distribution is only defined for $x>0$, but no inter-pass durations below a certain value occur due to technical restrictions, the distribution was modified by introducing a minimal inter-pass duration $\MinInterpassDuration$ with $x = \InterpassDuration - \MinInterpassDuration$.
-So there are three free parameters $\GammaDistributionAlpha$, $\GammaDistributionBeta$ and $\MinInterpassDuration$ for fitting of the distribution function.
+Since the gamma distribution is only defined for $x>0$, but no inter-pass durations below a certain value occur due to technical restrictions, the distribution was modified by introducing a minimal inter-pass duration $\Min{\Pause\Duration}$ with $x = \Pause\Duration - \Min{\Pause\Duration}$.
+So there are three free parameters $\GammaDistributionAlpha$, $\GammaDistributionBeta$ and $\Min{\Pause\Duration}$ for fitting of the distribution function.
 The fitting was done using least squares optimization of the PDF function on the density histogram of the data.
 
 \subsection{Core Simulation Procedure}\label{subsec:simulation-procedure}
@@ -116,24 +116,24 @@ The temperature change of the workpiece was calculated by an integral heat balan
     \label{eq:heat-balance}
 \end{equation}
 
-\noindent$\Delta\Temperature_\Convection$ is the temperature change by convective heat flows according to \autoref{eq:heat-convection} with $\HeatTransferFactor_{\Convection}$ as a heat transfer factor, $\Temperature_\Environment$ as the environment temperature, $\Temperature$ as the current workpiece temperature and $\Time$ as the duration of the process step.
+\noindent$\Delta\Temperature_\Convection$ is the temperature change by convective heat flows according to \autoref{eq:heat-convection} with $\HeatTransferFactor_{\Convection}$ as a heat transfer factor, $\Temperature_\Environment$ as the environment temperature, $\Temperature$ as the current workpiece temperature and $\Duration$ as the duration of the process step.
 
 \begin{equation}
-    \Delta\Temperature_\Convection = \HeatTransferFactor_{\Convection} \left( \Temperature_\Environment - \Temperature \right) \Time
+    \Delta\Temperature_\Convection = \HeatTransferFactor_{\Convection} \left( \Temperature_\Environment - \Temperature \right) \Duration
     \label{eq:heat-convection}
 \end{equation}
 
 \noindent$\Delta\Temperature_\Contact$ is the temperature change by contact to the rolls according to \autoref{eq:heat-contact} with $\HeatTransferFactor_{\Contact}$ as a heat transfer factor and $\Temperature_{\Roll}$ as the temperature of the rolls.
 
 \begin{equation}
-    \Delta\Temperature_\Contact = \HeatTransferFactor_{\Contact} \left( \Temperature_\Roll - \Temperature \right) \Time
+    \Delta\Temperature_\Contact = \HeatTransferFactor_{\Contact} \left( \Temperature_\Roll - \Temperature \right) \Duration
     \label{eq:heat-contact}
 \end{equation}
 
 \noindent$\Delta\Temperature_\Radiation$ is the temperature change by radiation according to \autoref{eq:heat-radiation} with $\StefanBoltzmannCoefficient$ as the Stefan's and Boltzmann's constant and $\RelativeRadiationCoefficient$ as the relative radiation coefficient of the gray radiator.
 
 \begin{equation}
-    \Delta\Temperature_\Radiation = \StefanBoltzmannCoefficient \RelativeRadiationCoefficient \left( \Temperature_\Environment^4 - \Temperature^4 \right) \Time
+    \Delta\Temperature_\Radiation = \StefanBoltzmannCoefficient \RelativeRadiationCoefficient \left( \Temperature_\Environment^4 - \Temperature^4 \right) \Duration
     \label{eq:heat-radiation}
 \end{equation}
 

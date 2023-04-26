@@ -41,7 +41,7 @@ def task_plot_timeline_pass_finding(depends_on: Path, produces: dict[..., Path])
 
     ax.grid(True)
     ax.legend()
-    ax.set_xlabel("Time $\\Time$ in \\unit{{\\second}}")
+    ax.set_xlabel("Time $\\Duration$ in \\unit{{\\second}}")
     ax.set_ylabel("Roll Torque $\\RollTorque$ in \\unit{\\kilo\\newton\\meter}")
 
     for f in produces.values():
