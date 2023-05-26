@@ -21,3 +21,5 @@ mpl.rcParams.update({
     "text.latex.preamble": rf"\usepackage{{{ROOT_DIR / 'symbols'}}}\usepackage{{siunitx}}\usepackage{{amsmath}}",
     "font.family": "serif",
 })
+
+MATERIAL = "c45"

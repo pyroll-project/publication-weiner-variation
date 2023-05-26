@@ -38,19 +38,23 @@ df_input = pd.read_csv(DATA_DIR / "input_dist.csv", index_col=0, header=0)
 df_input
 
 # %%
-df_durations = pd.read_csv(DATA_DIR / "duo_pauses_dist.csv", header=0)
+df_durations = pd.read_csv(DATA_DIR / "duo_pauses_dist.csv", header=0, index_col=0)
 df_durations
 
 # %%
 diameter_dist = norm(loc=df_input.loc["diameter", "mean"], scale=df_input.loc["diameter", "std"])
 temperature_dist = norm(loc=df_input.loc["temperature", "mean"], scale=df_input.loc["temperature", "std"])
-durations_dist = gamma(a=df_durations["alpha"], scale=df_durations["beta"], loc=df_durations["loc"])
+durations_dist = gamma(a=df_durations["alpha"]["all"], scale=df_durations["beta"]["all"], loc=df_durations["loc"]["all"])
+durations_dist_last = gamma(a=df_durations["alpha"]["R10-F1"], scale=df_durations["beta"]["R10-F1"], loc=df_durations["loc"]["R10-F1"])
 
 # %%
 RNG = np.random.default_rng(SEED)
 diameters = diameter_dist.rvs(random_state=RNG, size=SAMPLE_COUNT)
 temperatures = temperature_dist.rvs(random_state=RNG, size=SAMPLE_COUNT)
-durations = durations_dist.rvs(random_state=RNG, size=(SAMPLE_COUNT, 10))
+durations = np.concatenate([
+    durations_dist.rvs(random_state=RNG, size=(SAMPLE_COUNT, 9)), 
+    durations_dist_last.rvs(random_state=RNG, size=(SAMPLE_COUNT, 1))
+], axis=1)
 
 draws = [nominal] + [
     DrawDurations(d, t, dur)

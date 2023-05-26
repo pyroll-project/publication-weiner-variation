@@ -1,7 +1,6 @@
 from weiner_variation.config import DATA_DIR
 
 MATERIALS = ["c15", "c45"]
-MATERIAL = "c45"
 
 IBA_EXPORT_DIR = DATA_DIR / "iba_export"
 IBA_EXPORT_FILES = {

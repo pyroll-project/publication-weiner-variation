@@ -39,7 +39,7 @@ def task_analyse_pauses(produces: Path):
 def task_analyse_duo_pauses(produces: dict[str, Path], depends_on: dict[str, Path]):
     df = pd.read_csv(depends_on["data"], index_col=0, header=0)
 
-    data: pd.DataFrame = df.loc[df.index.str.match(r"R\d*-R\d*"), df.columns.str.match(r"Walz*")]
+    data: pd.DataFrame = df.loc[df.index.str.match(r"R\d*-\w\d*"), df.columns.str.match(r"Walz*")]
     all_data = pd.DataFrame({"all": data.stack()}).T
     data = pd.concat([data, all_data])
     data.to_csv(produces["data"])

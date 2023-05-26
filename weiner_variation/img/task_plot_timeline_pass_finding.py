@@ -2,8 +2,8 @@ import pytask
 from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
-from weiner_variation.config import ROOT_DIR
-from weiner_variation.data.config import RAW_DATA_FILES, PASSES_FILES, MATERIAL
+from weiner_variation.config import ROOT_DIR, MATERIAL
+from weiner_variation.data.config import RAW_DATA_FILES, PASSES_FILES
 
 FILE_STEM = "plot_timeline_pass_finding"
 FILE_TYPES = ["png", "svg", "pdf"]

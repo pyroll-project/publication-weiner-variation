@@ -9,7 +9,7 @@ import pyroll.core as pr
 from matplotlib.colors import to_rgba
 from scipy.stats import linregress
 
-from weiner_variation.config import SIM_DIR, IMG_DIR, DATA_DIR, ROOT_DIR
+from weiner_variation.config import SIM_DIR, IMG_DIR, DATA_DIR, ROOT_DIR, MATERIAL
 from weiner_variation.data.config import PASSES_DIR, PASSES_FILES
 from weiner_variation.sim.process import PASS_SEQUENCE
 from weiner_variation.sim.task_sim_temperature_stds import FACTORS as T_FACTORS
@@ -20,7 +20,7 @@ PASSES = [u for u in PASS_SEQUENCE if isinstance(u, pr.RollPass)]
 PASS_POSITIONS = np.arange(len(PASSES))
 PASS_LABELS = [p.label for p in PASSES]
 
-EXP_FILES = PASSES_FILES
+EXP_FILES = PASSES_FILES[MATERIAL]
 
 
 def boxplot_props(c):
@@ -52,7 +52,7 @@ def _load_sim_data(file):
 def _load_exp_data(files):
     return pd.concat(
         [pd.read_csv(f, index_col=0, header=0) for f in files.values()],
-        keys=range(4), axis=1
+        keys=range(len(files)), axis=1
     ).swaplevel(0, 1, axis=1)
 
 
@@ -121,13 +121,13 @@ for sim, color in zip(["input", "durations", "elastic"], ["C0", "C1", "C2"]):
 
         with _plot(produces) as (fig, ax):
             ax.set_ylabel("Roll Torque $\\RollTorque$ in \\unit{\\kilo\\newton\\meter}")
-            ax.set_ylim(0, 9)
+            ax.set_ylim(0, 10)
 
             ax.boxplot(df_sim.roll_torque / 1e3, positions=PASS_POSITIONS, **boxplot_props(color))
             ax.bar(df_sim.roll_torque.columns, df_sim.roll_torque.loc[0] / 1e3, fill=color, alpha=0.5, label="nominal")
 
             for c in df_exp["roll_torque"].columns:
-                artist = ax.scatter(df_exp["roll_torque"].index, df_exp["roll_torque"][c], marker="x", c="r", lw=1)
+                artist = ax.scatter(df_exp["roll_torque"].index, df_exp["roll_torque"][c] / 2, marker="x", c="r", lw=1)
             artist.set_label("experimental")
 
 

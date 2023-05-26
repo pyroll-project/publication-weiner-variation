@@ -1,7 +1,8 @@
 import pyroll.core as pr
 from pyroll.freiberg_flow_stress import FreibergFlowStressCoefficients
 
-REVERSING_PAUSE_DURATION = 6.1
+REVERSING_PAUSE_DURATION = 6
+LAST_REVERSING_PAUSE_DURATION = 9
 
 
 def create_in_profile(diameter, temperature):
@@ -194,7 +195,7 @@ PASS_SEQUENCE = pr.PassSequence([
         velocity=2,
         gap=4e-3,
     ), pr.Transport(
-        duration=REVERSING_PAUSE_DURATION
+        duration=LAST_REVERSING_PAUSE_DURATION
     ),
     pr.RollPass(
         label="F1",
