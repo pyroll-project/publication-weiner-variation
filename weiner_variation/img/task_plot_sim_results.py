@@ -10,7 +10,7 @@ from matplotlib.colors import to_rgba
 from scipy.stats import linregress
 
 from weiner_variation.config import SIM_DIR, IMG_DIR, DATA_DIR, ROOT_DIR
-from weiner_variation.data.config import PASSES_DIR
+from weiner_variation.data.config import PASSES_DIR, PASSES_FILES
 from weiner_variation.sim.process import PASS_SEQUENCE
 from weiner_variation.sim.task_sim_temperature_stds import FACTORS as T_FACTORS
 from weiner_variation.sim.task_sim_diameter_stds import FACTORS as D_FACTORS
@@ -20,7 +20,7 @@ PASSES = [u for u in PASS_SEQUENCE if isinstance(u, pr.RollPass)]
 PASS_POSITIONS = np.arange(len(PASSES))
 PASS_LABELS = [p.label for p in PASSES]
 
-EXP_FILES = [PASSES_DIR / f"2022-09-26_0{i + 1}.csv" for i in range(4)]
+EXP_FILES = PASSES_FILES
 
 
 def boxplot_props(c):

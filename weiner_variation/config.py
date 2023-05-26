@@ -18,6 +18,6 @@ mpl.rcParams["text.latex.preamble"] = rf"\usepackage{{{ROOT_DIR / 'symbols'}}}" 
                                       rf"\usepackage{{siunitx}}"
 mpl.rcParams.update({
     "text.usetex": True,
-    "text.latex.preamble": rf"\usepackage{{{ROOT_DIR / 'symbols'}}}\usepackage{{siunitx}}",
+    "text.latex.preamble": rf"\usepackage{{{ROOT_DIR / 'symbols'}}}\usepackage{{siunitx}}\usepackage{{amsmath}}",
     "font.family": "serif",
 })

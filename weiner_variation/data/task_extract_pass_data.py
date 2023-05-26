@@ -3,118 +3,122 @@ import numpy as np
 import pandas as pd
 import pytask
 from pathlib import Path
-from weiner_variation.data.config import PASSES_FILES, RAW_DATA_FILES
+from weiner_variation.data.config import PASSES_FILES, RAW_DATA_FILES, PASSES_DIR, MATERIALS
 
 from scipy import stats, signal
 
 PEAK_DISTANCE = 100
 WINDOW_LENGTH = 30
-PROMINENCE_DUO = 0.8
-PROMINENCE_F = 0.08
+PROMINENCE_DUO = (0.8, 0.8)
+PROMINENCE_F = (0.3, 0.1)
 
 MIN_TEMP = 850
 
-for in_file, out_file in zip(RAW_DATA_FILES, PASSES_FILES):
-    @pytask.mark.task(id=in_file.stem)
-    @pytask.mark.depends_on(in_file)
-    @pytask.mark.produces(out_file)
-    def task_extract_pass_data(depends_on: Path, produces: Path):
-        raw_data = pd.read_csv(depends_on, header=0, index_col=0)
-        raw_data.index = pd.to_datetime(raw_data.index)
-        raw_data = raw_data.resample("10ms").mean()
+for material in MATERIALS:
+    for in_file, out_file in zip(RAW_DATA_FILES[material], PASSES_FILES[material]):
+        @pytask.mark.task(id=f"{material}/{in_file.stem}")
+        @pytask.mark.depends_on(in_file)
+        @pytask.mark.produces(out_file)
+        def task_extract_pass_data(depends_on: Path, produces: Path, id=in_file.stem):
+            raw_data = pd.read_csv(depends_on, header=0, index_col=0)
+            raw_data.index = pd.to_datetime(raw_data.index)
+            raw_data = raw_data.resample("10ms").mean()
 
-        def _extract_force_and_torque(p: pd.DataFrame, key: str):
-            p["roll_force"] = p.apply(
-                lambda row: raw_data[f"roll_force_{key}"][
-                    (raw_data.index > row.start) & (raw_data.index < row.end)].median(),
-                axis=1
-            )
-            p["roll_torque"] = p.apply(
-                lambda row: np.abs(raw_data[f"roll_torque_{key}"][
-                                       (raw_data.index > row.start) & (raw_data.index < row.end)]).median() / 2,
-                axis=1
-            )
-
-        def _extract_duo_temperatures(row):
-            if row.name % 2 == 0:
-                t = raw_data["temp_3"]
-            else:
-                t = raw_data["temp_2"]
-
-            return t[
-                (raw_data.index > row.start - pd.Timedelta(500, "ms"))
-                & (raw_data.index < row.start - pd.Timedelta(200, "ms"))
-                & (t > MIN_TEMP)
-                ].median()
-
-        duo_passes = find_passes(raw_data["roll_torque_duo"], PROMINENCE_DUO)
-        _extract_force_and_torque(duo_passes, "duo")
-
-        duo_passes["out_temperature"] = duo_passes.apply(_extract_duo_temperatures, axis=1)
-
-        f_passes = list(range(4))
-        for i in range(4):
-            f_passes[i] = find_passes(raw_data[f"roll_torque_f{i + 1}"], PROMINENCE_F, 1)
-            if not f_passes[i].empty:
-                _extract_force_and_torque(f_passes[i], f"f{i + 1}")
-                f_passes[i]["in_temperature"] = f_passes[i].apply(
-                    lambda row: raw_data[f"temp_{4 + i}"][
-                        (raw_data.index > row.start) & (raw_data.index < row.end) & (raw_data[f"temp_{4 + i}"] > MIN_TEMP)
-                        ].median(),
+            def _extract_force_and_torque(p: pd.DataFrame, key: str):
+                p["roll_force"] = p.apply(
+                    lambda row: raw_data[f"roll_force_{key}"][
+                        (raw_data.index > row.start) & (raw_data.index < row.end)].median(),
                     axis=1
                 )
-                f_passes[i]["out_temperature"] = f_passes[i].apply(
-                    lambda row: raw_data[f"temp_{5 + i}"][
-                        (raw_data.index > row.start) & (raw_data.index < row.end) & (raw_data[f"temp_{5 + i}"] > MIN_TEMP)
-                        ].median(),
+                p["roll_torque"] = p.apply(
+                    lambda row: np.abs(raw_data[f"roll_torque_{key}"][
+                                           (raw_data.index > row.start) & (raw_data.index < row.end)]).median() / 2,
                     axis=1
                 )
 
-        f_passes = pd.concat(f_passes, ignore_index=True)
+            def _extract_duo_temperatures(row):
+                if row.name % 2 == 0:
+                    t = raw_data["temp_3"]
+                else:
+                    t = raw_data["temp_2"]
 
-        duo_passes.index = [f"R{i + 1}" for i in duo_passes.index]
-        f_passes.index = [f"F{i + 1}" for i in f_passes.index]
-        passes = pd.concat([duo_passes, f_passes])
-        passes.index.name = "index"
-        passes.to_csv(produces)
+                return t[
+                    (raw_data.index > row.start - pd.Timedelta(500, "ms"))
+                    & (raw_data.index < row.start - pd.Timedelta(200, "ms"))
+                    & (t > MIN_TEMP)
+                    ].median()
+
+            duo_passes = find_passes(id, raw_data["roll_torque_duo"], PROMINENCE_DUO, 10)
+            _extract_force_and_torque(duo_passes, "duo")
+
+            duo_passes["out_temperature"] = duo_passes.apply(_extract_duo_temperatures, axis=1)
+
+            f_passes = list(range(4))
+            for i in range(4):
+                f_passes[i] = find_passes(id, raw_data[f"roll_torque_f{i + 1}"], PROMINENCE_F, 1)
+                if not f_passes[i].empty:
+                    _extract_force_and_torque(f_passes[i], f"f{i + 1}")
+                    f_passes[i]["in_temperature"] = f_passes[i].apply(
+                        lambda row: raw_data[f"temp_{4 + i}"][
+                            (raw_data.index > row.start) & (raw_data.index < row.end) & (
+                                        raw_data[f"temp_{4 + i}"] > MIN_TEMP)
+                            ].median(),
+                        axis=1
+                    )
+                    f_passes[i]["out_temperature"] = f_passes[i].apply(
+                        lambda row: raw_data[f"temp_{5 + i}"][
+                            (raw_data.index > row.start) & (raw_data.index < row.end) & (
+                                        raw_data[f"temp_{5 + i}"] > MIN_TEMP)
+                            ].median(),
+                        axis=1
+                    )
+
+            f_passes = pd.concat(f_passes, ignore_index=True)
+
+            duo_passes.index = [f"R{i + 1}" for i in duo_passes.index]
+            f_passes.index = [f"F{i + 1}" for i in f_passes.index]
+            passes = pd.concat([duo_passes, f_passes])
+            passes.index.name = "index"
+            passes.to_csv(produces)
 
 
-def find_passes(torque_series, prominence, max_num=None):
-    try:
-        abs_data = np.abs(torque_series)
-        smooth = np.correlate(abs_data, np.full((10,), 1 / 10), mode="same")
-        diff = np.correlate(smooth, [-2, 0, 2], mode="same")
-        smooth_diff = np.correlate(diff, stats.norm.pdf(np.linspace(-1, 1, 5)), mode="same")
+def find_passes(id: str, torque_series: pd.Series, prominence, num):
+    abs_data = np.abs(torque_series)
+    smooth = np.correlate(abs_data, np.full((10,), 1 / 10), mode="same")
+    diff = np.correlate(smooth, [-2, 0, 2], mode="same")
+    smooth_diff = np.correlate(diff, stats.norm.pdf(np.linspace(-1, 1, 5)), mode="same")
 
-        peaks_start, peaks_start_props = signal.find_peaks(smooth_diff, distance=PEAK_DISTANCE, prominence=prominence,
-                                                           wlen=WINDOW_LENGTH)
-        peaks_end, peaks_end_props = signal.find_peaks(-smooth_diff, distance=PEAK_DISTANCE, prominence=prominence,
+    peaks_start, peaks_start_props = signal.find_peaks(smooth_diff, distance=PEAK_DISTANCE, prominence=prominence[0],
                                                        wlen=WINDOW_LENGTH)
+    peaks_end, peaks_end_props = signal.find_peaks(-smooth_diff, distance=PEAK_DISTANCE, prominence=prominence[1],
+                                                   wlen=WINDOW_LENGTH)
 
-        starts = torque_series.index[peaks_start]
-        ends = torque_series.index[peaks_end]
+    starts = torque_series.index[peaks_start]
+    ends = torque_series.index[peaks_end]
 
-        if len(starts) != len(ends):
-            raise ValueError(f"len(starts) = {len(starts)} != {len(ends)} = len(ends)")
+    fig: plt.Figure = plt.figure(dpi=300)
+    ax: plt.Axes = fig.add_subplot()
+    ax.grid(True)
+    ax.plot(torque_series.index, abs_data, lw=1, alpha=0.5, label="abs signal")
+    ax.plot(torque_series.index, smooth, lw=1, label="smooth")
+    ax.plot(torque_series.index, diff, lw=1, label="smooth diff")
+    ax.plot(torque_series.index, smooth_diff, lw=1, label="smooth diff smooth")
+    ax.scatter(torque_series.index[peaks_start], diff[peaks_start], marker="x", c="k", label="starts of passes")
+    ax.scatter(torque_series.index[peaks_end], diff[peaks_end], marker="x", c="r", label="ends of passes")
 
-        if max_num and len(starts) > max_num:
-            raise ValueError()
+    ax.legend()
+    path = PASSES_DIR / "plots" / id / f"{torque_series.name}.png"
+    path.parent.mkdir(exist_ok=True, parents=True)
+    fig.savefig(path)
+    plt.close(fig)
 
-        return pd.DataFrame({"start": starts, "end": ends, "mid": starts + (ends - starts) / 2})
+    if len(starts) != len(ends):
+        raise ValueError(f"len(starts) = {len(starts)} != {len(ends)} = len(ends)")
 
-    except ValueError:
-        fig: plt.Figure = plt.figure(dpi=300)
-        ax: plt.Axes = fig.add_subplot()
-        ax.grid(True)
-        ax.plot(torque_series.index, abs_data, lw=1, alpha=0.5, label="abs signal")
-        ax.plot(torque_series.index, smooth, lw=1, label="smooth")
-        ax.plot(torque_series.index, diff, lw=1, label="smooth diff")
-        ax.plot(torque_series.index, smooth_diff, lw=1, label="smooth diff smooth")
-        ax.scatter(torque_series.index[peaks_start], diff[peaks_start], marker="x", c="k", label="starts of passes")
-        ax.scatter(torque_series.index[peaks_end], diff[peaks_end], marker="x", c="r", label="ends of passes")
+    if not len(starts) == num:
+        raise ValueError()
 
-        ax.legend()
-        fig.show()
-        plt.close(fig)
+    if len(starts) == 0:
+        raise ValueError()
 
-        raise
+    return pd.DataFrame({"start": starts, "end": ends, "mid": starts + (ends - starts) / 2})
