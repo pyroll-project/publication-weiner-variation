@@ -7,6 +7,7 @@ import pandas as pd
 import pytask
 import pyroll.core as pr
 from matplotlib.colors import to_rgba
+from matplotlib.patches import Patch
 from scipy.stats import linregress
 
 from weiner_variation.config import SIM_DIR, IMG_DIR, DATA_DIR, ROOT_DIR, MATERIAL
@@ -21,6 +22,8 @@ PASS_POSITIONS = np.arange(len(PASSES))
 PASS_LABELS = [p.label for p in PASSES]
 
 EXP_FILES = PASSES_FILES[MATERIAL]
+
+EXP_COLOR = "red"
 
 
 def boxplot_props(c):
@@ -51,9 +54,12 @@ def _load_sim_data(file):
 
 def _load_exp_data(files):
     return pd.concat(
-        [pd.read_csv(f, index_col=0, header=0) for f in files.values()],
-        keys=range(len(files)), axis=1
-    ).swaplevel(0, 1, axis=1)
+        [
+            pd.read_csv(f, index_col=0, header=0).stack(dropna=False).swaplevel(0, 1)
+            for f in files.values()
+        ],
+        axis=1
+    ).T
 
 
 @contextmanager
@@ -68,8 +74,6 @@ def _plot(files, figsize=None):
 
     ax.xaxis.set_major_locator(plt.FixedLocator(range(len(PASSES))))
     ax.xaxis.set_major_formatter(plt.FixedFormatter(PASS_LABELS))
-
-    ax.legend()
 
     fig.tight_layout()
     for f in files.values():
@@ -97,12 +101,11 @@ for sim, color in zip(["input", "durations", "elastic"], ["C0", "C1", "C2"]):
             ax.set_ylabel("Roll Force $\\RollForce$ in \\unit{\\kilo\\newton}")
             ax.set_ylim(0, 400)
 
-            ax.boxplot(df_sim.roll_force / 1e3, positions=PASS_POSITIONS, **boxplot_props(color))
+            sim_boxes = ax.boxplot(df_sim.roll_force / 1e3, positions=PASS_POSITIONS, **boxplot_props(color))
             ax.bar(df_sim.roll_force.columns, df_sim.roll_force.loc[0] / 1e3, fill=color, alpha=0.5, label="nominal")
+            exp_boxes = ax.boxplot(df_exp.roll_force, positions=PASS_POSITIONS, **boxplot_props(EXP_COLOR))
 
-            for c in df_exp["roll_force"].columns:
-                artist = ax.scatter(df_exp["roll_force"].index, df_exp["roll_force"][c], marker="x", c="r", lw=1)
-            artist.set_label("experimental")
+            ax.legend(handles=[sim_boxes["boxes"][0], exp_boxes["boxes"][0]], labels=["Simulation", "Experiment"])
 
 
     @pytask.mark.task(id=sim)
@@ -121,14 +124,13 @@ for sim, color in zip(["input", "durations", "elastic"], ["C0", "C1", "C2"]):
 
         with _plot(produces) as (fig, ax):
             ax.set_ylabel("Roll Torque $\\RollTorque$ in \\unit{\\kilo\\newton\\meter}")
-            ax.set_ylim(0, 10)
+            ax.set_ylim(0, 12)
 
-            ax.boxplot(df_sim.roll_torque / 1e3, positions=PASS_POSITIONS, **boxplot_props(color))
-            ax.bar(df_sim.roll_torque.columns, df_sim.roll_torque.loc[0] / 1e3, fill=color, alpha=0.5, label="nominal")
+            sim_boxes = ax.boxplot(df_sim.roll_torque / 1e3, positions=PASS_POSITIONS, **boxplot_props(color))
+            # ax.bar(df_sim.roll_torque.columns, df_sim.roll_torque.loc[0] / 1e3, fill=color, alpha=0.5)
+            exp_boxes = ax.boxplot(df_exp.roll_torque / 2, positions=PASS_POSITIONS, **boxplot_props(EXP_COLOR))
 
-            for c in df_exp["roll_torque"].columns:
-                artist = ax.scatter(df_exp["roll_torque"].index, df_exp["roll_torque"][c] / 2, marker="x", c="r", lw=1)
-            artist.set_label("experimental")
+            ax.legend(handles=[sim_boxes["boxes"][0], exp_boxes["boxes"][0]], labels=["Simulation", "Experiment"])
 
 
     @pytask.mark.task(id=sim)
@@ -147,30 +149,51 @@ for sim, color in zip(["input", "durations", "elastic"], ["C0", "C1", "C2"]):
 
         with _plot(produces, (6.4, 3)) as (fig, ax):
             ax.set_ylabel("Workpiece Temperature $\\Temperature$ in \\unit{\\kelvin}")
-            ax.set_ylim(1100, 1450)
+            ax.set_ylim(1100, 1500)
 
-            ax.boxplot(df_sim.in_temperature, positions=PASS_POSITIONS - 0.25, widths=0.25, **boxplot_props(color))
-            ax.boxplot(df_sim.out_temperature, positions=PASS_POSITIONS + 0.25, widths=0.25, **boxplot_props(color))
+            ax.boxplot(
+                df_sim.in_temperature, positions=PASS_POSITIONS - 0.25, widths=0.25, **boxplot_props(color)
+            )
+            sim_boxes = ax.boxplot(
+                df_sim.out_temperature, positions=PASS_POSITIONS + 0.25, widths=0.25, **boxplot_props(color)
+            )
 
-            mean = pd.concat([
+            sim_mean = pd.concat([
                 _reindex_in(df_sim.in_temperature.mean()),
                 _reindex_out(df_sim.out_temperature.mean())
             ]).sort_index()
-            ax.plot(mean, c=color, alpha=0.5, label="mean", ls="--")
+            sim_mean_line = ax.plot(sim_mean, c=color, alpha=0.5, label="mean", ls="--")
 
             nominal = pd.concat([
                 _reindex_in(df_sim.in_temperature.loc[0]),
                 _reindex_out(df_sim.out_temperature.loc[0])
             ]).sort_index()
-            ax.plot(nominal, c=color, alpha=0.5, label="nominal")
+            nominal_line = ax.plot(nominal, c=color, alpha=0.5, label="nominal")
 
-            in_temperatures = _reindex_in(df_exp.in_temperature.copy()) + 273.15
-            for c in in_temperatures.columns:
-                ax.scatter(in_temperatures.index, in_temperatures[c], marker="x", c="r", lw=1)
-            out_temperatures = _reindex_out(df_exp.out_temperature.copy()) + 273.15
-            for c in out_temperatures.columns:
-                artist = ax.scatter(out_temperatures.index, out_temperatures[c], marker="x", c="r", lw=1)
-            artist.set_label("experimental")
+            ax.boxplot(
+                df_exp.in_temperature + 273.15,
+                positions=PASS_POSITIONS - 0.25, widths=0.25, **boxplot_props(EXP_COLOR)
+            )
+            exp_boxes = ax.boxplot(
+                df_exp.out_temperature + 273.15,
+                positions=PASS_POSITIONS + 0.25, widths=0.25, **boxplot_props(EXP_COLOR)
+            )
+            exp_mean = pd.concat([
+                _reindex_in(df_exp.in_temperature.mean()),
+                _reindex_out(df_exp.out_temperature.mean())
+            ]).sort_index().dropna()
+            exp_mean_line = ax.plot(exp_mean + 273.15, c=EXP_COLOR, alpha=0.5, label="mean", ls="--")
+
+            ax.legend(
+                handles=[
+                    sim_boxes["boxes"][0],
+                    nominal_line[0],
+                    sim_mean_line[0],
+                    exp_boxes["boxes"][0],
+                    exp_mean_line[0]
+                ],
+                labels=["Simulation", "Sim. Nominal", "Sim. Mean", "Experiment", "Exp. Mean"]
+            )
 
 
     @pytask.mark.task(id=sim)
@@ -310,7 +333,8 @@ def task_plot_temperature_std(produces, depends_on):
 def task_plot_temperature_stds(produces, depends_on):
     with _plot(produces, (6, 3)) as (fig, ax):
         ax: plt.Axes
-        ax.set_ylabel("Standard Deviation of\nWorkpiece Temperature $\\StandardDeviation(\\Temperature)$ in \\unit{\\kelvin}")
+        ax.set_ylabel(
+            "Standard Deviation of\nWorkpiece Temperature $\\StandardDeviation(\\Temperature)$ in \\unit{\\kelvin}")
 
         for i, f in enumerate(T_FACTORS):
             df_input = _load_sim_data(depends_on["input", f])

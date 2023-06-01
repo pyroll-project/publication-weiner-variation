@@ -12,7 +12,7 @@ from weiner_variation.config import DATA_DIR, IMG_DIR, ROOT_DIR
 from weiner_variation.data.config import PAUSES_BINS
 
 
-for i in range(10):
+for i in range(11):
     @pytask.mark.task(id=i)
     @pytask.mark.depends_on({
         "data": DATA_DIR / "duo_pauses.csv",

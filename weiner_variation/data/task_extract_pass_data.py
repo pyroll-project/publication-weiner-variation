@@ -24,52 +24,55 @@ for material in MATERIALS:
             raw_data.index = pd.to_datetime(raw_data.index)
             raw_data = raw_data.resample("10ms").mean()
 
-            def _extract_force_or_torque(key: str, delta=pd.Timedelta("500ms")):
+            def _extract_force_or_torque(
+                    key: str,
+                    delta1=pd.Timedelta("-50ms"), delta2=pd.Timedelta("-50ms"), delta3=pd.Timedelta("500ms")
+            ):
                 def _get(row):
-                    idx_plateau = (raw_data.index > row.start) & (raw_data.index < row.end)
+                    idx_plateau = (raw_data.index > row.start - delta1) & (raw_data.index < row.end + delta2)
                     plateau = raw_data[key][idx_plateau].median()
-                    idx_base = (raw_data.index > row.start - delta) & (raw_data.index < row.start)
+                    idx_base = (raw_data.index > row.start - delta3) & (raw_data.index < row.start)
                     base = raw_data[key][idx_base].median()
                     return np.abs(plateau - base)
 
                 return _get
 
-            def _extract_duo_temperature_in(delta=pd.Timedelta("500ms")):
+            def _extract_duo_temperature_in(delta1=pd.Timedelta("100ms"), delta2=pd.Timedelta("300ms")):
                 def _get(row):
                     if row.name % 2 == 0:
                         t_in = raw_data["temp_3"]
                     else:
                         t_in = raw_data["temp_2"]
 
-                    idx_in = (raw_data.index > row.start - delta) & (raw_data.index < row.start)
+                    idx_in = (raw_data.index < row.start - delta1) & (raw_data.index > row.start - delta2)
                     return t_in[idx_in & (t_in > MIN_TEMP)].median()
 
                 return _get
 
-            def _extract_duo_temperature_out(delta=pd.Timedelta("500ms")):
+            def _extract_duo_temperature_out(delta1=pd.Timedelta("100ms"), delta2=pd.Timedelta("300ms")):
                 def _get(row):
                     if row.name % 2 == 0:
                         t_out = raw_data["temp_2"]
                     else:
                         t_out = raw_data["temp_3"]
 
-                    idx_out = (raw_data.index > row.end) & (raw_data.index < row.end + delta)
+                    idx_out = (raw_data.index > row.end + delta1) & (raw_data.index < row.end + delta2)
                     return t_out[idx_out & (t_out > MIN_TEMP)].median()
 
                 return _get
 
-            def _extract_f_temperature_in(i, delta=pd.Timedelta("500ms")):
+            def _extract_f_temperature_in(i, delta1=pd.Timedelta("-300ms"), delta2=pd.Timedelta("-100ms")):
                 def _get(row):
                     t_in = raw_data[f"temp_{4 + i}"]
-                    idx_in = (raw_data.index > row.start - delta) & (raw_data.index < row.start)
+                    idx_in = (raw_data.index < row.start - delta1) & (raw_data.index > row.start - delta2)
                     return t_in[idx_in & (t_in > MIN_TEMP)].median()
 
                 return _get
 
-            def _extract_f_temperature_out(i, delta=pd.Timedelta("500ms")):
+            def _extract_f_temperature_out(i, delta1=pd.Timedelta("-300ms"), delta2=pd.Timedelta("-100ms")):
                 def _get(row):
                     t_out = raw_data[f"temp_{5 + i}"]
-                    idx_out = (raw_data.index > row.end) & (raw_data.index < row.end + delta)
+                    idx_out = (raw_data.index > row.end + delta1) & (raw_data.index < row.end + delta2)
                     return t_out[idx_out & (t_out > MIN_TEMP)].median()
 
                 return _get
