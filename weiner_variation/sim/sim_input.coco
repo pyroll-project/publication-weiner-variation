@@ -31,9 +31,6 @@ import os
 import pyroll.basic as pr
 
 # %%
-nominal = DrawInput(DIAMETER, TEMPERATURE)
-
-# %%
 input_dist = pd.read_csv(DATA_DIR / "input_dist.csv", index_col=0, header=0)
 input_dist
 
@@ -46,7 +43,7 @@ RNG = np.random.default_rng(SEED)
 diameters = diameter_dist.rvs(random_state=RNG, size=SAMPLE_COUNT)
 temperatures = temperature_dist.rvs(random_state=RNG, size=SAMPLE_COUNT)
 
-draws = [nominal] + [
+draws = [
     DrawInput(d, t)
     for d, t in zip(diameters, temperatures)
 ]

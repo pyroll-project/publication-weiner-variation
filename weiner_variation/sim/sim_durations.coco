@@ -30,10 +30,6 @@ from multiprocessing import Pool
 import pyroll.basic as pr
 
 # %%
-nominal = DrawDurations(DIAMETER, TEMPERATURE, np.full(10, REVERSING_PAUSE_DURATION))
-nominal
-
-# %%
 df_input = pd.read_csv(DATA_DIR / "input_dist.csv", index_col=0, header=0)
 df_input
 
@@ -56,7 +52,7 @@ durations = np.concatenate([
     durations_dist_last.rvs(random_state=RNG, size=(SAMPLE_COUNT, 1))
 ], axis=1)
 
-draws = [nominal] + [
+draws = [
     DrawDurations(d, t, dur)
     for d, t, dur in zip(diameters, temperatures, durations)
 ]
