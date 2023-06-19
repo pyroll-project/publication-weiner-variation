@@ -1,5 +1,5 @@
-*.ipynb
 *.log
+*.out.ipynb
 
 sim_durations.py
 sim_input.py

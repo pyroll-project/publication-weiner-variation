@@ -17,6 +17,7 @@ dependencies = [
     "tqdm",
     "pyroll-basic ~= 2.0",
     "pyroll-elastic-mill-spring ~= 2.0",
+    "papermill",
 ]
 
 [envs.sim.scripts]
