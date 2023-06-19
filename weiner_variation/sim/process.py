@@ -34,6 +34,9 @@ DIAMETER = 50e-3
 TEMPERATURE = 1150 + 273.15
 IN_PROFILE = create_in_profile(DIAMETER, TEMPERATURE)
 
+DIAMETER_STD = 1e-3
+TEMPERATURE_STD = 10
+
 PASS_SEQUENCE = pr.PassSequence([
     pr.RollPass(
         label="R1",
@@ -207,11 +210,11 @@ PASS_SEQUENCE = pr.PassSequence([
             ),
             nominal_radius=107.5e-3,
         ),
-        velocity=7.8,
+        velocity=7.9,
         gap=2.3e-3,
     ),
     pr.Transport(
-        duration=1.5 / 7.8
+        duration=1.5 / 7.9
     ),
     pr.RollPass(
         label="F2",

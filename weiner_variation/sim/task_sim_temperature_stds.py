@@ -4,23 +4,27 @@ import pytask
 from pathlib import Path
 
 from weiner_variation.config import DATA_DIR
+from weiner_variation.sim.process import TEMPERATURE_STD
 
 FACTORS = [0.2, 0.5, 1, 2, 4]
 
+for f in FACTORS:
+    @pytask.mark.task(id=f)
+    @pytask.mark.depends_on(["sim_input.ipynb", "config.py", "process.py"])
+    @pytask.mark.produces(DATA_DIR / "sim_temperature_stds_results" / f"{f}.csv")
+    def task_sim_temperature_stds(depends_on: dict[..., Path], produces: Path, factor=f):
+        result = subprocess.run(
+            [
+                "hatch",
+                "run",
+                "sim:papermill",
+                "-l", "python",
+                "--stdout-file", str(depends_on[0].with_suffix(".log")),
+                str(depends_on[0]),
+                str(depends_on[0].with_suffix(".out.ipynb")),
+                "-p", "OUTPUT_FILENAME", str(produces),
+                "-p", "TEMPERATURE_STD", str(factor * TEMPERATURE_STD),
+            ]
+        )
 
-@pytask.mark.depends_on(["sim_temperature_stds.py", DATA_DIR / "input_dist.csv", "config.py", "process.py"])
-@pytask.mark.produces([
-    DATA_DIR / "sim_temperature_stds_results" / f"{f}.csv"
-    for f in FACTORS
-])
-def task_sim_temperature_stds(depends_on: Path, produces: Path):
-    result = subprocess.run(
-        [
-            "hatch",
-            "run",
-            "sim:python",
-            "-m", "weiner_variation.sim.sim_temperature_stds",
-        ]
-    )
-
-    result.check_returncode()
+        result.check_returncode()

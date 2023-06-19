@@ -9,7 +9,6 @@ from weiner_variation.config import DATA_DIR
 @pytask.mark.task()
 @pytask.mark.depends_on([
     "sim_durations.ipynb",
-    DATA_DIR / "input_dist.csv",
     DATA_DIR / "duo_pauses_dist.csv",
     "config.py",
     "process.py",
