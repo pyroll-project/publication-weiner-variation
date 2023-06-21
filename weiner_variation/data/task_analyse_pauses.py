@@ -57,33 +57,37 @@ def task_analyse_duo_pauses(produces: dict[str, Path], depends_on: dict[str, Pat
     shifted = data.sub(data_min, axis="index")
     shifted_mean = shifted.mean(axis=1)
     shifted_std = shifted.std(axis=1)
-    alpha = shifted_mean ** 2 / shifted_std ** 2
-    beta = shifted_std ** 2 / shifted_mean
-    loc = data_min.copy()
+    shape = shifted_mean ** 2 / shifted_std ** 2
+    scale = shifted_std ** 2 / shifted_mean
 
     for i, row in data.iterrows():
         def _error_fun(_pars):
-            hist, bins = np.histogram(row, density=True, bins=PAUSES_BINS, range=(_pars[2], data_max[i]))
+            hist, bins = np.histogram(row, density=True, bins=PAUSES_BINS, range=(data_min[i], data_max[i]))
             x = (bins[1:] + bins[:-1]) / 2
-            pdf = stats.gamma.pdf(x, a=_pars[0], scale=_pars[1], loc=_pars[2])
+            pdf = stats.weibull_min.pdf(x, c=_pars[0], scale=_pars[1])
             error = ((hist - pdf) ** 2).sum()
             return error
 
-        result = optimize.minimize(_error_fun, x0=np.array([alpha[i], beta[i], loc[i]]), method="Nelder-Mead", tol=1e-4)
+        result = optimize.minimize(
+            _error_fun,
+            x0=np.array([5, 5]),
+            method="Nelder-Mead",
+            bounds=[(0, None), (0, None)],
+            tol=1e-4
+        )
 
         if not result.success:
             raise ValueError(result.message)
 
-        alpha[i], beta[i], loc[i] = result.x
+        shape[i], scale[i] = result.x
 
     dist = pd.DataFrame({
         "mean": data_mean,
         "std": data_std,
         "max": data_max,
         "min": data_min,
-        "loc": loc,
-        "alpha": alpha,
-        "beta": beta,
+        "shape": shape,
+        "scale": scale,
     }, index=data.index)
 
     dist.to_csv(produces["dist"])

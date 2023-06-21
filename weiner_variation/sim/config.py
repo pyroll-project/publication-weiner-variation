@@ -1,6 +1,6 @@
 import numpy as np
 
-SAMPLE_COUNT = 100
+SAMPLE_COUNT = 5000
 
 FIELDS = {
     "roll_force": lambda u: getattr(u, "roll_force", np.nan),
