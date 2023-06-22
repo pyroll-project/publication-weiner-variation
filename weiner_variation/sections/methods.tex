@@ -68,7 +68,7 @@ Due to manual transport and feed of the workpiece to the following roll pass, th
 Although, these deviations from the schedule influence the microstructure evolution of the sample, as well as the actual conditions in the roll passes.
 The current approach is aimed to help quantifying these deviations.
 
-To obtain the inter-pass durations from the timeline data, the passes have to be identified automatically.
+To obtain the inter-pass durations $\Pause{\Duration}$ from the timeline data, the passes have to be identified automatically.
 This was done by analysing the roll torque signal as plotted in \autoref{fig:plot_timeline_pass_finding}.
 The original signal was first downsampled and smoothed.
 Then, a difference filter was applied and the peaks of the resulting signal were determined.
@@ -82,17 +82,14 @@ The distances of those were used as the inter-pass durations.
     \label{fig:plot_timeline_pass_finding}
 \end{figure}
 
-For the approximative description of the durations' distribution, a gamma distribution was used, which is a generalized exponential distribution.
-The probability density function (PDF) of the gamma distribution is defined as in \autoref{eq:gamma-dist}, where $\Gamma$ is the gamma function and $\GammaDistributionAlpha > 0$ and $\GammaDistributionBeta > 0$ are parameters.
+For the approximative description of the durations' distribution, a Weibull distribution was used.
+The probability density function (PDF) of the Weibull distribution is defined as in \autoref{eq:weibull-dist},
+where $\WeibullDistributionShape > 0$ and $\WeibullDistributionScale > 0$ are the shape and scale parameters.
 
 \begin{equation}
-    f(x) = \frac{\GammaDistributionBeta^\GammaDistributionAlpha}{\Gamma(\GammaDistributionAlpha)}x^{\GammaDistributionAlpha - 1} \exp(-\GammaDistributionBeta x)
-    \label{eq:gamma-dist}
+    p\left(\Pause\Duration \right)=\frac{\WeibullDistributionShape}{\WeibullDistributionScale} \left(\frac{\Pause\Duration}{\WeibullDistributionScale}\right)^{\WeibullDistributionShape-1}\exp -\left(\frac{\Pause{\Duration}}{\WeibullDistributionScale} \right)^{\WeibullDistributionShape}
+    \label{eq:weibull-dist}
 \end{equation}
-
-Since the gamma distribution is only defined for $x>0$, but no inter-pass durations below a certain value occur due to technical restrictions, the distribution was modified by introducing a minimal inter-pass duration $\Min{\Pause\Duration}$ with $x = \Pause\Duration - \Min{\Pause\Duration}$.
-So there are three free parameters $\GammaDistributionAlpha$, $\GammaDistributionBeta$ and $\Min{\Pause\Duration}$ for fitting of the distribution function.
-The fitting was done using least squares optimization of the PDF function on the density histogram of the data.
 
 \subsection{Core Simulation Procedure}\label{subsec:simulation-procedure}
 

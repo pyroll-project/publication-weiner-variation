@@ -1,0 +1,14 @@
+\begin{tblr}{
+    colspec={l|XXXXXX},
+    column{2-7}={r},
+    row{1-2}={l},
+}
+    \toprule
+    \# & Mean & Std            & Min           & Max            & Shape $\WeibullDistributionShape$ & Scale $\WeibullDistributionScale$ \\
+    &    \unit{\second}   & \unit{\second} & \unit{\second} & \unit{\second} & \unit{1}                    & \unit{\second}                    \\
+    \midrule
+    {% for r in rows %}
+    {{ r.name }} & \num{ {{- "{:.3f}".format(r["mean"]) -}} }  & \num{ {{- "{:.3f}".format(r["std"]) -}} } & \num{ {{- "{:.3f}".format(r["min"]) -}} } & \num{ {{- "{:.3f}".format(r["max"]) -}} } & \num{ {{- "{:.3f}".format(r["shape"]) -}} } & \num{ {{- "{:.3f}".format(r["scale"]) -}} }\\
+    {% endfor %}
+    \bottomrule
+\end{tblr}

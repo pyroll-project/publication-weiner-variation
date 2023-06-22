@@ -6,10 +6,24 @@
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{img/plot_histogram_pauses}
-    \caption{Density and Cumulative Histograms of Inter-Pass Durations With Fitted Gamma Distribution}
+    \includegraphics[width=\linewidth]{img/plot_histogram_pauses_all}
+    \caption{Density and Cumulative Histograms of Inter-Pass Durations With Fitted Weibull Distributions}
     \label{fig:plot_histogram_pauses}
 \end{figure}
+
+\begin{table}
+    \centering
+    \caption{Descriptive Statistics and Weibull Distribution Parameters of Inter-Pass Durations}
+    \label{tab:pause_distributions}
+    \input{tbl/pause_distributions}
+\end{table}
+
+
+\autoref{fig:plot_histogram_pauses} shows the histograms of pause durations obtained from the torque signals with fitted Weibull distributions.
+The last pause (R10--F1) protrudes from the other distributions due to a technical difference, the workpiece is here fed into a driver which accelerates it to be fed into the first finishing pass.
+However, the other passes do not form a unitary distribution.
+The distributions partially overlap, but there is no clear tendency remarkable.
+Therefore, it was decided to treat each pause distinctly with its own distribution function fit.
 
 \subsection{Simulation Results}\label{subsec:simulation-results}
 
