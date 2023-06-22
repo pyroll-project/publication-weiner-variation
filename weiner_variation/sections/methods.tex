@@ -109,28 +109,28 @@ The models most important for the following elaborations will be discussed in br
 The temperature change of the workpiece was calculated by an integral heat balance as proposed by \textcite{Hensel1990} and given in \autoref{eq:heat-balance}.
 %TODO: correct surface, capacity
 \begin{equation}
-    \Delta\Temperature = \Delta\Temperature_\Convection + \Delta\Temperature_\Contact + \Delta\Temperature_\Deformation + \Delta\Temperature_\Radiation
+    \Delta\Temperature = \Convection{\Delta\Temperature} + \Contact{\Delta\Temperature} + \Delta\Temperature_\Deformation + \Radiation{\Delta\Temperature}
     \label{eq:heat-balance}
 \end{equation}
 
-\noindent$\Delta\Temperature_\Convection$ is the temperature change by convective heat flows according to \autoref{eq:heat-convection} with $\HeatTransferFactor_{\Convection}$ as a heat transfer factor, $\Temperature_\Environment$ as the environment temperature, $\Temperature$ as the current workpiece temperature and $\Duration$ as the duration of the process step.
+\noindent$\Convection{\Delta\Temperature}$ is the temperature change by convective heat flows according to \autoref{eq:heat-convection} with $\Convection{\HeatTransferFactor}$ as a heat transfer factor, $\Environment{\Temperature}$ as the environment temperature, $\Temperature$ as the current workpiece temperature and $\Duration$ as the duration of the process step.
 
 \begin{equation}
-    \Delta\Temperature_\Convection = \HeatTransferFactor_{\Convection} \left( \Temperature_\Environment - \Temperature \right) \Duration
+    \Convection{\Delta\Temperature} = \frac{\Convection{\HeatTransferFactor} \Surface\Area}{\Density\ThermalCapacity\Volume} \left( \Environment{\Temperature} - \Temperature \right) \Duration
     \label{eq:heat-convection}
 \end{equation}
 
-\noindent$\Delta\Temperature_\Contact$ is the temperature change by contact to the rolls according to \autoref{eq:heat-contact} with $\HeatTransferFactor_{\Contact}$ as a heat transfer factor and $\Temperature_{\Roll}$ as the temperature of the rolls.
+\noindent$\Contact{\Delta\Temperature}$ is the temperature change by contact to the rolls according to \autoref{eq:heat-contact} with $\Contact{\HeatTransferFactor}$ as a heat transfer factor and $\Roll{\Temperature}$ as the temperature of the rolls.
 
 \begin{equation}
-    \Delta\Temperature_\Contact = \HeatTransferFactor_{\Contact} \left( \Temperature_\Roll - \Temperature \right) \Duration
+    \Contact{\Delta\Temperature} = \frac{\Contact{\HeatTransferFactor} \Contact\Area}{\Density\ThermalCapacity\Volume} \left( \Roll{\Temperature} - \Temperature \right) \Duration
     \label{eq:heat-contact}
 \end{equation}
 
-\noindent$\Delta\Temperature_\Radiation$ is the temperature change by radiation according to \autoref{eq:heat-radiation} with $\StefanBoltzmannCoefficient$ as the Stefan's and Boltzmann's constant and $\RelativeRadiationCoefficient$ as the relative radiation coefficient of the gray radiator.
+\noindent$\Radiation{\Delta\Temperature}$ is the temperature change by radiation according to \autoref{eq:heat-radiation} with $\StefanBoltzmannCoefficient$ as the Stefan's and Boltzmann's constant and $\RelativeRadiationCoefficient$ as the relative radiation coefficient of the gray radiator.
 
 \begin{equation}
-    \Delta\Temperature_\Radiation = \StefanBoltzmannCoefficient \RelativeRadiationCoefficient \left( \Temperature_\Environment^4 - \Temperature^4 \right) \Duration
+    \Radiation{\Delta\Temperature} = \frac{\StefanBoltzmannCoefficient \RelativeRadiationCoefficient \Surface\Area}{\Density\ThermalCapacity\Volume} \left( \Environment{\Temperature}^4 - \Temperature^4 \right) \Duration
     \label{eq:heat-radiation}
 \end{equation}
 
@@ -138,15 +138,15 @@ The temperature change of the workpiece was calculated by an integral heat balan
 Since the deformation resistance is used here instead of the flow stress, this term also includes approximately the heat generation by inner and outer friction.
 
 \begin{equation}
-    \Delta\Temperature_\Deformation = \num{0.95} \DeformationResistance \Equivalent\LogStrain
+    \Delta\Temperature_\Deformation = \frac{\num{0.95} \DeformationResistance \Equivalent\LogStrain}{\Density\ThermalCapacity}
     \label{eq:heat-deformation}
 \end{equation}
 
 The deformation resistance was taken as proposed by \textcite{Hensel1978} and given in \autoref{eq:deformation-resistance}.
 
 \begin{multline}
-    \frac{\DeformationResistance}{\Equivalent\FlowStress} = \num{0.9901} + \num{0.106} \frac{\ContactArea}{\Equivalent\CrossSection} + \num{0.0283} \left( \frac{\ContactArea}{\Equivalent\CrossSection} \right)^2 + \num{1.5718} \exp \left[ \num{-2.4609} \frac{\ContactArea}{\Equivalent\CrossSection} \right] \\
-    + \num{0.3117} \exp \left[ \num{-15.625} \left( \frac{\ContactArea}{\Equivalent\CrossSection} \right)^2 \right]
+    \frac{\DeformationResistance}{\Equivalent\FlowStress} = \num{0.9901} + \num{0.106} \frac{\Contact\Area}{\Equivalent\CrossSection} + \num{0.0283} \left( \frac{\Contact\Area}{\Equivalent\CrossSection} \right)^2 + \num{1.5718} \exp \left[ \num{-2.4609} \frac{\Contact\Area}{\Equivalent\CrossSection} \right] \\
+    + \num{0.3117} \exp \left[ \num{-15.625} \left( \frac{\Contact\Area}{\Equivalent\CrossSection} \right)^2 \right]
     \label{eq:deformation-resistance}
 \end{multline}
 
@@ -154,7 +154,7 @@ The material data and model coefficients used above were taken for the following
 
 \begin{table}
     \centering
-    \caption{Material Data and Model COefficients Used in the Simulations}
+    \caption{Material Data and Model Coefficients Used in the Simulations}
     \label{tab:material_data}
     \input{tbl/material_data}
 \end{table}
