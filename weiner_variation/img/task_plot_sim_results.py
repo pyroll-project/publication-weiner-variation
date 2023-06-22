@@ -289,10 +289,12 @@ for sim, color in zip(["input", "durations", "elastic"], ["C0", "C1", "C2"]):
 def task_plot_temperature_std(produces, depends_on):
     df_input = _load_sim_data(depends_on["input"])
     df_durations = _load_sim_data(depends_on["durations"])
+    df_exp = _load_exp_data(depends_on["exp"])
 
     with _plot(produces, (6, 3)) as (fig, ax):
         ax: plt.Axes
         ax.set_ylabel("Standard Deviation of\nWorkpiece Temperature \\Temperature in \\unit{\\kelvin}")
+        ax.set_ylim(0, 18)
 
         std1 = pd.concat([
             _reindex_in(df_input.in_temperature.std()),
@@ -306,6 +308,13 @@ def task_plot_temperature_std(produces, depends_on):
         ]).sort_index()
         ax.plot(std2, label="With Varied Durations")
 
+        std3 = pd.concat([
+            _reindex_in(df_exp.in_temperature[df_exp.in_temperature > df_exp.in_temperature.median() - 30].std()),
+            _reindex_out(df_exp.out_temperature[df_exp.out_temperature > df_exp.out_temperature.median() - 30].std())
+        ]).sort_index()
+        std3.dropna()
+        ax.plot(std3, label="Experimental", c=EXP_COLOR)
+
         spans = [
             ax.axvspan(
                 x + 0.25, x + 0.75,
@@ -317,6 +326,8 @@ def task_plot_temperature_std(produces, depends_on):
         ]
         spans[-1].set_label("Oval Shape")
         spans[-2].set_label("Round Shape")
+
+        ax.legend()
 
 
 @pytask.mark.depends_on({
@@ -346,6 +357,8 @@ def task_plot_temperature_stds(produces, depends_on):
             color = mpl.colormaps["twilight"]((i + 1) / (len(T_FACTORS) + 1))
             ax.plot(std, label=f"$\\num{{{f:.1f}}}\\,\\StandardDeviation(\\Temperature)$", c=color)
 
+        ax.legend()
+
 
 @pytask.mark.depends_on({
                             "exp": EXP_FILES
@@ -370,3 +383,5 @@ def task_plot_filling_stds(produces, depends_on):
                 PASS_POSITIONS, df_input.filling_ratio.std().dropna(),
                 label=f"$\\num{{{f:.1f}}}\\,\\StandardDeviation(\\Diameter)$", c=color
             )
+
+        ax.legend()
