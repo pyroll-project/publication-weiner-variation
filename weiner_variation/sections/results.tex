@@ -1,8 +1,4 @@
-\subsection{Experimental Results}\label{subsec:experimental-results}
-
-\subsubsection{Input Workpiece Variation}\label{subsubsec:input-workpiece-variation}
-
-\subsubsection{Pause Duration Variation}\label{subsubsec:pause-duration-variation}
+\subsection{Analysis of Inter-Pass Durations}\label{subsec:analysis-of-inter-pass-durations}
 
 \begin{figure}
     \centering
@@ -21,11 +17,19 @@
 
 \autoref{fig:plot_histogram_pauses} shows the histograms of pause durations obtained from the torque signals with fitted Weibull distributions.
 The last pause (R10--F1) protrudes from the other distributions due to a technical difference, the workpiece is here fed into a driver which accelerates it to be fed into the first finishing pass.
-However, the other passes do not form a unitary distribution.
+However, the other passes also do not form a unitary distribution.
 The distributions partially overlap, but there is no clear tendency remarkable.
 Therefore, it was decided to treat each pause distinctly with its own distribution function fit.
 
-\subsection{Simulation Results}\label{subsec:simulation-results}
+\autoref{tab:pause_distributions} shows the summary statistics of the distinct data sets alongside with the fitted beta-distribution parameters.
+The mean pause duration in most passes is slightly below the scheduled duration of \qty{6}{\second}.
+However, single events up to \qty{21}{\second} occur.
+The standard deviation is in most passes below \qty{1}{\second}.
+The expectations of the fitted Weibull distribution function is constantly below the empirical means.
+The respective standard deviations are all far below the empirical ones.
+Both are explained by the occurrence of outliers at large values, compare especially the passes R1--R2, R3--R4 and R7--R8, which have high empirical standard deviations and high maximum events.
+
+\subsection{Variational Behavior of the Rolling Process}\label{subsec:variational-behavior-of-the-rolling-process}
 
 In the following, three questions shall be investigated and answered:
 \begin{enumerate}

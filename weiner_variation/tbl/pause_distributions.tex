@@ -1,14 +1,14 @@
 \begin{tblr}{
-    colspec={l|XXXXXX},
-    column{2-7}={r},
+    colspec={l|XXXXXXXX},
+    column{2-9}={r},
     row{1-2}={l},
 }
     \toprule
-    \# & Mean & Std            & Min           & Max            & Shape $\WeibullDistributionShape$ & Scale $\WeibullDistributionScale$ \\
-    &    \unit{\second}   & \unit{\second} & \unit{\second} & \unit{\second} & \unit{1}                    & \unit{\second}                    \\
+    \# & Data Mean      & Data Std.      & Data Min       & Data Max       & Dist. Shape $\WeibullDistributionShape$ & Dist. Scale $\WeibullDistributionScale$            & Dist. Mean & Dist. Std. \\
+    & \unit{\second} & \unit{\second} & \unit{\second} & \unit{\second} & \unit{1}                          & \unit{\second} & \unit{\second}& \unit{\second}\\
     \midrule
     {% for r in rows %}
-    {{ r.name }} & \num{ {{- "{:.3f}".format(r["mean"]) -}} }  & \num{ {{- "{:.3f}".format(r["std"]) -}} } & \num{ {{- "{:.3f}".format(r["min"]) -}} } & \num{ {{- "{:.3f}".format(r["max"]) -}} } & \num{ {{- "{:.3f}".format(r["shape"]) -}} } & \num{ {{- "{:.3f}".format(r["scale"]) -}} }\\
+    {{ r.name }} & \num{ {{- "{:.3f}".format(r["mean"]) -}} } & \num{ {{- "{:.3f}".format(r["std"]) -}} } & \num{ {{- "{:.3f}".format(r["min"]) -}} } & \num{ {{- "{:.3f}".format(r["max"]) -}} } & \num{ {{- "{:.3f}".format(r["shape"]) -}} } & \num{ {{- "{:.3f}".format(r["scale"]) -}} } & \num{ {{- "{:.3f}".format(r["fit_mean"]) -}} } & \num{ {{- "{:.3f}".format(r["fit_std"]) -}} }\\
     {% endfor %}
     \bottomrule
 \end{tblr}

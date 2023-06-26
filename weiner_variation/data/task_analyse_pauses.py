@@ -49,20 +49,17 @@ def task_analyse_duo_pauses(produces: dict[str, Path], depends_on: dict[str, Pat
     ])
     data.to_csv(produces["data"])
 
-    data_mean = data.mean(axis=1)
-    data_std = data.std(axis=1)
-    data_min = data.min(axis=1)
-    data_max = data_mean + 3 * data_std
+    dist = pd.DataFrame(index=data.index)
 
-    shifted = data.sub(data_min, axis="index")
-    shifted_mean = shifted.mean(axis=1)
-    shifted_std = shifted.std(axis=1)
-    shape = shifted_mean ** 2 / shifted_std ** 2
-    scale = shifted_std ** 2 / shifted_mean
+    dist["mean"] = data.mean(axis=1)
+    dist["median"] = data.median(axis=1)
+    dist["std"] = data.std(axis=1)
+    dist["min"] = data.min(axis=1)
+    dist["max"] = data.max(axis=1)
 
-    for i, row in data.iterrows():
+    def find_fit(row: pd.Series):
         def _error_fun(_pars):
-            hist, bins = np.histogram(row, density=True, bins=PAUSES_BINS, range=(data_min[i], data_max[i]))
+            hist, bins = np.histogram(data.loc[row.name], density=True, bins=PAUSES_BINS, range=(row["min"], row["max"]))
             x = (bins[1:] + bins[:-1]) / 2
             pdf = stats.weibull_min.pdf(x, c=_pars[0], scale=_pars[1])
             error = ((hist - pdf) ** 2).sum()
@@ -70,7 +67,7 @@ def task_analyse_duo_pauses(produces: dict[str, Path], depends_on: dict[str, Pat
 
         result = optimize.minimize(
             _error_fun,
-            x0=np.array([5, 5]),
+            x0=(5, 5),
             method="Nelder-Mead",
             bounds=[(0, None), (0, None)],
             tol=1e-4
@@ -79,15 +76,13 @@ def task_analyse_duo_pauses(produces: dict[str, Path], depends_on: dict[str, Pat
         if not result.success:
             raise ValueError(result.message)
 
-        shape[i], scale[i] = result.x
+        return pd.Series({"shape": result.x[0], "scale": result.x[1]})
 
-    dist = pd.DataFrame({
-        "mean": data_mean,
-        "std": data_std,
-        "max": data_max,
-        "min": data_min,
-        "shape": shape,
-        "scale": scale,
-    }, index=data.index)
+    dist = dist.join(dist.apply(find_fit, axis=1))
+
+    fits = dist.apply(lambda r: stats.weibull_min(r["shape"], scale=r["scale"]), axis=1)
+
+    dist["fit_mean"] = fits.apply(lambda f: f.mean())
+    dist["fit_std"] = fits.apply(lambda f: f.std())
 
     dist.to_csv(produces["dist"])
