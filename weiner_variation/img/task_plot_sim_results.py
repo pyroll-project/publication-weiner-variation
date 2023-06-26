@@ -70,7 +70,7 @@ def _load_exp_data(files):
 
 
 @contextmanager
-def _plot(files, figsize=None):
+def _plot(files, figsize=(6.4, 2.5)):
     fig: plt.Figure = plt.figure(figsize=figsize, dpi=600)
     ax: plt.Axes = fig.subplots()
 
@@ -166,7 +166,7 @@ for sim, color in zip(["input", "durations", "elastic"], [INPUT_COLOR, DURATIONS
         df_exp = _load_exp_data(depends_on["exp"])
         df_nominal = _load_nominal_data(depends_on["nominal"])
 
-        with _plot(produces, (6.4, 3)) as (fig, ax):
+        with _plot(produces, (6.4, 2.5)) as (fig, ax):
             ax.set_ylabel("Workpiece Temperature $\\Temperature$ in \\unit{\\kelvin}")
             ax.set_ylim(1100, 1500)
 
@@ -273,7 +273,7 @@ for sim, color in zip(["input", "durations", "elastic"], [INPUT_COLOR, DURATIONS
         std_changes_t = (df_transports["out_temperature"].std() - df_transports["in_temperature"].std()).abs() / \
                         df_transports["in_temperature"].std()
 
-        fig: plt.Figure = plt.figure(figsize=(6.4, 3), dpi=600)
+        fig: plt.Figure = plt.figure(figsize=(6.4, 2.5), dpi=600)
         ax: plt.Axes = fig.add_subplot()
         ax.set_xlabel(
             "Absolute Change in Workpiece Temperature $\\Delta\\Temperature$ in \\unit{\\kelvin}")
@@ -318,7 +318,7 @@ def task_plot_temperature_std(produces, depends_on):
     df_durations = _load_sim_data(depends_on["durations"])
     df_exp = _load_exp_data(depends_on["exp"])
 
-    with _plot(produces, (6, 2.5)) as (fig, ax):
+    with _plot(produces, (6.4, 2.5)) as (fig, ax):
         ax: plt.Axes
         ax.set_ylabel("Standard Deviation of\nWorkpiece Temperature \\Temperature in \\unit{\\kelvin}")
         ax.set_ylim(0, 18)
@@ -369,7 +369,7 @@ def task_plot_temperature_std(produces, depends_on):
     for suffix in ["png", "pdf", "svg"]]
 )
 def task_plot_temperature_stds(produces, depends_on):
-    with _plot(produces, (6, 2.5)) as (fig, ax):
+    with _plot(produces, (6.4, 2.5)) as (fig, ax):
         ax: plt.Axes
         ax.set_ylabel(
             "Standard Deviation of\nWorkpiece Temperature $\\StandardDeviation(\\Temperature)$ in \\unit{\\kelvin}")
@@ -398,7 +398,7 @@ def task_plot_temperature_stds(produces, depends_on):
     for suffix in ["png", "pdf", "svg"]]
 )
 def task_plot_filling_stds(produces, depends_on):
-    with _plot(produces, (6, 2.5)) as (fig, ax):
+    with _plot(produces, (6.4, 2.5)) as (fig, ax):
         ax: plt.Axes
         ax.set_ylabel("Standard Deviation of\nFilling Ratio $\\StandardDeviation(\\FillingRatio)$")
 

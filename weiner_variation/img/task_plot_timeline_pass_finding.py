@@ -14,7 +14,7 @@ INDEX = 1
 @pytask.mark.depends_on([RAW_DATA_FILES[MATERIAL][INDEX], PASSES_FILES[MATERIAL][INDEX], ROOT_DIR / "config.py"])
 @pytask.mark.produces([f"{FILE_STEM}.{t}" for t in FILE_TYPES])
 def task_plot_timeline_pass_finding(depends_on: dict[..., Path], produces: dict[..., Path]):
-    fig: plt.Figure = plt.figure(dpi=600)
+    fig: plt.Figure = plt.figure(figsize=(6.4, 2.5), dpi=600)
     ax: plt.Axes = fig.add_subplot()
 
     passes = pd.read_csv(depends_on[1], header=[0], index_col=0)
