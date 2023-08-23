@@ -225,6 +225,57 @@ for sim, color in zip(["input", "durations", "elastic"], [INPUT_COLOR, DURATIONS
         "config": ROOT_DIR / "config.py"
     })
     @pytask.mark.produces([
+        IMG_DIR / f"plot_{sim}_grain_size.{suffix}"
+        for suffix in ["png", "pdf", "svg"]]
+    )
+    def task_plot_grain_size(produces, depends_on, color=color):
+        df_sim = _load_sim_data(depends_on["sim"])
+        df_exp = _load_exp_data(depends_on["exp"])
+        df_nominal = _load_nominal_data(depends_on["nominal"])
+
+        with _plot(produces, (6.4, 2.5)) as (fig, ax):
+            ax.set_ylabel("Workpiece Grain Size $\\GrainSize$ in \\unit{\\micro\\meter}")
+            # ax.set_ylim(1100, 1500)
+
+            ax.boxplot(
+                df_sim.in_grain_size, positions=PASS_POSITIONS - 0.25, widths=0.25, **boxplot_props(color)
+            )
+            sim_boxes = ax.boxplot(
+                df_sim.out_grain_size, positions=PASS_POSITIONS + 0.25, widths=0.25, **boxplot_props(color)
+            )
+
+            sim_mean = pd.concat([
+                _reindex_in(df_sim.in_grain_size.mean()),
+                _reindex_out(df_sim.out_grain_size.mean())
+            ]).sort_index()
+            sim_mean_line = ax.plot(sim_mean, c=color, alpha=0.5, label="mean", ls="--")
+
+            nominal = pd.concat([
+                _reindex_in(df_nominal.in_grain_size),
+                _reindex_out(df_nominal.out_grain_size)
+            ]).sort_index()
+            nominal_line = ax.plot(nominal, c=color, alpha=0.5, label="nominal")
+
+            ax.legend(
+                handles=[
+                    sim_boxes["boxes"][0],
+                    nominal_line[0],
+                    sim_mean_line[0],
+                ],
+                labels=["Simulation", "Sim. Nominal", "Sim. Mean"],
+                loc="lower left",
+                ncols=2
+            )
+
+
+    @pytask.mark.task(id=sim)
+    @pytask.mark.depends_on({
+        "nominal": DATA_DIR / "sim_nominal_results.csv",
+        "sim": DATA_DIR / f"sim_{sim}_results.csv",
+        "exp": EXP_FILES,
+        "config": ROOT_DIR / "config.py"
+    })
+    @pytask.mark.produces([
         IMG_DIR / f"plot_{sim}_filling_ratio.{suffix}"
         for suffix in ["png", "pdf", "svg"]]
     )
