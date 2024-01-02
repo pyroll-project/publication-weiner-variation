@@ -10,7 +10,7 @@ def create_in_profile(diameter, temperature):
         diameter=diameter,
         temperature=temperature,
         density=7.5e3,
-        thermal_capacity=690,
+        specific_heat_capacity=690,
         material="C45",
         strain=0,
         freiberg_flow_stress_coefficients=FreibergFlowStressCoefficients(
@@ -27,7 +27,6 @@ def create_in_profile(diameter, temperature):
             baseStrain=0.1,
             baseStrainRate=0.1
         ),
-        grain_size=100,
     )
 
 
@@ -55,7 +54,6 @@ PASS_SEQUENCE = pr.PassSequence([
         gap=13.5e-3,
     ),
     pr.Transport(
-        label="R1-R2",
         duration=REVERSING_PAUSE_DURATION
     ),
     pr.RollPass(
@@ -72,7 +70,6 @@ PASS_SEQUENCE = pr.PassSequence([
         gap=1.5e-3,
     ),
     pr.Transport(
-        label="R2-R3",
         duration=REVERSING_PAUSE_DURATION
     ),
     pr.RollPass(
@@ -91,7 +88,6 @@ PASS_SEQUENCE = pr.PassSequence([
         gap=1.5e-3,
     ),
     pr.Transport(
-        label="R3-R4",
         duration=REVERSING_PAUSE_DURATION
     ),
     pr.RollPass(
@@ -108,7 +104,6 @@ PASS_SEQUENCE = pr.PassSequence([
         gap=1e-3,
     ),
     pr.Transport(
-        label="R4-R5",
         duration=REVERSING_PAUSE_DURATION
     ),
     pr.RollPass(
@@ -125,7 +120,6 @@ PASS_SEQUENCE = pr.PassSequence([
         gap=5.4e-3,
     ),
     pr.Transport(
-        label="R5-R6",
         duration=REVERSING_PAUSE_DURATION
     ),
     pr.RollPass(
@@ -142,7 +136,6 @@ PASS_SEQUENCE = pr.PassSequence([
         gap=1.8e-3,
     ),
     pr.Transport(
-        label="R6-R7",
         duration=REVERSING_PAUSE_DURATION
     ),
     pr.RollPass(
@@ -159,7 +152,6 @@ PASS_SEQUENCE = pr.PassSequence([
         gap=0.8e-3,
     ),
     pr.Transport(
-        label="R7-R8",
         duration=REVERSING_PAUSE_DURATION
     ),
     pr.RollPass(
@@ -176,7 +168,6 @@ PASS_SEQUENCE = pr.PassSequence([
         gap=3.8e-3,
     ),
     pr.Transport(
-        label="R8-R9",
         duration=REVERSING_PAUSE_DURATION
     ),
     pr.RollPass(
@@ -193,7 +184,6 @@ PASS_SEQUENCE = pr.PassSequence([
         gap=3.5e-3,
     ),
     pr.Transport(
-        label="R9-R10",
         duration=REVERSING_PAUSE_DURATION
     ), pr.RollPass(
         label="R10",
@@ -208,7 +198,6 @@ PASS_SEQUENCE = pr.PassSequence([
         velocity=2,
         gap=4e-3,
     ), pr.Transport(
-        label="R10-F1",
         duration=LAST_REVERSING_PAUSE_DURATION
     ),
     pr.RollPass(
@@ -225,7 +214,6 @@ PASS_SEQUENCE = pr.PassSequence([
         gap=2.3e-3,
     ),
     pr.Transport(
-        label="F1-F2",
         duration=1.5 / 7.9
     ),
     pr.RollPass(
@@ -242,7 +230,6 @@ PASS_SEQUENCE = pr.PassSequence([
         gap=1.5e-3,
     ),
     pr.Transport(
-        label="F2-F3",
         duration=1.5 / 9.3
     ),
     pr.RollPass(
@@ -259,7 +246,6 @@ PASS_SEQUENCE = pr.PassSequence([
         gap=1.96e-3,
     ),
     pr.Transport(
-        label="F3-F4",
         duration=1.5 / 12.06
     ),
     pr.RollPass(

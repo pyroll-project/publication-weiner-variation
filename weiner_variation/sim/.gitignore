@@ -4,7 +4,6 @@
 sim_durations.py
 sim_input.py
 sim_elastic.py
-sim_nominal.py
 __coconut__.py
 
 ### JupyterNotebooks template

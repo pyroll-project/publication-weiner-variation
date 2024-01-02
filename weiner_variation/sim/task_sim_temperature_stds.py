@@ -18,7 +18,7 @@ for f in FACTORS:
                 "hatch",
                 "run",
                 "sim:papermill",
-                "-l", "python",
+                "--language", "python",
                 "--stdout-file", str(depends_on[0].with_suffix(".log")),
                 str(depends_on[0]),
                 str(depends_on[0].with_suffix(".out.ipynb")),

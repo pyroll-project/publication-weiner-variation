@@ -10,8 +10,6 @@ FIELDS = {
     "filling_ratio": lambda u: getattr(u.out_profile, "filling_ratio", np.nan),
     "contact_area": lambda u: getattr(u, "contact_area", np.nan),
     "strain": lambda u: getattr(u, "strain", np.nan),
-    "in_grain_size": lambda u: getattr(u.in_profile, "grain_size", np.nan),
-    "out_grain_size": lambda u: getattr(u.out_profile, "grain_size", np.nan),
 }
 
 SEED = 38945729345645209345
