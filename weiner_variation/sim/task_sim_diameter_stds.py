@@ -4,9 +4,9 @@ import pytask
 from pathlib import Path
 
 from weiner_variation.config import DATA_DIR
-from weiner_variation.sim.process import DIAMETER_STD
+from weiner_variation.sim.process import DIAMETER
 
-FACTORS = [0.2, 0.5, 1, 2, 4]
+FACTORS = [0.01, 0.02, 0.05, 0.1]
 
 for f in FACTORS:
     @pytask.mark.task(id=f)
@@ -23,7 +23,7 @@ for f in FACTORS:
                 str(depends_on[0]),
                 str(depends_on[0].with_suffix(".out.ipynb")),
                 "-p", "OUTPUT_FILENAME", str(produces),
-                "-p", "DIAMETER_STD", str(factor * DIAMETER_STD),
+                "-p", "DIAMETER_STD", str(factor * DIAMETER),
             ]
         )
 

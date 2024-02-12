@@ -273,7 +273,7 @@ for sim, color in zip(["input", "durations", "elastic"], [INPUT_COLOR, DURATIONS
         std_changes_t = (df_transports["out_temperature"].std() - df_transports["in_temperature"].std()).abs() / \
                         df_transports["in_temperature"].std()
 
-        fig: plt.Figure = plt.figure(figsize=(6.4, 2.5), dpi=600)
+        fig: plt.Figure = plt.figure(figsize=(6.4, 3.0), dpi=600)
         ax: plt.Axes = fig.add_subplot()
         ax.set_xlabel(
             "Absolute Change in Workpiece Temperature $\\Delta\\Temperature$ in \\unit{\\kelvin}")
@@ -382,7 +382,11 @@ def task_plot_temperature_stds(produces, depends_on):
             ]).sort_index()
 
             color = mpl.colormaps["twilight"]((i + 1) / (len(T_FACTORS) + 1))
-            ax.plot(std, label=f"$\\num{{{f:.1f}}}\\,\\StandardDeviation(\\Temperature)$", c=color)
+            ax.plot(
+                std,
+                label=f"$\\StandardDeviation(\\Temperature) = \\num{{{f:.2f}}}\\,\\Expectation(\\Temperature)$",
+                c=color
+            )
 
         ax.legend()
 
@@ -408,7 +412,8 @@ def task_plot_filling_stds(produces, depends_on):
             color = mpl.colormaps["twilight"]((i + 1) / (len(D_FACTORS) + 1))
             ax.plot(
                 PASS_POSITIONS, df_input.filling_ratio.std().dropna(),
-                label=f"$\\num{{{f:.1f}}}\\,\\StandardDeviation(\\Diameter)$", c=color
+                label=f"$\\StandardDeviation(\\Diameter) = \\num{{{f:.2f}}}\\,\\Expectation(\\Diameter)$",
+                c=color
             )
 
         ax.legend()
