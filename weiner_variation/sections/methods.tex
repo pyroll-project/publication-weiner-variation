@@ -150,6 +150,50 @@ The deformation resistance was taken as proposed by \textcite{Hensel1978} and gi
     \label{eq:deformation-resistance}
 \end{multline}
 
+The pay regard on the microstructure influence of the thermal variation involved in the process, a JMAK based recrystallization model was used.
+The JMAK approach is named after \textcite{Johnson1939}, \textcite{Avrami1939, Avrami1940, Avrami1941} and \textcite{Kolmogorov1937}.
+It has gained a large popularity in modelling kinetics of transformation processes.
+The literature regarding recrystallization modelled by JMAK approaches is rather diverse~\cite{Luton1969, Sellars1978, Sellars1979, Sellars1985, Beynon1992, Glover1972, Glover1973, Hodgson1992, Laasraoui1991, Laasraoui1991a, Hernandez1996, Medina1996, Fernandez2000, Fernandez2003, Karhausen1992,Roberts1979, Maccagno1996, Siciliano2000}.
+There are many forms of how the parameters can be described for materials under different conditions regarding strain $\LogStrain$, strain rate $\StrainRate$ and temperature $\Temperature$.
+The following forms try to generalize them into one for all three major mechanisms: dynamic, metadynamic and static recrystallization.
+The Zener-Holomon-parameter~\cite{Zener1944} is not applied here, since sometimes different activation energies are used therein for the distinct mechanisms, so the Arrhenius-term is explicitly used in each equation.
+
+The recrystallized fraction $\RecrystallizedFraction$ in dependence on time $\Time$ is given as Avrami-term as \autoref{eq:jmak-fraction}, with the empirical parameters $k$ an $n$, as well as the reference time $\Time_\Reference$ and critical time $\Time_{\Critical}$.
+
+\begin{equation}
+    \RecrystallizedFraction(\Time) = 1 - \exp \left[ k \left( \frac{\Time - \Time_\Critical}{\Time_\Reference - \Time_\Critical} \right)^n \right]
+    \label{eq:jmak-fraction}
+\end{equation}
+
+The critical time $\Time_\Critical$ is the incubation time of the recrystallization, thus the time, when the recrystallization starts.
+It is calculated by an empirical approach according to \autoref{eq:jmak-critical} with the material dependent parameters $a_i$ and the activation energy $\ActivationEnergy_a$.
+
+\begin{equation}
+    \Time_{\Critical} = a_1 \cdot \LogStrain_{\In}^{a_2} \cdot \LogStrainRate^{a_3} \cdot \GrainSize_{\In}^{a_4} \cdot \exp \left[ \frac{\ActivationEnergy_a}{\GasConstant \Temperature} \right]
+    \label{eq:jmak-critical}
+\end{equation}
+
+The reference time $\Time_\Reference$ is often chosen as the time of half recrystallization $\Time_{0.5}$, then $k$ in \autoref{eq:jmak-fraction} equals $\ln \frac12$.
+It is calculated by an empirical approach according to \autoref{eq:jmak-reference} with the material dependent parameters $b_i$ and the activation energy $\ActivationEnergy_b$.
+
+\begin{equation}
+    \Time_{\Reference} = b_1 \cdot \LogStrain_{\In}^{b_2} \cdot \LogStrainRate^{b_3} \cdot \GrainSize_{\In}^{b_4} \cdot \exp \left[ \frac{\ActivationEnergy_b}{\GasConstant \Temperature} \right]
+    \label{eq:jmak-reference}
+\end{equation}
+
+The grain size $\GrainSize_{\mathrm{RX}}$ of the newly recrystallized grains is given by a similar approach according to \autoref{eq:jmak-grain-size} with the material dependent parameters $c_i$ and the activation energy $\ActivationEnergy_c$.
+
+\begin{equation}
+    \GrainSize_{\mathrm{RX}} = c_1 \cdot \LogStrain_{\In}^{c_2} \cdot \LogStrainRate^{c_3} \cdot \GrainSize_{\In}^{c_4} \cdot \exp \left[ \frac{\ActivationEnergy_c}{\GasConstant \Temperature} \right]
+    \label{eq:jmak-grain-size}
+\end{equation}
+
+These equations include all approaches found in the cited references for static, dynamic and metadynamic recrystallization.
+Parameters can be set to zero, if the respective dependency is not needed or not investigated.
+For dynamic recrystallization, the time $\Time$ if often substituted by the logarithmic strain $\LogStrain$ under the assumption of constant strain rate, where the same empirical approaches are applied.
+
+The resulting equivalent mean strain after incomplete recrystallization is given as
+
 The material data and model coefficients used above were taken for the following simulations as in \autoref{tab:material_data}.
 
 \begin{table}

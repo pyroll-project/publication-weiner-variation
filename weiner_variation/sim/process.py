@@ -27,6 +27,8 @@ def create_in_profile(diameter, temperature):
             baseStrain=0.1,
             baseStrainRate=0.1
         ),
+        recrystallized_fraction=0,
+        grain_size=200e-6,
     )
 
 

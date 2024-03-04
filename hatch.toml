@@ -17,9 +17,6 @@ dependencies = [
     "tqdm",
     "pyroll-basic ~= 2.0",
     "pyroll-elastic-mill-spring ~= 2.0",
+    "pyroll-jmak-recrystallization ~= 2.0",
     "papermill ~= 2.3.0",
 ]
-
-[envs.sim.scripts]
-jupyter = "coconut --jupyter lab"
-
