@@ -19,6 +19,7 @@ tqdm = "~=4.0"
 tomli = "~=2.0"
 pyroll-core = "~=2.1"
 pyroll-basic = "~=2.0"
+black = "*"
 
 [dev-packages]
 

@@ -13,7 +13,7 @@ from weiner_variation.config import ROOT_FILE, RC_FILE, ROOT_DIR
         )
     ),
 )
-@pytask.mark.depends_on("symbols.sty")
+@pytask.mark.depends_on(ROOT_DIR / "symbols.sty")
 def task_latex_compile():
     pass
 

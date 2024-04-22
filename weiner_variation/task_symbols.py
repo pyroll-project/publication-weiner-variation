@@ -4,6 +4,8 @@ from pathlib import Path
 import pytask
 import tomli
 
+from weiner_variation.config import ROOT_DIR
+
 
 def create_command_def(name: str, code: str):
     if "#" in code:
@@ -13,8 +15,8 @@ def create_command_def(name: str, code: str):
         return rf"\newcommand{{\{name}}}{{{{{code}}}}}"
 
 
-@pytask.mark.depends_on("symbols.toml")
-@pytask.mark.produces("symbols.sty")
+@pytask.mark.depends_on(ROOT_DIR / "symbols.toml")
+@pytask.mark.produces(ROOT_DIR / "symbols.sty")
 def task_symbols(depends_on: Path, produces: Path):
     input_text = depends_on.read_text()
     input_lines = input_text.splitlines()

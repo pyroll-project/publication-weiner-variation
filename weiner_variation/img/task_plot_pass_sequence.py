@@ -1,24 +1,21 @@
 import itertools
 from copy import deepcopy
-from typing import Any
 
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gs
-import pytask
-from pathlib import Path
 import pyroll.core as pr
 
-from weiner_variation.config import SIM_DIR
+from weiner_variation.config import SIM_DIR, IMG_DIR
 from weiner_variation.sim.process import PASS_SEQUENCE, IN_PROFILE
 
 FILE_STEM = "plot_pass_sequence"
 FILE_TYPES = ["png", "svg", "pdf"]
 
 
-@pytask.mark.task()
-@pytask.mark.depends_on(SIM_DIR / "process.py")
-@pytask.mark.produces([f"{FILE_STEM}.{t}" for t in FILE_TYPES])
-def task_plot_pass_sequence(depends_on: dict[str, Path], produces: dict[Any, Path]):
+def task_plot_pass_sequence(
+    process_file=SIM_DIR / "process.py",
+    produces=[IMG_DIR / f"{FILE_STEM}.{t}" for t in FILE_TYPES],
+):
     fig: plt.Figure = plt.figure(dpi=600, figsize=(6.4, 3))
 
     gs_rows = gs.GridSpec(3, 1, figure=fig, height_ratios=[2, 1.5, 1])
@@ -68,7 +65,7 @@ def task_plot_pass_sequence(depends_on: dict[str, Path], produces: dict[Any, Pat
     fig.tight_layout()
     fig.subplots_adjust(wspace=0.1, hspace=0.1)
 
-    for p in produces.values():
+    for p in produces:
         fig.savefig(p)
 
     plt.close(fig)

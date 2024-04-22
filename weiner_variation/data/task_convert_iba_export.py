@@ -4,17 +4,22 @@ from pathlib import Path
 from weiner_variation.data.config import IBA_EXPORT_FILES, RAW_DATA_FILES, MATERIALS
 
 for material in MATERIALS:
-    for in_file, out_file in zip(IBA_EXPORT_FILES[material], RAW_DATA_FILES[material]):
-        @pytask.mark.task(id=f"{material}/{in_file.stem}")
-        @pytask.mark.depends_on(in_file)
-        @pytask.mark.produces(out_file)
-        def task_convert_iba_export(depends_on: Path, produces: Path):
-            df_in = pd.read_csv(depends_on, header=0, index_col=0, skiprows=[0, 2], encoding="iso-8859-15")
+    for iba_file, export_file in zip(
+        IBA_EXPORT_FILES[material], RAW_DATA_FILES[material]
+    ):
+
+        @pytask.task(id=f"{material}/{iba_file.stem}")
+        def task_convert_iba_export(in_file=iba_file, produces=export_file):
+            df_in = pd.read_csv(
+                in_file, header=0, index_col=0, skiprows=[0, 2], encoding="iso-8859-15"
+            )
 
             df_out = pd.DataFrame(
                 {
-                    "roll_force_duo": df_in["Walzkraft  DUO-Walzwerk VL"] + df_in["Walzkraft  DUO-Walzwerk VR"] + df_in[
-                        "Walzkraft  DUO-Walzwerk HL"] + df_in["Walzkraft  DUO-Walzwerk HR"],
+                    "roll_force_duo": df_in["Walzkraft  DUO-Walzwerk VL"]
+                    + df_in["Walzkraft  DUO-Walzwerk VR"]
+                    + df_in["Walzkraft  DUO-Walzwerk HL"]
+                    + df_in["Walzkraft  DUO-Walzwerk HR"],
                     "roll_force_f1": df_in["Walzkraft Walzgerüst 1"],
                     "roll_force_f2": df_in["Walzkraft Walzgerüst 2"],
                     "roll_force_f3": df_in["Walzkraft Walzgerüst 3"],
