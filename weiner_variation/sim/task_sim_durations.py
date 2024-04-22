@@ -17,9 +17,7 @@ from weiner_variation.config import DATA_DIR
 def task_sim_durations(depends_on: dict[..., Path]):
     result = subprocess.run(
         [
-            "hatch",
-            "run",
-            "sim:papermill",
+            "papermill",
             "--language", "python",
             "--stdout-file", str(depends_on[0].with_suffix(".log")),
             str(depends_on[0]),
