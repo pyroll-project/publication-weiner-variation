@@ -80,7 +80,7 @@ for i in range(11):
         fig.tight_layout()
         fig.subplots_adjust(wspace=0.2)
 
-        for p in produces.values():
+        for p in produces:
             fig.savefig(p)
 
 

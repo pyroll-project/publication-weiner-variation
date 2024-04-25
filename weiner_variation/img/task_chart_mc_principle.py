@@ -74,7 +74,7 @@ def task_flow_chart_mc_principle(
         )
         d.add(Arrow().to(b_coll.N).reverse())
 
-        d.draw().getfig().set_constrained_layout(True)
+        # d.draw().getfig().set_constrained_layout(True)
 
         for p in produces:
             d.save(str(p))

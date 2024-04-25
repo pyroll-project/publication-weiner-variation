@@ -15,18 +15,15 @@ def create_command_def(name: str, code: str):
         return rf"\newcommand{{\{name}}}{{{{{code}}}}}"
 
 
-@pytask.mark.depends_on(ROOT_DIR / "symbols.toml")
-@pytask.mark.produces(ROOT_DIR / "symbols.sty")
-def task_symbols(depends_on: Path, produces: Path):
+def task_symbols(
+    depends_on=ROOT_DIR / "symbols.toml", produces=ROOT_DIR / "symbols.sty"
+):
     input_text = depends_on.read_text()
     input_lines = input_text.splitlines()
     depends_on.write_text("\n".join(sorted(input_lines)))
 
     data = tomli.loads(input_text)
 
-    lines = [
-        create_command_def(n, c)
-        for n, c in data.items()
-    ]
+    lines = [create_command_def(n, c) for n, c in data.items()]
 
     produces.write_text("\n".join(lines))

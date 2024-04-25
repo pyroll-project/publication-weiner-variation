@@ -14,12 +14,15 @@ BUILD_DIR = ROOT_DIR / ".build"
 BUILD_DIR.mkdir(parents=True, exist_ok=True)
 
 mpl.rcParams["text.usetex"] = True
-mpl.rcParams["text.latex.preamble"] = rf"\usepackage{{{ROOT_DIR / 'symbols'}}}" \
-                                      rf"\usepackage{{siunitx}}"
-mpl.rcParams.update({
-    "text.usetex": True,
-    "text.latex.preamble": rf"\usepackage{{{ROOT_DIR / 'symbols'}}}\usepackage{{siunitx}}\usepackage{{amsmath}}",
-    "font.family": "serif",
-})
+mpl.rcParams["text.latex.preamble"] = (
+    rf"\usepackage{{{ROOT_DIR / 'symbols'}}}" rf"\usepackage{{siunitx}}"
+)
+mpl.rcParams.update(
+    {
+        "text.usetex": True,
+        "text.latex.preamble": rf"\usepackage{{{ROOT_DIR / 'symbols'}}}\usepackage{{siunitx}}\usepackage{{amsmath}}",
+        "font.family": "serif",
+    }
+)
 
 MATERIAL = "c45"

@@ -10,18 +10,12 @@ TEMPLATE = THIS_DIR / "flow_stress.tex"
 RESULT = BUILD_DIR / TEMPLATE.relative_to(ROOT_DIR)
 
 
-@pytask.mark.task()
-@pytask.mark.depends_on({
-    "template": TEMPLATE,
-    "process": SIM_DIR / "process.py",
-})
-@pytask.mark.produces(RESULT)
-def task_flow_stress(depends_on: Path, produces: Path):
+def task_flow_stress(
+    template=TEMPLATE, process=SIM_DIR / "process.py", produces=RESULT
+):
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE.parent))
     template = env.get_template(TEMPLATE.name)
 
-    result = template.render(
-        c=IN_PROFILE.freiberg_flow_stress_coefficients
-    )
+    result = template.render(c=IN_PROFILE.freiberg_flow_stress_coefficients)
 
     produces.write_text(result, encoding="utf-8")

@@ -1,7 +1,6 @@
 import re
 from copy import deepcopy
 
-import pytask
 from pathlib import Path
 import jinja2
 
@@ -19,13 +18,9 @@ def format_pass_type(value: pr.RollPass):
     return re.sub(r"([a-z])([A-Z])", r"\g<1> \g<2>", name).lower()
 
 
-@pytask.mark.task()
-@pytask.mark.depends_on({
-    "template": TEMPLATE,
-    "process": SIM_DIR / "process.py"
-})
-@pytask.mark.produces(RESULT)
-def task_process_conditions(depends_on: Path, produces: Path):
+def task_process_conditions(
+    template=TEMPLATE, process=SIM_DIR / "process.py", produces=RESULT
+):
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE.parent))
     env.filters["format_pass_type"] = format_pass_type
     template = env.get_template(TEMPLATE.name)

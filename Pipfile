@@ -20,11 +20,13 @@ tomli = "~=2.0"
 pyroll-core = "~=2.1"
 pyroll-basic = "~=2.0"
 black = "*"
+xonsh = "*"
 
 [dev-packages]
 
 [scripts]
-pytask = "python -m pytask"
+initialize = "python -m initialize"
+pytask = "exec pytask"
 
 [requires]
 python_version = "3.11"

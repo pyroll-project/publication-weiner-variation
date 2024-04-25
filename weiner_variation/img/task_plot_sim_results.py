@@ -13,8 +13,7 @@ from scipy.stats import linregress
 from weiner_variation.config import SIM_DIR, IMG_DIR, DATA_DIR, ROOT_DIR, MATERIAL
 from weiner_variation.data.config import PASSES_DIR, PASSES_FILES
 from weiner_variation.sim.process import PASS_SEQUENCE
-from weiner_variation.sim.task_sim_temperature_stds import FACTORS as T_FACTORS
-from weiner_variation.sim.task_sim_diameter_stds import FACTORS as D_FACTORS
+from weiner_variation.sim.task_sim_stds import FACTORS
 
 PASSES = [u for u in PASS_SEQUENCE if isinstance(u, pr.RollPass)]
 
@@ -63,7 +62,7 @@ def _load_exp_data(files):
     return pd.concat(
         [
             pd.read_csv(f, index_col=0, header=0).stack(dropna=False).swaplevel(0, 1)
-            for f in files.values()
+            for f in files
         ],
         axis=1,
     ).T
@@ -427,7 +426,7 @@ for sim, color in zip(
         ax.set_ylim(0, None)
 
         fig.tight_layout()
-        for f in produces.values():
+        for f in produces:
             fig.savefig(f)
 
         plt.close(fig)
@@ -505,7 +504,7 @@ def task_plot_temperature_stds(
     depends_on={"exp": EXP_FILES, "config": ROOT_DIR / "config.py"}
     | {
         ("input", f): DATA_DIR / "sim_temperature_stds_results" / f"{f}.csv"
-        for f in T_FACTORS
+        for f in FACTORS
     },
 ):
     with _plot(produces, (6.4, 2.5)) as (fig, ax):
@@ -514,7 +513,7 @@ def task_plot_temperature_stds(
             "Standard Deviation of\nWorkpiece Temperature $\\StandardDeviation(\\Temperature)$ in \\unit{\\kelvin}"
         )
 
-        for i, f in enumerate(T_FACTORS):
+        for i, f in enumerate(FACTORS):
             df_input = _load_sim_data(depends_on["input", f])
             std = pd.concat(
                 [
@@ -523,7 +522,7 @@ def task_plot_temperature_stds(
                 ]
             ).sort_index()
 
-            color = mpl.colormaps["twilight"]((i + 1) / (len(T_FACTORS) + 1))
+            color = mpl.colormaps["twilight"]((i + 1) / (len(FACTORS) + 1))
             ax.plot(
                 std,
                 label=f"$\\StandardDeviation(\\Temperature) = \\num{{{f:.2f}}}\\,\\Expectation(\\Temperature)$",
@@ -540,7 +539,7 @@ def task_plot_filling_stds(
     depends_on={"exp": EXP_FILES}
     | {
         ("input", f): DATA_DIR / "sim_diameter_stds_results" / f"{f}.csv"
-        for f in D_FACTORS
+        for f in FACTORS
     },
 ):
     with _plot(produces, (6.4, 2.5)) as (fig, ax):
@@ -549,10 +548,10 @@ def task_plot_filling_stds(
             "Standard Deviation of\nFilling Ratio $\\StandardDeviation(\\FillingRatio)$"
         )
 
-        for i, f in enumerate(D_FACTORS):
+        for i, f in enumerate(FACTORS):
             df_input = _load_sim_data(depends_on["input", f])
 
-            color = mpl.colormaps["twilight"]((i + 1) / (len(D_FACTORS) + 1))
+            color = mpl.colormaps["twilight"]((i + 1) / (len(FACTORS) + 1))
             ax.plot(
                 PASS_POSITIONS,
                 df_input.filling_ratio.std().dropna(),
