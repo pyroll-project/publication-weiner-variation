@@ -1,11 +1,9 @@
-from pathlib import Path
-from typing import Any
-
-import matplotlib.pyplot as plt
 import pytask as pytask
 from schemdraw import Drawing
-from schemdraw.elements import ElementCompound, DotDotDot, EncircleBox
-from schemdraw.flow import Data, Box, Arrow, Wire, Subroutine
+from schemdraw.elements import DotDotDot, ElementCompound, EncircleBox
+from schemdraw.flow import Arrow, Box, Data, Subroutine, Wire
+
+from weiner_variation.config import IMG_DIR
 
 RUN_DISTANCE = 3.5
 
@@ -25,14 +23,13 @@ class Run(ElementCompound):
         self.anchors = {
             "start": d_in.W,
             "end": d_out.E,
-            "center": (d_in.W + d_out.E) / 2
+            "center": (d_in.W + d_out.E) / 2,
         }
 
         self.anchor("start")
 
 
-@pytask.mark.produces("chart_mc_principle." + s for s in ["svg", "pdf", "png"])
-def task_flow_chart_mc_principle(produces: dict[Any, Path]):
+def task_flow_chart_mc_principle(produces=[IMG_DIR / f"chart_mc_principle.{s}" for s in ["svg", "pdf", "png"]]):
     with Drawing() as d:
         d.add(b_sample := Box().label("random\nsampling"))
 
@@ -52,19 +49,24 @@ def task_flow_chart_mc_principle(produces: dict[Any, Path]):
         d.add(Wire("z", arrow="->").at(rn.end).to(b_coll.W))
 
         d.add(
-            Data(w=5.5).label("statistically distributed\ninput data")
-            .at((b_sample.N.x, r1.start.y), -0.5).anchor("center").drop("S")
+            Data(w=5.5)
+            .label("statistically distributed\ninput data")
+            .at((b_sample.N.x, r1.start.y), -0.5)
+            .anchor("center")
+            .drop("S")
         )
         d.add(Arrow().to(b_sample.N))
 
         d.add(
-            Data(w=5.5).label("statistically distributed\nresult data")
-            .at((b_coll.N.x, r1.end.y), 0.5).anchor("center").drop("S")
+            Data(w=5.5)
+            .label("statistically distributed\nresult data")
+            .at((b_coll.N.x, r1.end.y), 0.5)
+            .anchor("center")
+            .drop("S")
         )
         d.add(Arrow().to(b_coll.N).reverse())
 
-        d.draw().getfig().set_constrained_layout(True)
+        # d.draw().getfig().set_constrained_layout(True)
 
-        for p in produces.values():
+        for p in produces:
             d.save(str(p))
-

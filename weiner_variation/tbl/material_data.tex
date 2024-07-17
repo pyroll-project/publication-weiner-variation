@@ -32,7 +32,11 @@
         $\Density$                                  & $\ThermalCapacity$                                   & $\Contact{\HeatTransferFactor}$                        & $\Convection{\HeatTransferFactor}$ & $\RelativeRadiationCoefficient$                    \\
         \unit{\kilo\gram\per\cubic\meter}           & \unit{\joule\per\kilo\gram\per\kelvin}               & \unit{\watt\per\square\meter\per\kelvin} & \unit{\watt\per\square\meter\per\kelvin} & \\
         \midrule
-        \num{ {{- "{:.1f}".format(ip.density) -}} } & \num{ {{- "{:.1f}".format(ip.thermal_capacity) -}} } & \num{ {{- "{:.1f}".format(alpha_cont) -}} } & \num{ {{- "{:.1f}".format(alpha_conv) -}} }  & \num{ {{- "{:.1f}".format(epsr) -}} } \\
+        \num{ {{- "{:.1f}".format(ip.density) -}} } &
+        \num{ {{- "{:.1f}".format(ip.specific_heat_capacity) -}} } &
+        \num{ {{- "{:.1f}".format(alpha_cont) -}} } &
+        \num{ {{- "{:.1f}".format(alpha_conv) -}} }  &
+        \num{ {{- "{:.1f}".format(epsr) -}} } \\
         \bottomrule
     \end{tblr}
 \end{subtable}

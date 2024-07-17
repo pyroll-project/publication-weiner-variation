@@ -1,3 +1,6 @@
-ensure_path('TEXINPUTS', '.', './.build/');
+use File::Spec;
+my $build_path = File::Spec->rel2abs( "./weiner_variation/.build" ) ;
+
+ensure_path('TEXINPUTS', '.', $build_path);
 $pdf_mode = 4;
 $do_cd = 1;

@@ -1,21 +1,21 @@
-import pytask
 from pathlib import Path
+
 import jinja2
 
 from weiner_variation.config import BUILD_DIR, ROOT_DIR
-from weiner_variation.sim.process import IN_PROFILE, CONVECTION_HEAT_TRANSFER, CONTACT_HEAT_TRANSFER, RELATIVE_RADIATION
+from weiner_variation.sim.process import (
+    CONTACT_HEAT_TRANSFER,
+    CONVECTION_HEAT_TRANSFER,
+    IN_PROFILE,
+    RELATIVE_RADIATION,
+)
 
 THIS_DIR = Path(__file__).parent
 TEMPLATE = THIS_DIR / "material_data.tex"
 RESULT = BUILD_DIR / TEMPLATE.relative_to(ROOT_DIR)
 
 
-@pytask.mark.task()
-@pytask.mark.depends_on({
-    "template": TEMPLATE,
-})
-@pytask.mark.produces(RESULT)
-def task_material_data(depends_on: Path, produces: Path):
+def task_material_data(template=TEMPLATE, produces=RESULT):
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE.parent))
     template = env.get_template(TEMPLATE.name)
 
