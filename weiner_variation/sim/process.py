@@ -1,14 +1,17 @@
 import pyroll.core as pr
 from pyroll.freiberg_flow_stress import FreibergFlowStressCoefficients
 
-REVERSING_PAUSE_DURATION = 6
-LAST_REVERSING_PAUSE_DURATION = 9
+DIAMETER = 50e-3
+TEMPERATURE = 1150 + 273.15
+
+DIAMETER_STD = 1e-3
+TEMPERATURE_STD = 10
 
 
-def create_in_profile(diameter, temperature):
+def create_in_profile(diameter):
     return pr.Profile.round(
         diameter=diameter,
-        temperature=temperature,
+        temperature=TEMPERATURE,
         density=7.5e3,
         specific_heat_capacity=690,
         material="C45",
@@ -32,12 +35,10 @@ def create_in_profile(diameter, temperature):
     )
 
 
-DIAMETER = 50e-3
-TEMPERATURE = 1150 + 273.15
-IN_PROFILE = create_in_profile(DIAMETER, TEMPERATURE)
+IN_PROFILE = create_in_profile(DIAMETER)
 
-DIAMETER_STD = 1e-3
-TEMPERATURE_STD = 10
+REVERSING_PAUSE_DURATION = 6
+LAST_REVERSING_PAUSE_DURATION = 9
 
 PASS_SEQUENCE = pr.PassSequence(
     [

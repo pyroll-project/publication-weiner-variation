@@ -38,6 +38,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/weiner_variation/sim/sim_nominal_results.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

@@ -1,5 +1,6 @@
 import subprocess
 
+import papermill
 import pytask
 
 from weiner_variation.config import DATA_DIR, SIM_DIR
@@ -14,16 +15,10 @@ for sim in SIMS:
         process_file=SIM_DIR / "process.py",
         produces=DATA_DIR / f"sim_{sim}_results.csv",
     ):
-        result = subprocess.run(
-            [
-                "papermill",
-                "--language",
-                "python",
-                "--stdout-file",
-                str(produces.with_suffix(".log")),
-                str(notebook),
-                str(notebook.with_suffix(".out.ipynb")),
-            ]
+        papermill.execute_notebook(
+            notebook,
+            notebook.with_suffix(".out.ipynb"),
+            parameters={
+                "OUTPUT_FILENAME": str(produces),
+            },
         )
-
-        result.check_returncode()

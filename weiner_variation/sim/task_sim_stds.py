@@ -1,6 +1,7 @@
 import subprocess
 
 import pytask
+import papermill
 
 from weiner_variation.config import DATA_DIR, SIM_DIR
 from weiner_variation.sim import process
@@ -24,22 +25,11 @@ for sim in SIMS_STDS:
         ):
             base_value = getattr(process, sim_key)
 
-            result = subprocess.run(
-                [
-                    "papermill",
-                    "--language",
-                    "python",
-                    "--stdout-file",
-                    str(produces.with_suffix(".log")),
-                    str(notebook_file),
-                    str(notebook_file.with_suffix(".out.ipynb")),
-                    "-p",
-                    "OUTPUT_FILENAME",
-                    str(produces),
-                    "-p",
-                    f"{sim_key}_STD",
-                    str(factor * base_value),
-                ]
+            papermill.execute_notebook(
+                notebook_file,
+                produces.with_suffix(".out.ipynb"),
+                parameters={
+                    "OUTPUT_FILENAME": str(produces),
+                    f"{sim_key}_STD": str(factor * base_value),
+                },
             )
-
-            result.check_returncode()
