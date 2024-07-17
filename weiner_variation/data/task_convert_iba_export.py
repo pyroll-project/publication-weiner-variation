@@ -1,18 +1,14 @@
 import pandas as pd
 import pytask
-from pathlib import Path
-from weiner_variation.data.config import IBA_EXPORT_FILES, RAW_DATA_FILES, MATERIALS
+
+from weiner_variation.data.config import IBA_EXPORT_FILES, MATERIALS, RAW_DATA_FILES
 
 for material in MATERIALS:
-    for iba_file, export_file in zip(
-        IBA_EXPORT_FILES[material], RAW_DATA_FILES[material]
-    ):
+    for iba_file, export_file in zip(IBA_EXPORT_FILES[material], RAW_DATA_FILES[material], strict=False):
 
         @pytask.task(id=f"{material}/{iba_file.stem}")
         def task_convert_iba_export(in_file=iba_file, produces=export_file):
-            df_in = pd.read_csv(
-                in_file, header=0, index_col=0, skiprows=[0, 2], encoding="iso-8859-15"
-            )
+            df_in = pd.read_csv(in_file, header=0, index_col=0, skiprows=[0, 2], encoding="iso-8859-15")
 
             df_out = pd.DataFrame(
                 {

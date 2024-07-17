@@ -1,12 +1,12 @@
 import itertools
 from copy import deepcopy
 
-import matplotlib.pyplot as plt
 import matplotlib.gridspec as gs
+import matplotlib.pyplot as plt
 import pyroll.core as pr
 
-from weiner_variation.config import SIM_DIR, IMG_DIR
-from weiner_variation.sim.process import PASS_SEQUENCE, IN_PROFILE
+from weiner_variation.config import IMG_DIR, SIM_DIR
+from weiner_variation.sim.process import IN_PROFILE, PASS_SEQUENCE
 
 FILE_STEM = "plot_pass_sequence"
 FILE_TYPES = ["png", "svg", "pdf"]
@@ -38,7 +38,7 @@ def task_plot_pass_sequence(
         ax.set_xmargin(0.05)
         ax.set_ymargin(0.05)
 
-    for ax, rp in zip(axs, roll_passes):
+    for ax, rp in zip(axs, roll_passes, strict=False):
         ax.set_title(rp.label)
 
         for c in rp.contour_lines:

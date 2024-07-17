@@ -1,5 +1,5 @@
 use File::Spec;
-my $build_path = File::Spec->rel2abs( "./build" ) ;
+my $build_path = File::Spec->rel2abs( "./weiner_variation/.build" ) ;
 
 ensure_path('TEXINPUTS', '.', $build_path);
 $pdf_mode = 4;

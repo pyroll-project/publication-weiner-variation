@@ -2,15 +2,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pytask
-from pathlib import Path
+from scipy import signal, stats
+
 from weiner_variation.data.config import (
+    MATERIALS,
+    PASSES_DIR,
     PASSES_FILES,
     RAW_DATA_FILES,
-    PASSES_DIR,
-    MATERIALS,
 )
-
-from scipy import stats, signal
 
 PEAK_DISTANCE = 100
 WINDOW_LENGTH = 30
@@ -20,12 +19,10 @@ PROMINENCE_F = (0.3, 0.1)
 MIN_TEMP = 850
 
 for material in MATERIALS:
-    for in_file, out_file in zip(RAW_DATA_FILES[material], PASSES_FILES[material]):
+    for in_file, out_file in zip(RAW_DATA_FILES[material], PASSES_FILES[material], strict=False):
 
         @pytask.task(id=f"{material}/{in_file.stem}")
-        def task_extract_pass_data(
-            depends_on=in_file, produces=out_file, id=in_file.stem
-        ):
+        def task_extract_pass_data(depends_on=in_file, produces=out_file, id=in_file.stem):
             raw_data = pd.read_csv(depends_on, header=0, index_col=0)
             raw_data.index = pd.to_datetime(raw_data.index)
             raw_data = raw_data.resample("10ms").mean()
@@ -37,96 +34,64 @@ for material in MATERIALS:
                 delta3=pd.Timedelta("500ms"),
             ):
                 def _get(row):
-                    idx_plateau = (raw_data.index > row.start - delta1) & (
-                        raw_data.index < row.end + delta2
-                    )
+                    idx_plateau = (raw_data.index > row.start - delta1) & (raw_data.index < row.end + delta2)
                     plateau = raw_data[key][idx_plateau].median()
-                    idx_base = (raw_data.index > row.start - delta3) & (
-                        raw_data.index < row.start
-                    )
+                    idx_base = (raw_data.index > row.start - delta3) & (raw_data.index < row.start)
                     base = raw_data[key][idx_base].median()
                     return np.abs(plateau - base)
 
                 return _get
 
-            def _extract_duo_temperature_in(
-                delta1=pd.Timedelta("100ms"), delta2=pd.Timedelta("300ms")
-            ):
+            def _extract_duo_temperature_in(delta1=pd.Timedelta("100ms"), delta2=pd.Timedelta("300ms")):
                 def _get(row):
                     if row.name % 2 == 0:
                         t_in = raw_data["temp_3"]
                     else:
                         t_in = raw_data["temp_2"]
 
-                    idx_in = (raw_data.index < row.start - delta1) & (
-                        raw_data.index > row.start - delta2
-                    )
+                    idx_in = (raw_data.index < row.start - delta1) & (raw_data.index > row.start - delta2)
                     return t_in[idx_in & (t_in > MIN_TEMP)].median()
 
                 return _get
 
-            def _extract_duo_temperature_out(
-                delta1=pd.Timedelta("100ms"), delta2=pd.Timedelta("300ms")
-            ):
+            def _extract_duo_temperature_out(delta1=pd.Timedelta("100ms"), delta2=pd.Timedelta("300ms")):
                 def _get(row):
                     if row.name % 2 == 0:
                         t_out = raw_data["temp_2"]
                     else:
                         t_out = raw_data["temp_3"]
 
-                    idx_out = (raw_data.index > row.end + delta1) & (
-                        raw_data.index < row.end + delta2
-                    )
+                    idx_out = (raw_data.index > row.end + delta1) & (raw_data.index < row.end + delta2)
                     return t_out[idx_out & (t_out > MIN_TEMP)].median()
 
                 return _get
 
-            def _extract_f_temperature_in(
-                i, delta1=pd.Timedelta("-300ms"), delta2=pd.Timedelta("-100ms")
-            ):
+            def _extract_f_temperature_in(i, delta1=pd.Timedelta("-300ms"), delta2=pd.Timedelta("-100ms")):
                 def _get(row):
                     t_in = raw_data[f"temp_{4 + i}"]
-                    idx_in = (raw_data.index < row.start - delta1) & (
-                        raw_data.index > row.start - delta2
-                    )
+                    idx_in = (raw_data.index < row.start - delta1) & (raw_data.index > row.start - delta2)
                     return t_in[idx_in & (t_in > MIN_TEMP)].median()
 
                 return _get
 
-            def _extract_f_temperature_out(
-                i, delta1=pd.Timedelta("-300ms"), delta2=pd.Timedelta("-100ms")
-            ):
+            def _extract_f_temperature_out(i, delta1=pd.Timedelta("-300ms"), delta2=pd.Timedelta("-100ms")):
                 def _get(row):
                     t_out = raw_data[f"temp_{5 + i}"]
-                    idx_out = (raw_data.index > row.end + delta1) & (
-                        raw_data.index < row.end + delta2
-                    )
+                    idx_out = (raw_data.index > row.end + delta1) & (raw_data.index < row.end + delta2)
                     return t_out[idx_out & (t_out > MIN_TEMP)].median()
 
                 return _get
 
-            duo_passes = find_passes(
-                id, raw_data["roll_torque_duo"], PROMINENCE_DUO, 10
-            )
-            duo_passes["roll_force"] = duo_passes.apply(
-                _extract_force_or_torque("roll_force_duo"), axis=1
-            )
-            duo_passes["roll_torque"] = duo_passes.apply(
-                _extract_force_or_torque("roll_torque_duo"), axis=1
-            )
+            duo_passes = find_passes(id, raw_data["roll_torque_duo"], PROMINENCE_DUO, 10)
+            duo_passes["roll_force"] = duo_passes.apply(_extract_force_or_torque("roll_force_duo"), axis=1)
+            duo_passes["roll_torque"] = duo_passes.apply(_extract_force_or_torque("roll_torque_duo"), axis=1)
 
-            duo_passes["in_temperature"] = duo_passes.apply(
-                _extract_duo_temperature_in(), axis=1
-            )
-            duo_passes["out_temperature"] = duo_passes.apply(
-                _extract_duo_temperature_out(), axis=1
-            )
+            duo_passes["in_temperature"] = duo_passes.apply(_extract_duo_temperature_in(), axis=1)
+            duo_passes["out_temperature"] = duo_passes.apply(_extract_duo_temperature_out(), axis=1)
 
             f_passes = list(range(4))
             for i in range(4):
-                f_passes[i] = find_passes(
-                    id, raw_data[f"roll_torque_f{i + 1}"], PROMINENCE_F, 1
-                )
+                f_passes[i] = find_passes(id, raw_data[f"roll_torque_f{i + 1}"], PROMINENCE_F, 1)
                 if not f_passes[i].empty:
                     f_passes[i]["roll_force"] = f_passes[i].apply(
                         _extract_force_or_torque(f"roll_force_f{i + 1}"), axis=1
@@ -134,12 +99,8 @@ for material in MATERIALS:
                     f_passes[i]["roll_torque"] = f_passes[i].apply(
                         _extract_force_or_torque(f"roll_torque_f{i + 1}"), axis=1
                     )
-                    f_passes[i]["in_temperature"] = f_passes[i].apply(
-                        _extract_f_temperature_in(i), axis=1
-                    )
-                    f_passes[i]["out_temperature"] = f_passes[i].apply(
-                        _extract_f_temperature_out(i), axis=1
-                    )
+                    f_passes[i]["in_temperature"] = f_passes[i].apply(_extract_f_temperature_in(i), axis=1)
+                    f_passes[i]["out_temperature"] = f_passes[i].apply(_extract_f_temperature_out(i), axis=1)
 
             f_passes = pd.concat(f_passes, ignore_index=True)
 
@@ -204,11 +165,9 @@ def find_passes(id: str, torque_series: pd.Series, prominence, num):
         raise ValueError(f"len(starts) = {len(starts)} != {len(ends)} = len(ends)")
 
     if not len(starts) == num:
-        raise ValueError()
+        raise ValueError
 
     if len(starts) == 0:
-        raise ValueError()
+        raise ValueError
 
-    return pd.DataFrame(
-        {"start": starts, "end": ends, "mid": starts + (ends - starts) / 2}
-    )
+    return pd.DataFrame({"start": starts, "end": ends, "mid": starts + (ends - starts) / 2})

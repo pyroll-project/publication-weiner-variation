@@ -1,11 +1,7 @@
-from typing import Any
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pytask
-from pathlib import Path
-
 from scipy import stats
 
 from weiner_variation.config import DATA_DIR, IMG_DIR, ROOT_DIR
@@ -13,14 +9,12 @@ from weiner_variation.data.config import PAUSES_BINS
 
 for i in range(11):
 
-    @pytask.mark.task(id=str(i))
+    @pytask.task(id=str(i))
     def task_plot_histogram_pauses(
         data=DATA_DIR / "duo_pauses.csv",
         dist=DATA_DIR / "duo_pauses_dist.csv",
         config=ROOT_DIR / "config.py",
-        produces=[
-            IMG_DIR / f"plot_histogram_pauses{i}.{s}" for s in ["png", "pdf", "svg"]
-        ],
+        produces=[IMG_DIR / f"plot_histogram_pauses{i}.{s}" for s in ["png", "pdf", "svg"]],
         row_index=i,
     ):
         fig: plt.Figure = plt.figure(dpi=600, figsize=(6.4, 4.5))
@@ -88,9 +82,7 @@ def task_plot_histogram_pauses_all(
     data=DATA_DIR / "duo_pauses.csv",
     dist=DATA_DIR / "duo_pauses_dist.csv",
     config=ROOT_DIR / "config.py",
-    produces=[
-        IMG_DIR / f"plot_histogram_pauses_all.{s}" for s in ["png", "pdf", "svg"]
-    ],
+    produces=[IMG_DIR / f"plot_histogram_pauses_all.{s}" for s in ["png", "pdf", "svg"]],
 ):
     fig: plt.Figure = plt.figure(dpi=600, figsize=(6.4, 4.5))
     ax: list[plt.Axes] = fig.subplots(nrows=2, sharex="all")

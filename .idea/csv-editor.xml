@@ -10,6 +10,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/weiner_variation/data/sim_diameter_stds_results/0-05.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/weiner_variation/data/sim_diameter_stds_results/0-1.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/weiner_variation/data/sim_durations_results.csv">
           <value>
             <Attribute>

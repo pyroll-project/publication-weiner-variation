@@ -1,7 +1,7 @@
 import subprocess
+from pathlib import Path
 
 import pytask
-from pathlib import Path
 
 THIS_DIR = Path(__file__).parent
 
@@ -18,6 +18,7 @@ for f in THIS_DIR.glob("*.coco"):
             ],
             capture_output=True,
             text=True,
+            check=False,
         )
         print(result.stdout)
         result.check_returncode()

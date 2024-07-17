@@ -1,17 +1,13 @@
 import numpy as np
 import pandas as pd
-import pytask
-from pathlib import Path
-from scipy import stats, optimize
+from scipy import optimize, stats
 
-from weiner_variation.data.config import PASSES_FILES, DATA_DIR, PAUSES_BINS, MAX_PAUSE
+from weiner_variation.data.config import DATA_DIR, PASSES_FILES, PAUSES_BINS
 
 
 def task_analyse_pauses(passes_files=PASSES_FILES, produces=DATA_DIR / "pauses.csv"):
     dfs = {
-        f.stem: pd.read_csv(
-            f, index_col=0, header=0, parse_dates=[1, 2, 3]
-        ).convert_dtypes()
+        f.stem: pd.read_csv(f, index_col=0, header=0, parse_dates=[1, 2, 3]).convert_dtypes()
         for fs in passes_files.values()
         for f in fs
     }
@@ -47,9 +43,7 @@ def task_analyse_duo_pauses(
 ):
     df = pd.read_csv(data_file, index_col=0, header=0)
 
-    data: pd.DataFrame = df.loc[
-        df.index.str.match(r"R\d*-R\d*"), df.columns.str.match(r"Walz*")
-    ]
+    data: pd.DataFrame = df.loc[df.index.str.match(r"R\d*-R\d*"), df.columns.str.match(r"Walz*")]
     data = pd.concat(
         [
             data,

@@ -1,11 +1,7 @@
-from pathlib import Path
-from typing import Any
-
-import matplotlib.pyplot as plt
 import pytask as pytask
 from schemdraw import Drawing
-from schemdraw.elements import ElementCompound, DotDotDot, EncircleBox
-from schemdraw.flow import Data, Box, Arrow, Wire, Subroutine
+from schemdraw.elements import DotDotDot, ElementCompound, EncircleBox
+from schemdraw.flow import Arrow, Box, Data, Subroutine, Wire
 
 from weiner_variation.config import IMG_DIR
 
@@ -22,9 +18,7 @@ class Run(ElementCompound):
         self.add(Arrow().length(1))
         self.add(d_out := Data().label("result data"))
 
-        self.add(
-            EncircleBox([d_in, d_out]).linewidth(1).linestyle("--").label(f"Run \\#{i}")
-        )
+        self.add(EncircleBox([d_in, d_out]).linewidth(1).linestyle("--").label(f"Run \\#{i}"))
 
         self.anchors = {
             "start": d_in.W,
@@ -35,9 +29,7 @@ class Run(ElementCompound):
         self.anchor("start")
 
 
-def task_flow_chart_mc_principle(
-    produces=[IMG_DIR / f"chart_mc_principle.{s}" for s in ["svg", "pdf", "png"]]
-):
+def task_flow_chart_mc_principle(produces=[IMG_DIR / f"chart_mc_principle.{s}" for s in ["svg", "pdf", "png"]]):
     with Drawing() as d:
         d.add(b_sample := Box().label("random\nsampling"))
 

@@ -1,4 +1,4 @@
-import pytask as pytask
+import pytask
 from pytask_latex import compilation_steps as cs
 
 from weiner_variation.config import ROOT_FILE, RC_FILE, ROOT_DIR
@@ -9,18 +9,18 @@ from weiner_variation.config import ROOT_FILE, RC_FILE, ROOT_DIR
     document=ROOT_FILE.with_suffix(".pdf"),
     compilation_steps=cs.latexmk(
         options=(
+            "-cd",
+            "-gg",
             "-r",
             f"{RC_FILE}",
         )
     ),
 )
-@pytask.mark.depends_on(ROOT_DIR / "symbols.sty")
-def task_latex_compile():
+def task_latex_compile(symbols=ROOT_DIR / "symbols.sty"):
     pass
 
-
-@pytask.mark.depends_on(ROOT_FILE.with_suffix(".pdf"))
-def task_cleanup_latex():
+@pytask.task
+def task_cleanup_latex(pdf_file=ROOT_FILE.with_suffix(".pdf")):
     files = ROOT_DIR.glob(f"{ROOT_FILE.stem}.*")
     files_to_remove = filter(lambda f: f.suffix not in [".tex", ".pdf"], files)
 

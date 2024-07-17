@@ -1,12 +1,12 @@
 import re
 from copy import deepcopy
-
 from pathlib import Path
-import jinja2
 
-from weiner_variation.config import ROOT_DIR, BUILD_DIR, SIM_DIR
-from weiner_variation.sim.process import IN_PROFILE, PASS_SEQUENCE
+import jinja2
 import pyroll.core as pr
+
+from weiner_variation.config import BUILD_DIR, ROOT_DIR, SIM_DIR
+from weiner_variation.sim.process import IN_PROFILE, PASS_SEQUENCE
 
 THIS_DIR = Path(__file__).parent
 TEMPLATE = THIS_DIR / "process_conditions.tex"
@@ -18,9 +18,7 @@ def format_pass_type(value: pr.RollPass):
     return re.sub(r"([a-z])([A-Z])", r"\g<1> \g<2>", name).lower()
 
 
-def task_process_conditions(
-    template=TEMPLATE, process=SIM_DIR / "process.py", produces=RESULT
-):
+def task_process_conditions(template=TEMPLATE, process=SIM_DIR / "process.py", produces=RESULT):
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE.parent))
     env.filters["format_pass_type"] = format_pass_type
     template = env.get_template(TEMPLATE.name)

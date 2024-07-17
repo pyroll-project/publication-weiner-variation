@@ -37,9 +37,10 @@ requires = [
 [tool.hatch.envs.default]
 type = "pip-compile"
 lock-filename = "default.lock"
-
-[tool.hatch.build]
-packages = ["weiner_variation"]
+path = ".venv"
 
 [tool.hatch.envs.default.scripts]
 build = "python -m pytask"
+
+[tool.hatch.build]
+packages = ["weiner_variation"]
