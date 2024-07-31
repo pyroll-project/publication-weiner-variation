@@ -4,7 +4,7 @@ The object of the current investigation is the operation of the experimental sem
 It consists of a two-high reversing roughing stand and four continuous finishing stands.
 The pass schedule of the current work consists of 10 oval-round reversing passes followed by 4 oval-round continuous finishing passes.
 A \qty{50}{\milli\meter} round workpiece made of C45 carbon steel is rolled down to \qty{8}{\milli\meter} diameter, starting at \qty{1150}{\celsius}, resp.\ \qty{1423.15}{\kelvin}.
-Details of the schedule are provided in \autoref{tab:process_conditions} and in the supplemental material~\cite{WeinerVariationSupplemental2023}.
+Details of the schedule are provided in \autoref{tab:process_conditions} and in the supplemental material~\cite{WeinerVariationSupplemental2024}.
 The profile shapes appearing in the schedule are illustrated in \autoref{fig:plot_pass_sequence}.
 
 \begin{figure}
@@ -93,7 +93,7 @@ where $\WeibullDistributionShape > 0$ and $\WeibullDistributionScale > 0$ are th
 
 \subsection{Core Simulation Procedure}\label{subsec:simulation-procedure}
 
-In the current work, the open-source rolling simulation framework PyRolL~\cite{pyroll2} was used to simulate the rolling process.
+In the current work, the open-source rolling simulation framework PyRolL~\cite{pyroll_jors, pyroll2.1} was used to simulate the rolling process.
 Generally, the shown approach can be used with every rolling simulation software available, since the procedure does not depend on any internals of the simulation.
 A fast simulation approach, however, is favourable, since the simulation has to be done several, up to hundreds of, times.
 The models used here are of one-dimensional type, thus, they lack of resolution in other directions as the rolling direction and provide only limited accuracy, but at the benefit of high solution speed.
@@ -102,8 +102,6 @@ The simulation was done with the basic configuration of PyRolL, which includes t
 Spreading was simulated using the equivalent flat pass according to \citeauthor*{Lendl1948}~\cite{Lendl1948, Lendl1948a, Lendl1949} in conjunction with the spreading equation of \textcite{Wusatowski1969}.
 Details of software construction and model equations are provided in the documentation of PyRolL~\cite{pyroll}.
 
-
-% TODO: kurze Beschreibung der wichtigsten Modelle: Thermik, Mikrostruktur, Hensel
 
 The models most important for the following elaborations will be discussed in brief.
 The temperature change of the workpiece was calculated by an integral heat balance as proposed by \textcite{Hensel1990} and given in \autoref{eq:heat-balance}.
@@ -157,6 +155,7 @@ The literature regarding recrystallization modelled by JMAK approaches is rather
 There are many forms of how the parameters can be described for materials under different conditions regarding strain $\LogStrain$, strain rate $\StrainRate$ and temperature $\Temperature$.
 The following forms try to generalize them into one for all three major mechanisms: dynamic, metadynamic and static recrystallization.
 The Zener-Holomon-parameter~\cite{Zener1944} is not applied here, since sometimes different activation energies are used therein for the distinct mechanisms, so the Arrhenius-term is explicitly used in each equation.
+These equations are implemented in the JMAK Recrystallization Plugin for PyRolL~\cite{pyroll-jmak-recrystallization}
 
 The recrystallized fraction $\RecrystallizedFraction$ in dependence on time $\Time$ is given as Avrami-term as \autoref{eq:jmak-fraction}, with the empirical parameters $k$ an $n$, as well as the reference time $\Time_\Reference$ and critical time $\Time_{\Critical}$.
 
@@ -181,7 +180,7 @@ It is calculated by an empirical approach according to \autoref{eq:jmak-referenc
     \label{eq:jmak-reference}
 \end{equation}
 
-The grain size $\GrainSize_{\mathrm{RX}}$ of the newly recrystallized grains is given by a similar approach according to \autoref{eq:jmak-grain-size} with the material dependent parameters $c_i$ and the activation energy $\ActivationEnergy_c$.
+The grain size $\GrainSize_{\mathrm{RX}}$ of the newly recrystallized grains is given by a similar approach according to \autoref{eq:jmak-grain-size} with the material-dependent parameters $c_i$ and the activation energy $\ActivationEnergy_c$.
 
 \begin{equation}
     \GrainSize_{\mathrm{RX}} = c_1 \cdot \LogStrain_{\In}^{c_2} \cdot \LogStrainRate^{c_3} \cdot \GrainSize_{\In}^{c_4} \cdot \exp \left[ \frac{\ActivationEnergy_c}{\GasConstant \Temperature} \right]
@@ -191,8 +190,6 @@ The grain size $\GrainSize_{\mathrm{RX}}$ of the newly recrystallized grains is 
 These equations include all approaches found in the cited references for static, dynamic and metadynamic recrystallization.
 Parameters can be set to zero, if the respective dependency is not needed or not investigated.
 For dynamic recrystallization, the time $\Time$ if often substituted by the logarithmic strain $\LogStrain$ under the assumption of constant strain rate, where the same empirical approaches are applied.
-
-The resulting equivalent mean strain after incomplete recrystallization is given as
 
 The material data and model coefficients used above were taken for the following simulations as in \autoref{tab:material_data}.
 
