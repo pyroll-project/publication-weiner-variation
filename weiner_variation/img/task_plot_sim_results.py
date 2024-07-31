@@ -630,7 +630,7 @@ def task_plot_grain_size_std(
     with _plot(produces, (6.4, 2.5)) as (fig, ax):
         ax: plt.Axes
         ax.set_ylabel(
-            "Standard Deviation of\nWorkpiece Temperature $\\Temperature$ in \\unit{\\kelvin}"
+            "Standard Deviation of\nMean Grain Size $\\GrainSize$ in \\unit{\\micro\\meter}"
         )
         ax.set_ylim(0, 7)
 

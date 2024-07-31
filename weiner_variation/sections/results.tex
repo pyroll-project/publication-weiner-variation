@@ -34,7 +34,6 @@ Both are explained by the occurrence of outliers at large values, compare especi
 In the following, three questions shall be investigated and answered:
 \begin{enumerate}
     \item What is the difference in behavior of variations sourced in the input workpiece and arising within the process?
-    \item What is the influence of elastic mill response on the variational behavior of the process?
     \item Is there a minimum number of passes needed to eliminate variations of the input workpiece?
 \end{enumerate}
 
@@ -96,7 +95,7 @@ The experimental results tendentiously show higher variations than proposed by t
 Values more than \qty{30}{\kelvin} below of the median were dropped as outliers, since after inspection of the original signals they were identified as corrupted.
 However, there are several peaks in the experimental curve remarkably deviating from the simulation results.
 Note also the gap in the data between F1 and F2, since there was no pyrometer applied there.
-Overall, the simulation regarding the pause durations gives a good first estimate of the workpiece temperature variation.
+Overall, the simulation regarding the pause durations gives a good first estimate of the workpiece temperature variation, although there seem to be further sources of variation missing.
 
 \begin{figure}
     \begin{subfigure}{\linewidth}
@@ -114,8 +113,8 @@ Overall, the simulation regarding the pause durations gives a good first estimat
     \caption{Correlation Between Change in Temperature Standard Deviation and Change in Temperature Per Unit}
 \end{figure}
 
-From this, the hypothesis that process steps with high influence on temperature have also high influence on the variation depression can be stated.
-This is proofed by plotting the relative depression in standard deviation per step as in \autoref{eq:relative-variation-depression} over the change in temperature in the step.
+From the observation regarding the difference between oval and round shapes, the hypothesis can be stated that process steps with high influence on temperature have also high influence on the variation depression.
+This is proven by plotting the relative depression in standard deviation per step as in \autoref{eq:relative-variation-depression} over the change in temperature in the step.
 This correlation can especially be observed in varying only the input workpiece as shown in \autoref{fig:plot_input_temperature_correlation}, where the variation depressions in roll passes and transports show an approximately linear correlation to the temperature changes.
 In the case of varying pause durations, the roll passes still show the same behavior, but the correlation in the transports is destroyed by the introduction of additional variation, as can be seen in \autoref{fig:plot_durations_temperature_correlation}.
 
@@ -124,7 +123,17 @@ In the case of varying pause durations, the roll passes still show the same beha
     \label{eq:relative-variation-depression}
 \end{equation}
 
-% Vergleich Korngröße
+\begin{figure}
+    \centering
+    \includegraphics{img/plot_grain_size_std}
+    \caption{Comparison of Grain Size Variation Evolution Between Input Variation and Process Variation}
+    \label{fig:plot_grain_size_std}
+\end{figure}
+
+As stated before, the actual workpiece temperature has significant influence on the microstructural processes happening within rolling and the pauses between the deformation steps.
+\autoref{fig:plot_grain_size_std} shows the variation of the mean grain size predicted by the simulation using only input variation in comparison to that using the pause duration variation.
+Note that the variation in grain size is significantly higher in the second case.
+A remarkable feature here is, that a prominent peak is occurring in the R10 pass, this is because the pass applies a deformation only slightly above the critical strain of recrystallization.
 
 \subsubsection{Elimination of Input Variation}\label{subsubsec:elimination-of-input-variation}
 
@@ -154,5 +163,3 @@ So regarding the temperature evolutions, the statement can not be confirmed, esp
     \end{subfigure}
     \caption{Depression of Workpiece Variation}
 \end{figure}
-
-% Einfluss auf Mikrostruktur
