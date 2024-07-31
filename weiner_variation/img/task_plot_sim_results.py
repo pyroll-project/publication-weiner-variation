@@ -18,11 +18,13 @@ UNIT_POSITIONS = np.arange(len(PASS_SEQUENCE))
 PASS_POSITIONS = UNIT_POSITIONS[[isinstance(u, pr.RollPass) for u in PASS_SEQUENCE]]
 PASS_COLUMNS = [str(i) for i in PASS_POSITIONS]
 PASS_LABELS = [p.label for p in PASS_SEQUENCE.roll_passes]
-TRANSPORT_POSITIONS = UNIT_POSITIONS[[isinstance(u, pr.Transport) for u in
-                                      PASS_SEQUENCE]]
+TRANSPORT_POSITIONS = UNIT_POSITIONS[
+    [isinstance(u, pr.Transport) for u in PASS_SEQUENCE]
+]
 
 EXP_FILES = PASSES_FILES[MATERIAL]
 
+NOMINAL_COLOR = "C4"
 EXP_COLOR = "C3"
 INPUT_COLOR = "C0"
 DURATIONS_COLOR = "C1"
@@ -66,8 +68,7 @@ def _load_exp_data(files):
         return df
 
     return pd.concat(
-        [_load_file(f).stack(
-            dropna=False).swaplevel(0, 1) for f in files],
+        [_load_file(f).stack(dropna=False).swaplevel(0, 1) for f in files],
         axis=1,
     ).T
 
@@ -92,7 +93,9 @@ def _plot(files, figsize=(6.4, 2.5)):
     plt.close(fig)
 
 
-for sim, color in zip(["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELASTIC_COLOR], strict=False):
+for sim, color in zip(
+    ["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELASTIC_COLOR], strict=False
+):
     dep_files = {
         "nominal": DATA_DIR / "sim_nominal_results.csv",
         "sim": DATA_DIR / f"sim_{sim}_results.csv",
@@ -102,7 +105,10 @@ for sim, color in zip(["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELA
 
     @pytask.task(id=sim)
     def task_plot_roll_force(
-        produces=[IMG_DIR / f"plot_{sim}_roll_force.{suffix}" for suffix in ["png", "pdf", "svg"]],
+        produces=[
+            IMG_DIR / f"plot_{sim}_roll_force.{suffix}"
+            for suffix in ["png", "pdf", "svg"]
+        ],
         depends_on=dep_files,
         color=color,
     ):
@@ -122,11 +128,13 @@ for sim, color in zip(["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELA
             nom = ax.bar(
                 PASS_POSITIONS,
                 df_nominal.roll_force.T / 1e3,
-                fill=color,
+                fill=NOMINAL_COLOR,
                 alpha=0.5,
                 label="Nominal",
             )
-            exp_boxes = ax.boxplot(df_exp.roll_force, positions=PASS_POSITIONS, **boxplot_props(EXP_COLOR))
+            exp_boxes = ax.boxplot(
+                df_exp.roll_force, positions=PASS_POSITIONS, **boxplot_props(EXP_COLOR)
+            )
 
             ax.legend(
                 handles=[nom, sim_boxes["boxes"][0], exp_boxes["boxes"][0]],
@@ -135,7 +143,10 @@ for sim, color in zip(["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELA
 
     @pytask.task(id=sim)
     def task_plot_roll_torque(
-        produces=[IMG_DIR / f"plot_{sim}_roll_torque.{suffix}" for suffix in ["png", "pdf", "svg"]],
+        produces=[
+            IMG_DIR / f"plot_{sim}_roll_torque.{suffix}"
+            for suffix in ["png", "pdf", "svg"]
+        ],
         depends_on=dep_files,
         color=color,
     ):
@@ -155,7 +166,7 @@ for sim, color in zip(["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELA
             nom = ax.bar(
                 PASS_POSITIONS,
                 df_nominal.roll_roll_torque.T / 1e3,
-                fill=color,
+                fill=NOMINAL_COLOR,
                 alpha=0.5,
                 label="Nominal",
             )
@@ -172,7 +183,10 @@ for sim, color in zip(["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELA
 
     @pytask.task(id=sim)
     def task_plot_temperature(
-        produces=[IMG_DIR / f"plot_{sim}_temperature.{suffix}" for suffix in ["png", "pdf", "svg"]],
+        produces=[
+            IMG_DIR / f"plot_{sim}_temperature.{suffix}"
+            for suffix in ["png", "pdf", "svg"]
+        ],
         depends_on=dep_files,
         color=color,
     ):
@@ -211,7 +225,7 @@ for sim, color in zip(["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELA
                     _reindex_out(df_nominal.out_profile_temperature.T),
                 ]
             ).sort_index()
-            nominal_line = ax.plot(nominal, c=color, alpha=0.5, label="nominal")
+            nominal_line = ax.plot(nominal, c=NOMINAL_COLOR, alpha=0.5, label="nominal")
 
             ax.boxplot(
                 df_exp.in_temperature + 273.15,
@@ -235,21 +249,22 @@ for sim, color in zip(["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELA
                 .sort_index()
                 .dropna()
             )
-            exp_mean_line = ax.plot(exp_mean + 273.15, c=EXP_COLOR,
-                                    alpha=0.5, label="mean", ls="--")
+            exp_mean_line = ax.plot(
+                exp_mean + 273.15, c=EXP_COLOR, alpha=0.5, label="mean", ls="--"
+            )
 
             ax.legend(
                 handles=[
                     sim_boxes["boxes"][0],
-                    nominal_line[0],
                     sim_mean_line[0],
+                    nominal_line[0],
                     exp_boxes["boxes"][0],
                     exp_mean_line[0],
                 ],
                 labels=[
                     "Simulation",
-                    "Sim. Nominal",
                     "Sim. Mean",
+                    "Sim. Nominal",
                     "Experiment",
                     "Exp. Mean",
                 ],
@@ -259,7 +274,10 @@ for sim, color in zip(["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELA
 
     @pytask.task(id=sim)
     def task_plot_grain_size(
-        produces=[IMG_DIR / f"plot_{sim}_grain_size.{suffix}" for suffix in ["png", "pdf", "svg"]],
+        produces=[
+            IMG_DIR / f"plot_{sim}_grain_size.{suffix}"
+            for suffix in ["png", "pdf", "svg"]
+        ],
         depends_on=dep_files,
         color=color,
     ):
@@ -276,6 +294,7 @@ for sim, color in zip(["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELA
                 widths=0.25,
                 **boxplot_props(color),
             )
+            
             sim_boxes = ax.boxplot(
                 df_sim.out_profile_grain_size * 1e6,
                 positions=UNIT_POSITIONS + 0.5,
@@ -289,7 +308,9 @@ for sim, color in zip(["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELA
                     _reindex_out(df_sim.out_profile_grain_size.mean()),
                 ]
             ).sort_index()
-            sim_mean_line = ax.plot(sim_mean * 1e6, c=color, alpha=0.5, label="mean", ls="--")
+            sim_mean_line = ax.plot(
+                sim_mean * 1e6, c=color, alpha=0.5, label="mean", ls="--"
+            )
 
             nominal = pd.concat(
                 [
@@ -297,22 +318,31 @@ for sim, color in zip(["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELA
                     _reindex_out(df_nominal.out_profile_grain_size.T),
                 ]
             ).sort_index()
-            nominal_line = ax.plot(nominal * 1e6, c=color, alpha=0.5, label="nominal")
+            nominal_line = ax.plot(
+                nominal * 1e6, c=NOMINAL_COLOR, alpha=0.5, label="nominal"
+            )
 
             ax.legend(
                 handles=[
                     sim_boxes["boxes"][0],
-                    nominal_line[0],
                     sim_mean_line[0],
+                    nominal_line[0],
                 ],
-                labels=["Simulation", "Sim. Nominal", "Sim. Mean"],
+                labels=[
+                    "Simulation",
+                    "Sim. Mean",
+                    "Sim. Nominal",
+                ],
                 loc="lower left",
                 ncols=2,
             )
 
     @pytask.task(id=sim)
     def task_plot_filling_ratio(
-        produces=[IMG_DIR / f"plot_{sim}_filling_ratio.{suffix}" for suffix in ["png", "pdf", "svg"]],
+        produces=[
+            IMG_DIR / f"plot_{sim}_filling_ratio.{suffix}"
+            for suffix in ["png", "pdf", "svg"]
+        ],
         depends_on=dep_files,
         color=color,
     ):
@@ -323,21 +353,36 @@ for sim, color in zip(["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELA
             ax.set_ylabel("Filling Ratio $\\FillingRatio$")
             ax.set_ylim(0.7, 1.1)
 
-            sim_boxes = ax.boxplot(df_sim.out_profile_filling_ratio,
-                                   positions=UNIT_POSITIONS, **boxplot_props(color))
+            sim_boxes = ax.boxplot(
+                df_sim.out_profile_filling_ratio,
+                positions=UNIT_POSITIONS,
+                **boxplot_props(color),
+            )
             nom = ax.bar(
                 UNIT_POSITIONS,
                 df_nominal.out_profile_filling_ratio.T,
-                fill=color,
+                fill=NOMINAL_COLOR,
                 alpha=0.5,
                 label="Nominal",
             )
 
-            ax.legend(handles=[nom, sim_boxes["boxes"][0]], labels=["Nominal", "Simulation"])
+            ax.legend(
+                handles=[
+                    nom,
+                    sim_boxes["boxes"][0],
+                ],
+                labels=[
+                    "Nominal",
+                    "Simulation",
+                ],
+            )
 
     @pytask.task(id=sim)
     def task_plot_temperature_correlation(
-        produces=[IMG_DIR / f"plot_{sim}_temperature_correlation.{suffix}" for suffix in ["png", "pdf", "svg"]],
+        produces=[
+            IMG_DIR / f"plot_{sim}_temperature_correlation.{suffix}"
+            for suffix in ["png", "pdf", "svg"]
+        ],
         results=DATA_DIR / f"sim_{sim}_results.csv",
         config=ROOT_DIR / "config.py",
     ):
@@ -345,12 +390,18 @@ for sim, color in zip(["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELA
 
         df = _load_sim_data(results)
         temperature_changes = df.temperature_change.mean().abs()
-        temperature_changes.iloc[PASS_POSITIONS] += df.temperature_change_by_deformation.mean().abs().dropna()
-        std_changes = (df["out_profile_temperature"].std() - df["in_profile_temperature"].std()).abs() / df["in_profile_temperature"].std()
+        temperature_changes.iloc[PASS_POSITIONS] += (
+            df.temperature_change_by_deformation.mean().abs().dropna()
+        )
+        std_changes = (
+            df["out_profile_temperature"].std() - df["in_profile_temperature"].std()
+        ).abs() / df["in_profile_temperature"].std()
 
         fig: plt.Figure = plt.figure(figsize=(6.4, 3.0), dpi=600)
         ax: plt.Axes = fig.add_subplot()
-        ax.set_xlabel("Absolute Change in Workpiece Temperature $\\Delta\\Temperature$ in \\unit{\\kelvin}")
+        ax.set_xlabel(
+            "Absolute Change in Workpiece Temperature $\\Delta\\Temperature$ in \\unit{\\kelvin}"
+        )
         ax.set_ylabel(
             "Relative Depression of Workpiece\\\\Temperature Standard Deviation $\\RelativeStandardDeviationDepression$ in \\unit{\\kelvin}"
         )
@@ -362,15 +413,21 @@ for sim, color in zip(["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELA
             c="C0",
             marker="+",
         )
-        ax.scatter(temperature_changes.iloc[TRANSPORT_POSITIONS],
-                   std_changes.iloc[TRANSPORT_POSITIONS],
-                   label="Transports",
-                   c="C1", marker="x",)
+        ax.scatter(
+            temperature_changes.iloc[TRANSPORT_POSITIONS],
+            std_changes.iloc[TRANSPORT_POSITIONS],
+            label="Transports",
+            c="C1",
+            marker="x",
+        )
 
-        rp_regr = linregress(temperature_changes.iloc[PASS_POSITIONS],
-                             std_changes.iloc[PASS_POSITIONS])
-        t_regr = linregress(temperature_changes.iloc[TRANSPORT_POSITIONS],
-                            std_changes.iloc[TRANSPORT_POSITIONS])
+        rp_regr = linregress(
+            temperature_changes.iloc[PASS_POSITIONS], std_changes.iloc[PASS_POSITIONS]
+        )
+        t_regr = linregress(
+            temperature_changes.iloc[TRANSPORT_POSITIONS],
+            std_changes.iloc[TRANSPORT_POSITIONS],
+        )
 
         x = np.linspace(0, XMAX)
         ax.plot(x, rp_regr.slope * x + rp_regr.intercept, c="C0", ls="--")
@@ -389,11 +446,13 @@ for sim, color in zip(["input", "durations"], [INPUT_COLOR, DURATIONS_COLOR, ELA
 
 
 def task_plot_temperature_std(
-    produces=[IMG_DIR / f"plot_temperature_std.{suffix}" for suffix in ["png", "pdf", "svg"]],
-    input=DATA_DIR / "sim_input_results.csv",
-    durations=DATA_DIR / "sim_durations_results.csv",
-    exp=EXP_FILES,
-    config=ROOT_DIR / "config.py",
+        produces=[
+            IMG_DIR / f"plot_temperature_std.{suffix}" for suffix in ["png", "pdf", "svg"]
+        ],
+        input=DATA_DIR / "sim_input_results.csv",
+        durations=DATA_DIR / "sim_durations_results.csv",
+        exp=EXP_FILES,
+        config=ROOT_DIR / "config.py",
 ):
     df_input = _load_sim_data(input)
     df_durations = _load_sim_data(durations)
@@ -401,8 +460,10 @@ def task_plot_temperature_std(
 
     with _plot(produces, (6.4, 2.5)) as (fig, ax):
         ax: plt.Axes
-        ax.set_ylabel("Standard Deviation of\nWorkpiece Temperature \\Temperature in \\unit{\\kelvin}")
-        ax.set_ylim(0, 18)
+        ax.set_ylabel(
+            "Standard Deviation of\nWorkpiece Temperature $\\Temperature$ in \\unit{\\kelvin}"
+        )
+        ax.set_ylim(0, 20)
 
         std1 = pd.concat(
             [
@@ -422,9 +483,15 @@ def task_plot_temperature_std(
 
         std3 = pd.concat(
             [
-                _reindex_in(df_exp.in_temperature[df_exp.in_temperature > df_exp.in_temperature.median() - 30].std()),
+                _reindex_in(
+                    df_exp.in_temperature[
+                        df_exp.in_temperature > df_exp.in_temperature.median() - 30
+                        ].std()
+                ),
                 _reindex_out(
-                    df_exp.out_temperature[df_exp.out_temperature > df_exp.out_temperature.median() - 30].std()
+                    df_exp.out_temperature[
+                        df_exp.out_temperature > df_exp.out_temperature.median() - 30
+                        ].std()
                 ),
             ]
         ).sort_index()
@@ -432,8 +499,9 @@ def task_plot_temperature_std(
         ax.plot(std3, label="Experimental", c=EXP_COLOR)
 
         spans = [
-            ax.axvspan(x + 0.5, x + 1.5, lw=0, color="C2" if x % 4 == 0
-            else "C3", alpha=0.4)
+            ax.axvspan(
+                x + 0.5, x + 1.5, lw=0, color="C2" if x % 4 == 0 else "C3", alpha=0.4
+            )
             for x in PASS_POSITIONS[:-1]
         ]
         spans[-1].set_label("Oval Shape")
@@ -443,9 +511,14 @@ def task_plot_temperature_std(
 
 
 def task_plot_temperature_stds(
-    produces=[IMG_DIR / f"plot_temperature_stds.{suffix}" for suffix in ["png", "pdf", "svg"]],
+    produces=[
+        IMG_DIR / f"plot_temperature_stds.{suffix}" for suffix in ["png", "pdf", "svg"]
+    ],
     depends_on={"exp": EXP_FILES, "config": ROOT_DIR / "config.py"}
-    | {("input", f): DATA_DIR / "sim_temperature_stds_results" / f"{f}.csv" for f in FACTORS},
+    | {
+        ("input", f): DATA_DIR / "sim_temperature_stds_results" / f"{f}.csv"
+        for f in FACTORS
+    },
 ):
     with _plot(produces, (6.4, 2.5)) as (fig, ax):
         ax: plt.Axes
@@ -473,13 +546,20 @@ def task_plot_temperature_stds(
 
 
 def task_plot_filling_stds(
-    produces=[IMG_DIR / f"plot_filling_stds.{suffix}" for suffix in ["png", "pdf", "svg"]],
+    produces=[
+        IMG_DIR / f"plot_filling_stds.{suffix}" for suffix in ["png", "pdf", "svg"]
+    ],
     depends_on={"exp": EXP_FILES}
-    | {("input", f): DATA_DIR / "sim_diameter_stds_results" / f"{f}.csv" for f in FACTORS},
+    | {
+        ("input", f): DATA_DIR / "sim_diameter_stds_results" / f"{f}.csv"
+        for f in FACTORS
+    },
 ):
     with _plot(produces, (6.4, 2.5)) as (fig, ax):
         ax: plt.Axes
-        ax.set_ylabel("Standard Deviation of\nFilling Ratio $\\StandardDeviation(\\FillingRatio)$")
+        ax.set_ylabel(
+            "Standard Deviation of\nFilling Ratio $\\StandardDeviation(\\FillingRatio)$"
+        )
 
         for i, f in enumerate(FACTORS):
             df_input = _load_sim_data(depends_on["input", f])
@@ -493,3 +573,81 @@ def task_plot_filling_stds(
             )
 
         ax.legend()
+
+
+def task_plot_roll_torque_std(
+    produces=[
+        IMG_DIR / f"plot_roll_torque_std.{suffix}" for suffix in ["png", "pdf", "svg"]
+    ],
+    input=DATA_DIR / "sim_input_results.csv",
+    durations=DATA_DIR / "sim_durations_results.csv",
+    exp=EXP_FILES,
+    config=ROOT_DIR / "config.py",
+):
+    df_input = _load_sim_data(input)
+    df_durations = _load_sim_data(durations)
+    df_exp = _load_exp_data(exp)
+
+    with _plot(produces, (6.4, 2.5)) as (fig, ax):
+        ax: plt.Axes
+        ax.set_ylabel(
+            "Standard Deviation of\nRoll Torque $\\RollTorque$ in \\unit{\\kilo\\newton\\meter}"
+        )
+        ax.set_ylim(0, 0.7)
+
+        ax.plot(
+            PASS_POSITIONS,
+            df_input.roll_roll_torque.std() / 1e3,
+            label="Only Varied Input",
+            c=INPUT_COLOR,
+        )
+
+        ax.plot(
+            PASS_POSITIONS,
+            df_durations.roll_roll_torque.std() / 1e3,
+            label="With Varied Durations",
+            c=DURATIONS_COLOR,
+        )
+
+        ax.plot(
+            PASS_POSITIONS, df_exp.roll_torque.std(), label="Experimental", c=EXP_COLOR
+        )
+
+        ax.legend(ncols=2, loc="upper right")
+
+
+def task_plot_grain_size_std(
+        produces=[
+            IMG_DIR / f"plot_grain_size_std.{suffix}" for suffix in ["png", "pdf", "svg"]
+        ],
+        input=DATA_DIR / "sim_input_results.csv",
+        durations=DATA_DIR / "sim_durations_results.csv",
+        config=ROOT_DIR / "config.py",
+):
+    df_input = _load_sim_data(input)
+    df_durations = _load_sim_data(durations)
+
+    with _plot(produces, (6.4, 2.5)) as (fig, ax):
+        ax: plt.Axes
+        ax.set_ylabel(
+            "Standard Deviation of\nWorkpiece Temperature $\\Temperature$ in \\unit{\\kelvin}"
+        )
+        ax.set_ylim(0, 7)
+
+        std1 = pd.concat(
+            [
+                _reindex_in(df_input.in_profile_grain_size.std() * 1e6),
+                _reindex_out(df_input.out_profile_grain_size.std() * 1e6),
+            ]
+        ).sort_index()
+        ax.plot(std1, label="Only Varied Input", c=INPUT_COLOR)
+
+        std2 = pd.concat(
+            [
+                _reindex_in(df_durations.in_profile_grain_size.std() * 1e6),
+                _reindex_out(df_durations.out_profile_grain_size.std() * 1e6),
+            ]
+        ).sort_index()
+        ax.plot(std2, label="With Varied Durations", c=DURATIONS_COLOR)
+
+        ax.legend(ncols=1, loc="upper left")

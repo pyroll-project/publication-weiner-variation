@@ -1,5 +1,6 @@
 import pyroll.core as pr
 from pyroll.freiberg_flow_stress import FreibergFlowStressCoefficients
+import pyroll.jmak_recrystallization  # noqa: F401
 
 DIAMETER = 50e-3
 TEMPERATURE = 1150 + 273.15
@@ -14,24 +15,24 @@ def create_in_profile(diameter):
         temperature=TEMPERATURE,
         density=7.5e3,
         specific_heat_capacity=690,
-        material="C45",
+        material=["C15", "C-Mn", "steel"],
         strain=0,
         freiberg_flow_stress_coefficients=FreibergFlowStressCoefficients(
-            a=2731.39 * 1e6,
-            m1=-0.00268,
-            m2=0.31076,
+            a=2098.29 * 1e6,
+            m1=-0.00272,
+            m2=0.22312,
             m3=0,
-            m4=-0.00056,
-            m5=0.00046,
+            m4=-0.00003,
+            m5=0.00028,
             m6=0,
-            m7=-0.98375,
-            m8=0.000139,
+            m7=-0.58508,
+            m8=0.000137,
             m9=0,
             baseStrain=0.1,
             baseStrainRate=0.1,
         ),
         recrystallized_fraction=0,
-        grain_size=200e-6,
+        grain_size=50e-6,
     )
 
 

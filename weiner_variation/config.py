@@ -24,4 +24,4 @@ mpl.rcParams.update(
     }
 )
 
-MATERIAL = "c45"
+MATERIAL = "c15"

@@ -10,48 +10,6 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="/weiner_variation/data/sim_diameter_stds_results/0-05.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="/weiner_variation/data/sim_diameter_stds_results/0-1.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="/weiner_variation/data/sim_durations_results.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="/weiner_variation/data/sim_elastic_results.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="/weiner_variation/data/sim_input_results.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="/weiner_variation/data/sim_nominal_results.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="/weiner_variation/sim/sim_nominal_results.csv">
           <value>
             <Attribute>

@@ -5,7 +5,7 @@ from weiner_variation.config import DATA_DIR, SIM_DIR
 from weiner_variation.sim import process
 from weiner_variation.sim.config import SIMS_STDS
 
-FACTORS = [0.01, 0.02, 0.05, 0.1]
+FACTORS = [0.01, 0.02, 0.05]
 
 for sim in SIMS_STDS:
     for f in FACTORS:
