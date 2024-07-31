@@ -397,7 +397,7 @@ for sim, color in zip(
             df["out_profile_temperature"].std() - df["in_profile_temperature"].std()
         ).abs() / df["in_profile_temperature"].std()
 
-        fig: plt.Figure = plt.figure(figsize=(6.4, 3.0), dpi=600)
+        fig: plt.Figure = plt.figure(figsize=(6.4, 2.5), dpi=600)
         ax: plt.Axes = fig.add_subplot()
         ax.set_xlabel(
             "Absolute Change in Workpiece Temperature $\\Delta\\Temperature$ in \\unit{\\kelvin}"

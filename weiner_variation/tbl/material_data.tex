@@ -24,26 +24,26 @@
 \begin{subtable}{\linewidth}
     \caption{Parameters for Generalized JMAK Model as in Equations~\ref{eq:jmak-fraction} to~\ref{eq:jmak-grain-size} acc.~to \textcite{Hodgson1992}}
     \begin{tblr}{
-        colspec={llXXXX},
+        colspec={llXXXXl},
         columns={r},
         row{1}={l},
         column{1-2}={l},
     }
         \toprule
-        Mechanism & Parameter & 1 & 2 & 3 & 4 \\
+        Mechanism & Parameter & 1 & 2 & 3 & 4 & $Q$ in \unit{\kilo\joule}\\
         \midrule
         Dynamic
-        & $a$ & \num{ {{- "{:.2e}".format(drx.a1) -}} } & \num{ {{- drx.a2 -}} } & \num{ {{- drx.a3 -}} } & \num{ {{- drx.a4 -}} } \\
-        & $b$ & \num{ {{- "{:.2e}".format(drx.b1) -}} } & \num{ {{- drx.b2 -}} } & \num{ {{- drx.b3 -}} } & \num{ {{- drx.b4 -}} } \\
-        & $c$ & \num{ {{- "{:.2e}".format(drx.c1) -}} } & \num{ {{- drx.c2 -}} } & \num{ {{- drx.c3 -}} } & \num{ {{- drx.c4 -}} } \\
+        & $a$ & \num{ {{- "{:.2e}".format(drx.a1) -}} } & \num{ {{- drx.a2 -}} } & \num{ {{- drx.a3 -}} } & \num{ {{- drx.a4 -}} } & \num{ {{- "{:.1f}".format(drx.qa / 1e3) -}} } \\
+        & $b$ & \num{ {{- "{:.2e}".format(drx.b1) -}} } & \num{ {{- drx.b2 -}} } & \num{ {{- drx.b3 -}} } & \num{ {{- drx.b4 -}} } & \num{ {{- "{:.1f}".format(drx.qb / 1e3)  -}} } \\
+        & $c$ & \num{ {{- "{:.2e}".format(drx.c1) -}} } & \num{ {{- drx.c2 -}} } & \num{ {{- drx.c3 -}} } & \num{ {{- drx.c4 -}} } & \num{ {{- "{:.1f}".format(drx.qc / 1e3)  -}} } \\
         Meta-Dynamic
-        & $a$ & \num{ {{- "{:.2e}".format(mrx.a1) -}} } & \num{ {{- mrx.a2 -}} } & \num{ {{- mrx.a3 -}} } & \num{ {{- mrx.a4 -}} } \\
-        & $b$ & \num{ {{- "{:.2e}".format(mrx.b1) -}} } & \num{ {{- mrx.b2 -}} } & \num{ {{- mrx.b3 -}} } & \num{ {{- mrx.b4 -}} } \\
-        & $c$ & \num{ {{- "{:.2e}".format(mrx.c1) -}} } & \num{ {{- mrx.c2 -}} } & \num{ {{- mrx.c3 -}} } & \num{ {{- mrx.c4 -}} } \\
+        & $a$ & \num{ {{- "{:.2e}".format(mrx.a1) -}} } & \num{ {{- mrx.a2 -}} } & \num{ {{- mrx.a3 -}} } & \num{ {{- mrx.a4 -}} } & \num{ {{- "{:.1f}".format(mrx.qa / 1e3)  -}} } \\
+        & $b$ & \num{ {{- "{:.2e}".format(mrx.b1) -}} } & \num{ {{- mrx.b2 -}} } & \num{ {{- mrx.b3 -}} } & \num{ {{- mrx.b4 -}} } & \num{ {{- "{:.1f}".format(mrx.qb / 1e3)  -}} } \\
+        & $c$ & \num{ {{- "{:.2e}".format(mrx.c1) -}} } & \num{ {{- mrx.c2 -}} } & \num{ {{- mrx.c3 -}} } & \num{ {{- mrx.c4 -}} } & \num{ {{- "{:.1f}".format(mrx.qc / 1e3)  -}} } \\
         Static
-        & $a$ & \num{ {{- "{:.2e}".format(srx.a1) -}} } & \num{ {{- srx.a2 -}} } & \num{ {{- srx.a3 -}} } & \num{ {{- srx.a4 -}} } \\
-        & $b$ & \num{ {{- "{:.2e}".format(srx.b1) -}} } & \num{ {{- srx.b2 -}} } & \num{ {{- srx.b3 -}} } & \num{ {{- srx.b4 -}} } \\
-        & $c$ & \num{ {{- "{:.2e}".format(srx.c1) -}} } & \num{ {{- srx.c2 -}} } & \num{ {{- srx.c3 -}} } & \num{ {{- srx.c4 -}} } \\
+        & $a$ & \num{ {{- "{:.2e}".format(srx.a1) -}} } & \num{ {{- srx.a2 -}} } & \num{ {{- srx.a3 -}} } & \num{ {{- srx.a4 -}} } & \num{ {{- "{:.1f}".format(srx.qa / 1e3)  -}} } \\
+        & $b$ & \num{ {{- "{:.2e}".format(srx.b1) -}} } & \num{ {{- srx.b2 -}} } & \num{ {{- srx.b3 -}} } & \num{ {{- srx.b4 -}} } & \num{ {{- "{:.1f}".format(srx.qb / 1e3)  -}} } \\
+        & $c$ & \num{ {{- "{:.2e}".format(srx.c1) -}} } & \num{ {{- srx.c2 -}} } & \num{ {{- srx.c3 -}} } & \num{ {{- srx.c4 -}} } & \num{ {{- "{:.1f}".format(srx.qc / 1e3)  -}} } \\
         \bottomrule
     \end{tblr}
 \end{subtable}

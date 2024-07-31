@@ -85,6 +85,7 @@ The distances of those were used as the inter-pass durations.
 For the approximative description of the durations' distribution, a Weibull distribution was used.
 The probability density function (PDF) of the Weibull distribution is defined as in \autoref{eq:weibull-dist},
 where $\WeibullDistributionShape > 0$ and $\WeibullDistributionScale > 0$ are the shape and scale parameters.
+The distribution function was fitted on the observed data using the least-squares method.
 
 \begin{equation}
     p\left(\Pause\Duration \right)=\frac{\WeibullDistributionShape}{\WeibullDistributionScale} \left(\frac{\Pause\Duration}{\WeibullDistributionScale}\right)^{\WeibullDistributionShape-1}\exp -\left(\frac{\Pause{\Duration}}{\WeibullDistributionScale} \right)^{\WeibullDistributionShape}

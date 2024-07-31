@@ -96,7 +96,14 @@
     \maketitle
 
     \begin{abstract}
-
+        Industrial processes are subject to uncertainties originating in variations of input material and process parameters,
+        especially if manual treatment is involved.
+        For hot rolling processes, in particular,
+        variations in workpiece geometry and temperature are affecting the final product shape and material properties.
+        In this work, a Monte-Carlo-Method is applied to a fast hot rolling model based on the open-source rolling simulation framework PyRolL for estimating and analysing the variational behaviour of an experimental semi-continuous rolling line for steel wire production.
+        The effects of input tolerances and manual transport between the reversing passes on the final product properties are quantified.
+        Crucial stages of the process in regard to product properties are identified
+        The findings are compared with practical knowledge and experimental results of statistical rolling trials.
     \end{abstract}
 
 
@@ -116,6 +123,18 @@
 
 
     \section{Summary and Outlook}\label{sec:summary}
+
+    The method was found to give a good estimate of a rolling process' variational behaviour, however, dependent on the included influences and availability of statistical data that describe the input parameters.
+    Uncertainties in input material were found to vanish along the process line, whereas uncertainties of the process itself were found to accumulate, which is in accordance with practical knowledge and intuition.
+    A correlation was found between the size of the effect on a property, a process step applies, and its ability to depress already present uncertainties.
+    Deviations in shape of the input workpiece were found to be equalized rapidly within a few passes.
+    Deviations in temperature are reduced, but do not vanish.
+    However, their actual impact on the microstructure was found to be negligible.
+
+    The method offers a general way to investigate a process regarding the evolution of deviations and their impact on product properties.
+    More reliable and convincing result could be obtained by use of more detailed and sophisticated model approaches, however, at the cost of a significant increase in computational effort.
+    Additional influences and sources of deviation can be included in the analysis easily, since all uncertain inputs are processed in parallel.
+    For each of them, a reasonable estimate of their statistical distribution must be available from data or educated guessing.
 
     \input{sections/summary}
 

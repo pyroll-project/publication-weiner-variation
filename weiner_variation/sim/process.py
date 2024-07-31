@@ -5,8 +5,8 @@ import pyroll.jmak_recrystallization  # noqa: F401
 DIAMETER = 50e-3
 TEMPERATURE = 1150 + 273.15
 
-DIAMETER_STD = 1e-3
-TEMPERATURE_STD = 10
+DIAMETER_STD = DIAMETER * 0.01
+TEMPERATURE_STD = TEMPERATURE * 0.01
 
 
 def create_in_profile(diameter):

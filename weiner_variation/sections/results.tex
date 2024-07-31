@@ -24,26 +24,29 @@ Therefore, it was decided to treat each pause distinctly with its own distributi
 \autoref{tab:pause_distributions} shows the summary statistics of the distinct data sets alongside with the fitted beta-distribution parameters.
 The mean pause duration in most passes is slightly below the scheduled duration of \qty{6}{\second}.
 However, single events up to \qty{21}{\second} occur.
-The standard deviation is in most passes below \qty{1}{\second}.
-The expectations of the fitted Weibull distribution function is constantly below the empirical means.
+The standard deviation is in the most passes below \qty{1}{\second}.
+The expectations of the fitted Weibull distribution function are constantly below the empirical means.
 The respective standard deviations are all far below the empirical ones.
 Both are explained by the occurrence of outliers at large values, compare especially the passes R1--R2, R3--R4 and R7--R8, which have high empirical standard deviations and high maximum events.
 
 \subsection{Variational Behavior of the Rolling Process}\label{subsec:variational-behavior-of-the-rolling-process}
 
-In the following, three questions shall be investigated and answered:
+The following questions shall be investigated and answered:
 \begin{enumerate}
-    \item What is the difference in behavior of variations sourced in the input workpiece and arising within the process?
+    \item What is the difference in the behaviour of variations sourced in the input workpiece and arising within the process (manual handling)?
+    \item How can the variation of the input workpiece be efficiently depressed?
+    \item Or, similarly, how can the precision of the process be increased efficiently?
     \item Is there a minimum number of passes needed to eliminate variations of the input workpiece?
 \end{enumerate}
 
-For this distinct simulations were carried out and compared with each other and the experimental data.
+For this, distinct simulations were carried out and compared with each other and the experimental data.
 
 \subsubsection{Different Sources of Variation}\label{subsubsec:different-sources-of-variation}
 
-Two basic classes of variation sources in can be identified in rolling processes, or manufacturing processes in general: variations inherent to the input workpiece and variations arising in the regarded processes itself.
-These effect together the variation of the resulting product.
-To investigate the different behavior of them, two simulations shall be carried out and compared.
+Two basic classes of variation sources can be identified in rolling processes, or, manufacturing processes in general: variations inherent to the input workpiece and variations arising in the regarded processes itself.
+Together with the variational behaviour of the process, these determine the variation of the resulting product.
+However, they presumably behave differently in the process.
+To investigate this, two simulations shall be carried out and compared.
 The first one only regards variations of the input workpiece and how they evolve during the process.
 The second one introduces additional variations within the process in means of varying inter-stand pause durations between the reversing passes.
 These originate, as denoted before, in the manual handling of the workpiece for feeding into the next pass.
@@ -67,17 +70,17 @@ The focus of the following analysis lies on the temperature evolution of the wor
 
 
 The temperature evolution of the first case is shown in \autoref{fig:plot_input_temperature}.
-The variation of the input workpiece was taken as obtained in \autoref{subsubsec:input-workpiece-variation}.
-The box plots in the figure show the variation of the workpiece temperature, where the box marks a distance of $\Estimated\StandardDeviation$ to $\Estimated\Mean$ and the whiskers a distance of $3\Estimated\StandardDeviation$.
+The uncertainty of the input workpiece was modelled using normal distributions for diameter and mean temperature, with expectation equal to the nominal value and relative standard deviations of \qty{1}{\percent}.
+The box plots in the figure show the variation of the workpiece temperature, where the box marks the region from the lower to the upper quartile and the whiskers the distance of \num{1.5} of the inter-quartile-distance from the median.
 The variation of temperature decreases with each processing step and is remarkably small in the product.
 So there is something like a ``natural'' depression of variation in each process step.
 
 The second case, however, is shown in \autoref{fig:plot_durations_temperature}.
-Here, the variation is not decreasing with each step, but increasing in the transport steps.
+Here, the variation is not decreasing with each step, but increases in some of the transport steps.
 In contrast, roll passes still decrease the variation.
-If the overall variation decreases in the process, depends, of course, on the ratio between decrease in passes and increase in transports.
+If the overall variation decreases in the process depends on the ratio between the decrease in passes and the increase in transports.
 In this view, the goal of process design must be to prevent an overall increase of variation in the process.
-The main vantage point for this is to limit variation in pause durations.
+The main vantage point for this is in our example to limit variation in pause durations.
 
 \begin{figure}
     \centering
@@ -86,16 +89,17 @@ The main vantage point for this is to limit variation in pause durations.
     \label{fig:plot_temperature_std}
 \end{figure}
 
-\autoref{fig:plot_temperature_std} shows the evolution of variation of both cases in comparison, accompanied by the experimental results.
-One can see, that the overall variation is increasing solely in reversing transports for the second case.
-Note, that the influence of transports in oval cross-section shape is remarkably higher than those in round shape.
-This can be explained by the adverse surface area to volume ratio of oval cross-sections.
+\autoref{fig:plot_temperature_std} shows the evolution of standard deviation in both cases in comparison, accompanied by the experimental results.
+One can see that the overall variation is increasing solely in reversing transports for the second case.
+Note that the influence of transports in oval cross-section shape is remarkably higher than those in round shape.
+This can be explained by the adverse surface-area-to-volume ratio of oval cross-sections.
 
 The experimental results tendentiously show higher variations than proposed by the simulation, which is natural, since the simulation only regards selected sources of variation.
-Values more than \qty{30}{\kelvin} below of the median were dropped as outliers, since after inspection of the original signals they were identified as corrupted.
+Sometimes the pyrometer does not continuously hit the strand, which lowers the integral mean of the temperature signal.
+Therefore, values more than \qty{30}{\kelvin} below of the median were dropped as outliers.
 However, there are several peaks in the experimental curve remarkably deviating from the simulation results.
-Note also the gap in the data between F1 and F2, since there was no pyrometer applied there.
-Overall, the simulation regarding the pause durations gives a good first estimate of the workpiece temperature variation, although there seem to be further sources of variation missing.
+The gap in the data between F1 and F2 is due to the lack of a pyrometer there.
+Overall, the simulation including the pause durations gives a good first estimate of the workpiece temperature variation, although there seem to be further sources of variation missing.
 
 \begin{figure}
     \begin{subfigure}{\linewidth}
@@ -113,16 +117,6 @@ Overall, the simulation regarding the pause durations gives a good first estimat
     \caption{Correlation Between Change in Temperature Standard Deviation and Change in Temperature Per Unit}
 \end{figure}
 
-From the observation regarding the difference between oval and round shapes, the hypothesis can be stated that process steps with high influence on temperature have also high influence on the variation depression.
-This is proven by plotting the relative depression in standard deviation per step as in \autoref{eq:relative-variation-depression} over the change in temperature in the step.
-This correlation can especially be observed in varying only the input workpiece as shown in \autoref{fig:plot_input_temperature_correlation}, where the variation depressions in roll passes and transports show an approximately linear correlation to the temperature changes.
-In the case of varying pause durations, the roll passes still show the same behavior, but the correlation in the transports is destroyed by the introduction of additional variation, as can be seen in \autoref{fig:plot_durations_temperature_correlation}.
-
-\begin{equation}
-    \RelativeStandardDeviationDepression = \frac{\Abs{\Change{\StandardDeviation}}}{\Abs{\StandardDeviation}}
-    \label{eq:relative-variation-depression}
-\end{equation}
-
 \begin{figure}
     \centering
     \includegraphics{img/plot_grain_size_std}
@@ -134,19 +128,40 @@ As stated before, the actual workpiece temperature has significant influence on 
 \autoref{fig:plot_grain_size_std} shows the variation of the mean grain size predicted by the simulation using only input variation in comparison to that using the pause duration variation.
 Note that the variation in grain size is significantly higher in the second case.
 A remarkable feature here is, that a prominent peak is occurring in the R10 pass, this is because the pass applies a deformation only slightly above the critical strain of recrystallization.
+The grain size deviation rises in the first pass from its certain initial value caused by the variation in temperature and draught.
+In reality, the mean grain size would also not be a certainly determined property because of differences in chemical composition and uncertainty of previous processes, especially the casting and reheating in the furnace.
+The final standard deviation, however, is predicted to be about \qty{1}{\micro\meter} for the second case, which lies definitely within the measurement uncertainty of mean grain sizes from optical micrographs.
+So the variation of mean grain sizes can hardly be rated as significant for the current example.
+This statement may change if one regards local microstructural properties using more sophisticated models for temperature and microstructure evolution.
 
-\subsubsection{Elimination of Input Variation}\label{subsubsec:elimination-of-input-variation}
+\subsubsection{Efficiency of Variation Depression in a Single Process Step}
 
-A common statement found is that the variations in the input workpiece are eliminated after three to four passes.
+From the observation regarding the difference between oval and round shapes, the hypothesis can be stated that process steps with high influence on temperature have also high influence on the variation depression.
+This is proven by plotting the relative depression in standard deviation per step as in \autoref{eq:relative-variation-depression} over the change in temperature in the step.
+This correlation can especially be observed in varying only the input workpiece as shown in \autoref{fig:plot_input_temperature_correlation}, where the variation depressions in roll passes and transports show an approximately linear correlation to the temperature changes.
+In the case of varying pause durations, the roll passes still show the same behaviour, but the correlation in the transports is destroyed by the introduction of additional variation, as can be seen in \autoref{fig:plot_durations_temperature_correlation}.
+Nevertheless, it can be concluded that a process highly affecting a regarded property is also efficient in reducing the variation of this property introduced with the input workpiece, which seems plausible.
+
+\begin{equation}
+    \RelativeStandardDeviationDepression = \frac{\Abs{\Change{\StandardDeviation}}}{\Abs{\StandardDeviation}}
+    \label{eq:relative-variation-depression}
+\end{equation}
+
+
+\subsubsection{Elimination of Input Variation Along the Process Line}
+
+A common experiential statement found is that the variations in the input workpiece are eliminated after three to four passes.
 To validate this statement, simulations under different variations of the input workpiece have been carried out.
 
 \autoref{fig:plot_filling_stds} shows the depression of the filling ratio standard deviation along the pass sequence for different initial workpiece diameter variations.
-It is found that the variation decreases rapidly in the first three passes and is negligible small in the fourth, no matter what initial variation was applied.
-So regarding the geometry the validity of the former statement can be confirmed.
+It is found that the variation decreases rapidly in the first three passes and is negligibly small in the fourth, no matter what initial variation was applied.
+So regarding the geometry, the validity of the former statement can be confirmed.
+Simulations using standard deviations higher than \qty{5}{\percent} of the nominal value often failed in the current example.
+There was a significant probability for the workpiece to be too small, so gripping of the profile failed in the first or second pass (due to too few spread in the first).
 
 \autoref{fig:plot_temperature_stds}, however, shows the depression of temperature variation along the pass sequence for different initial workpiece temperature variations.
 Although, the variation is effectively depressed in the sequence, the variation of the output workpiece is still remarkably higher for higher input variations.
-So regarding the temperature evolutions, the statement can not be confirmed, especially in regard of microstructure evolution heavily effected by the temperature path taken.
+So regarding the temperature evolutions, the statement can not be confirmed, especially in regard of microstructure evolution heavily affected by the temperature path taken.
 
 \begin{figure}
     \begin{subfigure}{\linewidth}
