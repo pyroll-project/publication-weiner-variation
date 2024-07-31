@@ -22,6 +22,9 @@ def task_material_data(template=TEMPLATE, produces=RESULT):
     result = template.render(
         ip=IN_PROFILE,
         c=IN_PROFILE.freiberg_flow_stress_coefficients,
+        drx=IN_PROFILE.jmak_dynamic_recrystallization_parameters,
+        srx=IN_PROFILE.jmak_static_recrystallization_parameters,
+        mrx=IN_PROFILE.jmak_metadynamic_recrystallization_parameters,
         alpha_conv=CONVECTION_HEAT_TRANSFER,
         alpha_cont=CONTACT_HEAT_TRANSFER,
         epsr=RELATIVE_RADIATION,
