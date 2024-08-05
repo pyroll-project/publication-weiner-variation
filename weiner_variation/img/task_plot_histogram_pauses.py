@@ -17,7 +17,7 @@ for i in range(11):
         produces=[IMG_DIR / f"plot_histogram_pauses{i}.{s}" for s in ["png", "pdf", "svg"]],
         row_index=i,
     ):
-        fig: plt.Figure = plt.figure(dpi=600, figsize=(6.4, 4.5))
+        fig: plt.Figure = plt.figure(dpi=600, figsize=(6.4, 4.5), layout="constrained")
         ax: list[plt.Axes] = fig.subplots(nrows=2, sharex="all")
         ax[0].grid(True)
         ax[0].set_ylabel("Probability Density")
@@ -71,7 +71,6 @@ for i in range(11):
             bbox=dict(facecolor="white", boxstyle="round"),
         )
 
-        fig.tight_layout()
         fig.subplots_adjust(wspace=0.2)
 
         for p in produces:
@@ -84,7 +83,7 @@ def task_plot_histogram_pauses_all(
     config=ROOT_DIR / "config.py",
     produces=[IMG_DIR / f"plot_histogram_pauses_all.{s}" for s in ["png", "pdf", "svg"]],
 ):
-    fig: plt.Figure = plt.figure(dpi=600, figsize=(6.4, 4.5))
+    fig: plt.Figure = plt.figure(dpi=600, figsize=(6.4, 4.5), layout="constrained")
     ax: list[plt.Axes] = fig.subplots(nrows=2, sharex="all")
     ax[0].grid(True)
     ax[0].set_ylabel("Probability Density")
@@ -128,7 +127,6 @@ def task_plot_histogram_pauses_all(
 
     fig.legend(loc="upper right", framealpha=1)
 
-    fig.tight_layout()
     fig.subplots_adjust(hspace=0.1)
 
     for p in produces:

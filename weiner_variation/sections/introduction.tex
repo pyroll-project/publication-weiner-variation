@@ -1,13 +1,13 @@
 All technical processes are subject to certain variations.
 Knowledge and control of these variations is crucial for process stability and product quality.
 Sources of variations in a process are the variations already present in the input workpiece and newly generated variations due to imperfections of the process itself.
-In the case of wire and bar hot rolling industry regarded here, not only the product geometry, but also the final material properties sre highly sensitiv to the process conditions.
-Especially the temperature evolution of the workpiece within the rolling line has high impact on the microstructural transformation processes happening before, during and after forming.
-The product's microstructural state determines the mechanical properties and therefore its behavior in further processing and application.
+In the case of wire and bar hot rolling industry regarded here, not only the product geometry, but also the final material properties are highly sensitive to the process conditions.
+Especially the temperature evolution of the workpiece within the rolling train has high impact on the microstructural transformation processes happening before, during and after forming.
+The product's microstructural state determines the mechanical properties and therefore its behaviour in further processing and application.
 Current alloy concepts in the steel industry increase this problem, as the process window gets more narrow to achieve the property requirements for high-tech applications.
 The controlled combination of forming and thermally activated material transformation is commonly subsumed under the term thermo-mechanical treatment.
 
-The classic way of analysing variational behavior with mathematical tooling is the error propagation using first order Taylor series expansions (see f.e.~\cite{Ku1966}).
+The classic way of analysing variational behaviour with mathematical tooling is the error propagation using first order Taylor series expansions (see f.e.~\cite{Ku1966}).
 This concept is widely used in science and industry, especially to determine the error of indirect measurement processes.
 This procedure has two main problems.
 First, one needs to determine the first derivatives of the regarded function in each dimension, either analytically or numerically, which is rather problematic if the function is complicated.
@@ -39,6 +39,6 @@ These are offering high accuracy and high resolution results at the expense of h
 So these methods are inconvenient for the current need.
 Therefore, one-dimensional approaches shall be used here.
 These offer less accuracy and limited resolution, but are computable within fractions of seconds on typical personal computer systems.
-The current work is based on the open-source rolling simulation framework PyRolL~\cite{pyroll2}, developed by the authors, which is a fast, open and flexible software package mainly aimed at groove rolling in reduction passes.
+The current work is based on the open-source rolling simulation framework PyRolL~\cite{pyroll_jors}, developed by the authors, which is a fast, open and flexible software package mainly aimed at groove rolling in elongation passes.
 The models used for the different parts of the problem can be exchanged and extended with low effort to the users needs.
 

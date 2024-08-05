@@ -16,7 +16,7 @@
 
 
 \autoref{fig:plot_histogram_pauses} shows the histograms of pause durations obtained from the torque signals with fitted Weibull distributions.
-The last pause (R10--F1) protrudes from the other distributions due to a technical difference, the workpiece is here fed into a driver which accelerates it to be fed into the first finishing pass.
+The last pause (R10--F1) protrudes from the other distributions due to a technical difference, the workpiece is here fed into a driver, which accelerates it to be fed into the first finishing pass.
 However, the other passes also do not form a unitary distribution.
 The distributions partially overlap, but there is no clear tendency remarkable.
 Therefore, it was decided to treat each pause distinctly with its own distribution function fit.
@@ -70,7 +70,7 @@ The focus of the following analysis lies on the temperature evolution of the wor
 
 
 The temperature evolution of the first case is shown in \autoref{fig:plot_input_temperature}.
-The uncertainty of the input workpiece was modelled using normal distributions for diameter and mean temperature, with expectation equal to the nominal value and relative standard deviations of \qty{1}{\percent}.
+The uncertainty of the input workpiece was modelled using normal distributions for diameter and mean temperature, with expectation equal to the nominal value (\qty{50}{\milli\meter} resp.~\qty{1200}{\degree\celsius}) and standard deviations of \qty{1}{\milli\meter} resp.~\qty{10}{\kelvin}.
 The box plots in the figure show the variation of the workpiece temperature, where the box marks the region from the lower to the upper quartile and the whiskers the distance of \num{1.5} of the inter-quartile-distance from the median.
 The variation of temperature decreases with each processing step and is remarkably small in the product.
 So there is something like a ``natural'' depression of variation in each process step.
@@ -148,7 +148,7 @@ Nevertheless, it can be concluded that a process highly affecting a regarded pro
 \end{equation}
 
 
-\subsubsection{Elimination of Input Variation Along the Process Line}
+\subsubsection{Elimination of Input Variation Along the Process Train}
 
 A common experiential statement found is that the variations in the input workpiece are eliminated after three to four passes.
 To validate this statement, simulations under different variations of the input workpiece have been carried out.
@@ -162,6 +162,8 @@ There was a significant probability for the workpiece to be too small, so grippi
 \autoref{fig:plot_temperature_stds}, however, shows the depression of temperature variation along the pass sequence for different initial workpiece temperature variations.
 Although, the variation is effectively depressed in the sequence, the variation of the output workpiece is still remarkably higher for higher input variations.
 So regarding the temperature evolutions, the statement can not be confirmed, especially in regard of microstructure evolution heavily affected by the temperature path taken.
+
+These results are in accordance with earlier results of \textcite{Mauk1999}, who investigated the error depression in a 4-stand block by application of a minimum/maximum approach while altering each investigated parameter distinctly.
 
 \begin{figure}
     \begin{subfigure}{\linewidth}

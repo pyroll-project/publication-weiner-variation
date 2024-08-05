@@ -1,9 +1,9 @@
+% compiler: lualatex
 % Preamble
 \documentclass[DIV=13]{scrartcl}
 
 % Packages
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
+\usepackage{fontspec}
 \usepackage[english]{babel}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -18,29 +18,25 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{csquotes}
 
-%\usepackage[newfloat]{minted}
-%\usemintedstyle{friendly}
-%\setminted{
-%    fontsize={\small}
-%}
-
 \addbibresource{refs.bib}
 \usepackage{symbols}
+
+\setmainfont{Tempora}
 
 % Document
 \begin{document}
     \title{Rolling Process Variation Estimation Using a Monte-Carlo Method}
     \date{\today}
     \author{%
-        M. Weiner \thanks{Corresponding author}
+        M.~Weiner \thanks{Corresponding author}
         \and
-        C. Renzing
-%        \and
-%        M. Stirl
+        C.~Renzing
         \and
-        M. Schmidtchen
+        J.~Mantel
         \and
-        U. Prahl
+        M.~Schmidtchen
+        \and
+        U.~Prahl
     }
 
     \extratitle{%
@@ -51,13 +47,13 @@
 
         \minisec{Christoph Renzing}
         christoph.renzing@imf.tu-freiberg.de\\
-        Conceptualization, Methodology, Software, Formal analysis, Validation, Investigation, Project administration, Writing - Original Draft\\
+        Software, Validation, Investigation, Project administration, Writing - Review \& Editing\\
         Institute of Metals Forming, TU Bergakademie Freiberg
 
-%        \minisec{Max Stirl}
-%        max.stirl@imf.tu-freiberg.de\\
-%        Writing - Review \& Editing\\
-%        Institute of Metals Forming, TU Bergakademie Freiberg
+        \minisec{Jennifer Mantel}
+        jennifer.mantel@imf.tu-freiberg.de\\
+        Writing - Review \& Editing, Data curation\\
+        Institute of Metals Forming, TU Bergakademie Freiberg
 
         \minisec{Matthias Schmidtchen}
         matthias.schmidtchen@imf.tu-freiberg.de\\
@@ -135,6 +131,11 @@
     More reliable and convincing result could be obtained by use of more detailed and sophisticated model approaches, however, at the cost of a significant increase in computational effort.
     Additional influences and sources of deviation can be included in the analysis easily, since all uncertain inputs are processed in parallel.
     For each of them, a reasonable estimate of their statistical distribution must be available from data or educated guessing.
+    Especially, the influence of modern process control systems is not included in the current model (as there were none present in the regarded experimental plant).
+    Inclusion of static control behaviour is possible and required for industrial usage, as otherwise the deviation would be heavily overestimated.
+    Dynamic behaviour can not be regarded with the current setup, since the used simulation procedure is stationary.
+    Although, since the Monte-Carlo approach is agnostic regarding the core simulation procedure, the method is generally also applicable for this case, with a heavy increase in computational effort and the necessity to regard timeline results instead of scalar ones.
+    The method does not include head and tail deviations, this has to be regarded separately.
 
     \input{sections/summary}
 

@@ -106,7 +106,7 @@ Details of software construction and model equations are provided in the documen
 
 The models most important for the following elaborations will be discussed in brief.
 The temperature change of the workpiece was calculated by an integral heat balance as proposed by \textcite{Hensel1990} and given in \autoref{eq:heat-balance}.
-%TODO: correct surface, capacity
+
 \begin{equation}
     \Delta\Temperature = \Convection{\Delta\Temperature} + \Contact{\Delta\Temperature} + \Delta\Temperature_\Deformation + \Radiation{\Delta\Temperature}
     \label{eq:heat-balance}
@@ -149,11 +149,11 @@ The deformation resistance was taken as proposed by \textcite{Hensel1978} and gi
     \label{eq:deformation-resistance}
 \end{multline}
 
-The pay regard on the microstructure influence of the thermal variation involved in the process, a JMAK based recrystallization model was used.
+T0 pay regard on the microstructure influence of the thermal variation involved in the process, a JMAK based recrystallization model was used.
 The JMAK approach is named after \textcite{Johnson1939}, \textcite{Avrami1939, Avrami1940, Avrami1941} and \textcite{Kolmogorov1937}.
 It has gained a large popularity in modelling kinetics of transformation processes.
 The literature regarding recrystallization modelled by JMAK approaches is rather diverse~\cite{Luton1969, Sellars1978, Sellars1979, Sellars1985, Beynon1992, Glover1972, Glover1973, Hodgson1992, Laasraoui1991, Laasraoui1991a, Hernandez1996, Medina1996, Fernandez2000, Fernandez2003, Karhausen1992,Roberts1979, Maccagno1996, Siciliano2000}.
-There are many forms of how the parameters can be described for materials under different conditions regarding strain $\LogStrain$, strain rate $\StrainRate$ and temperature $\Temperature$.
+There are many forms of how the parameters can be described for materials under different conditions regarding strain $\LogStrain$, strain rate $\LogStrainRate$ and temperature $\Temperature$.
 The following forms try to generalize them into one for all three major mechanisms: dynamic, metadynamic and static recrystallization.
 The Zener-Holomon-parameter~\cite{Zener1944} is not applied here, since sometimes different activation energies are used therein for the distinct mechanisms, so the Arrhenius-term is explicitly used in each equation.
 These equations are implemented in the JMAK Recrystallization Plugin for PyRolL~\cite{pyroll-jmak-recrystallization}

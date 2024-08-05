@@ -16,7 +16,7 @@ def task_plot_timeline_pass_finding(
     config=ROOT_DIR / "config.py",
     produces=[IMG_DIR / f"{FILE_STEM}.{t}" for t in FILE_TYPES],
 ):
-    fig: plt.Figure = plt.figure(figsize=(6.4, 2.5), dpi=600)
+    fig: plt.Figure = plt.figure(figsize=(6.4, 2.5), dpi=600, layout="constrained")
     ax: plt.Axes = fig.add_subplot()
 
     passes = pd.read_csv(passes_file, header=[0], index_col=0)

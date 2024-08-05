@@ -16,7 +16,7 @@ def task_plot_pass_sequence(
     process_file=SIM_DIR / "process.py",
     produces=[IMG_DIR / f"{FILE_STEM}.{t}" for t in FILE_TYPES],
 ):
-    fig: plt.Figure = plt.figure(dpi=600, figsize=(6.4, 3))
+    fig: plt.Figure = plt.figure(dpi=600, figsize=(6.4, 3), layout="constrained")
 
     gs_rows = gs.GridSpec(3, 1, figure=fig, height_ratios=[2, 1.5, 1])
     gs0 = gs.GridSpecFromSubplotSpec(1, 4, subplot_spec=gs_rows[0])
@@ -62,7 +62,6 @@ def task_plot_pass_sequence(
     first_row_xlim = axs[0].get_xlim()
     axs[8].set_xlim(first_row_xlim[0] * 4 / 6, first_row_xlim[1] * 4 / 6)
 
-    fig.tight_layout()
     fig.subplots_adjust(wspace=0.1, hspace=0.1)
 
     for p in produces:
