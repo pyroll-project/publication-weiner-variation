@@ -2,7 +2,7 @@ All technical processes are subject to certain variations.
 Knowledge and control of these variations is crucial for process stability and product quality.
 Sources of variations in a process are the variations already present in the input workpiece and newly generated variations due to imperfections of the process itself.
 In the case of wire and bar hot rolling industry regarded here, not only the product geometry, but also the final material properties are highly sensitive to the process conditions.
-Especially the temperature evolution of the workpiece within the rolling train has high impact on the microstructural transformation processes happening before, during and after forming.
+Especially the temperature evolution of the workpiece within the rolling train has a high impact on the microstructural transformation processes happening before, during and after forming.
 The product's microstructural state determines the mechanical properties and therefore its behaviour in further processing and application.
 Current alloy concepts in the steel industry increase this problem, as the process window gets more narrow to achieve the property requirements for high-tech applications.
 The controlled combination of forming and thermally activated material transformation is commonly subsumed under the term thermo-mechanical treatment.
@@ -13,7 +13,7 @@ This procedure has two main problems.
 First, one needs to determine the first derivatives of the regarded function in each dimension, either analytically or numerically, which is rather problematic if the function is complicated.
 Second, the error is commonly represented in terms of the variance, so there is only information about the spread, but not about the shape of the distribution inherent.
 
-The usage of a Monte-Carlo Method circumvents these problems, and shall be proposed with this work.
+The usage of a Monte Carlo Method circumvents these problems, and shall be proposed with this work.
 The term Monte Carlo Method (MCM) generally refers to a class of methods, which are characterized by the use of random numbers.
 These methods are rather diverse and serve different purposes.
 Here, the term shall be used for the concept of drawing random numbers as input for a function and analysing the results of several evaluations of this function, with different random inputs, with statistical methods.
@@ -23,8 +23,8 @@ In this case, Monte Carlo methods can provide valuable information about the beh
 Also, the complete distribution of the input variables is included in the estimation and is reflected in the results.
 
 Here, the function equals the simulation procedure, so it is generally known, but complicated.
-For example, it is generally not possible, to compute derivatives of the outputs in dependence on the inputs in an analytical way.
-Even numerical derivation is hard, due to the multi-dimensional nature of most natural or technical systems and the pronounced non-linear behavior of the function.
+For example, it is generally not possible to compute derivatives of the outputs in dependence of the inputs in an analytical way.
+Even numerical derivation is difficult, due to the multi-dimensional nature of most natural or technical systems and the pronounced non-linear behavior of the function.
 
 The use of Monte Carlo methods for the analysis of variations in technical processes was reported before in the field of assembly of complicated structures, like in mechanical engineering and building construction (f.e.~\cite{Lin1997, Shen2005, Dantan2009, Qureshi2012, Yan2015, Rausch2019}).
 However, in the field of rolling processes, there was no such attempt yet to the knowledge of the authors.
@@ -40,5 +40,5 @@ So these methods are inconvenient for the current need.
 Therefore, one-dimensional approaches shall be used here.
 These offer less accuracy and limited resolution, but are computable within fractions of seconds on typical personal computer systems.
 The current work is based on the open-source rolling simulation framework PyRolL~\cite{pyroll_jors}, developed by the authors, which is a fast, open and flexible software package mainly aimed at groove rolling in elongation passes.
-The models used for the different parts of the problem can be exchanged and extended with low effort to the users needs.
+The models used for the different parts of the calculation can be exchanged and extended to the users needs with low effort.
 

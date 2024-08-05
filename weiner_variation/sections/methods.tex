@@ -2,7 +2,7 @@
 
 The object of the current investigation is the operation of the experimental semi-continuous rolling plant located at the Institute of Metal Forming, TU Bergakademie Freiberg.
 It consists of a two-high reversing roughing stand and four continuous finishing stands.
-The pass schedule of the current work consists of 10 oval-round reversing passes followed by 4 oval-round continuous finishing passes.
+The pass schedule of the current work consists of 10 oval-round reversing passes (R1-10) followed by 4 oval-round continuous finishing passes (F1-4).
 A \qty{50}{\milli\meter} round workpiece made of C45 carbon steel is rolled down to \qty{8}{\milli\meter} diameter, starting at \qty{1150}{\celsius}, resp.\ \qty{1423.15}{\kelvin}.
 Details of the schedule are provided in \autoref{tab:process_conditions} and in the supplemental material~\cite{WeinerVariationSupplemental2024}.
 The profile shapes appearing in the schedule are illustrated in \autoref{fig:plot_pass_sequence}.
@@ -22,11 +22,11 @@ The profile shapes appearing in the schedule are illustrated in \autoref{fig:plo
     \input{tbl/process_conditions}
 \end{table}
 
-Online measurements of the process conditions and workpiece state are done regarding roll force and torque, as well as workpiece temperature.
-The latter is measured using pyrometers at several points in the plant: at entry and exit of the reversing stand and before, between and after the finishing stands.
+Inline measurements of the process conditions and workpiece state are done regarding roll force and torque, as well as workpiece temperature.
+The latter is measured using pyrometers at several points in the plant: at the entry and exit of the reversing stand and before, between and after the finishing stands.
 The sensor signals are collected as timelines, so that they can be automatically analysed afterwards as described in \autoref{subsec:data-acquisition}.
 
-To achieve statistical certainty, a number of 45 rolling trials were carried out.
+To achieve statistical certainty, 45 rolling trials were carried out.
 This enables an estimation of the variations appearing.
 A major source of variation in these trials is the manual feeding of the workpiece into the reversing passes.
 The duration of those is scheduled with about 6 seconds.
@@ -47,12 +47,12 @@ The principle is shown in \autoref{fig:chart_mc_principle}.
 
 This approach provides information about the overall variational behavior of the process.
 If a single source of variation is introduced in the input, the reaction of the process on this variable can be analysed.
-The count of variation sources introduced is generally unbounded.
+The count of variation sources that can be introduced is generally unbounded.
 In contrast to classic Taylor series error propagation, the computational effort does not directly increase remarkably with increasing count of investigated parameters.
 However, an increase in sample size can be necessary to achieve sufficient certainty.
 The key problem is to obtain data describing the variations of the input variables.
 The tracing back of result variations to the input can be done using classic correlation methods of descriptive statistics, however, with the same typical caveats.
-The main benefit of the approach is, that no information about the internals of the simulation procedure is needed for variational analysis, especially there is no need for derivatives of result values in dependence on the input.
+The main benefit of the approach is that no information about the internals of the simulation procedure is needed for variational analysis, especially there is no need for derivatives of result values in dependence on the input.
 The simulation procedure can generally be treated as black box with defined input and output interfaces.
 
 \subsection{Statistical Data Acquisition}\label{subsec:data-acquisition}
@@ -65,7 +65,7 @@ Both were approximated using a normal distribution for sampling of random input 
 The question of varying inter-pass durations is crucial for scientific experiments on microstructure evolution, but currently often neglected.
 Mostly, only fixed durations between the reversing passes are included in the design calculations.
 Due to manual transport and feed of the workpiece to the following roll pass, the scheduled inter-pass durations are never realized in practice.
-Although, these deviations from the schedule influence the microstructure evolution of the sample, as well as the actual conditions in the roll passes.
+Nevertheless, these deviations from the schedule influence the microstructure evolution of the sample, as well as the actual conditions in the roll passes.
 The current approach is aimed to help quantifying these deviations.
 
 To obtain the inter-pass durations $\Pause{\Duration}$ from the timeline data, the passes have to be identified automatically.
@@ -149,14 +149,14 @@ The deformation resistance was taken as proposed by \textcite{Hensel1978} and gi
     \label{eq:deformation-resistance}
 \end{multline}
 
-T0 pay regard on the microstructure influence of the thermal variation involved in the process, a JMAK based recrystallization model was used.
+To pay regard on the microstructure influence of the thermal variation involved in the process, a JMAK based recrystallization model was used.
 The JMAK approach is named after \textcite{Johnson1939}, \textcite{Avrami1939, Avrami1940, Avrami1941} and \textcite{Kolmogorov1937}.
 It has gained a large popularity in modelling kinetics of transformation processes.
 The literature regarding recrystallization modelled by JMAK approaches is rather diverse~\cite{Luton1969, Sellars1978, Sellars1979, Sellars1985, Beynon1992, Glover1972, Glover1973, Hodgson1992, Laasraoui1991, Laasraoui1991a, Hernandez1996, Medina1996, Fernandez2000, Fernandez2003, Karhausen1992,Roberts1979, Maccagno1996, Siciliano2000}.
 There are many forms of how the parameters can be described for materials under different conditions regarding strain $\LogStrain$, strain rate $\LogStrainRate$ and temperature $\Temperature$.
-The following forms try to generalize them into one for all three major mechanisms: dynamic, metadynamic and static recrystallization.
+The following equations try to generalize them into one for all three major mechanisms: dynamic, metadynamic and static recrystallization.
 The Zener-Holomon-parameter~\cite{Zener1944} is not applied here, since sometimes different activation energies are used therein for the distinct mechanisms, so the Arrhenius-term is explicitly used in each equation.
-These equations are implemented in the JMAK Recrystallization Plugin for PyRolL~\cite{pyroll-jmak-recrystallization}
+These equations are implemented in the JMAK Recrystallization Plugin for PyRolL~\cite{pyroll-jmak-recrystallization}.
 
 The recrystallized fraction $\RecrystallizedFraction$ in dependence on time $\Time$ is given as Avrami-term as \autoref{eq:jmak-fraction}, with the empirical parameters $k$ an $n$, as well as the reference time $\Time_\Reference$ and critical time $\Time_{\Critical}$.
 
