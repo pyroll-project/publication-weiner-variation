@@ -1,9 +1,10 @@
-\subsection{Experimental Procedure}\label{subsec:experimental-procedure}
+\subsection{Regarded Process and Scope of Investigation}\label{subsec:regarded-process}
 
 The object of the current investigation is the operation of the experimental semi-continuous rolling plant located at the Institute of Metal Forming, TU Bergakademie Freiberg.
 It consists of a two-high reversing roughing stand and four continuous finishing stands.
 The pass schedule of the current work consists of 10 oval-round reversing passes followed by 4 oval-round continuous finishing passes.
-A \qty{50}{\milli\meter} round workpiece made of C45 carbon steel is rolled down to \qty{8}{\milli\meter} diameter, starting at \qty{1150}{\celsius}, resp.\ \qty{1423.15}{\kelvin}.
+The workpiece is handled manually between the reversing passes and in the transfer to the continuous passes.
+A \qty{50}{\milli\meter} round workpiece made of C15 carbon steel is rolled down to \qty{8}{\milli\meter} diameter, starting at \qty{1150}{\celsius}, resp.\ \qty{1423.15}{\kelvin}.
 Details of the schedule are provided in \autoref{tab:process_conditions} and in the supplemental material~\cite{WeinerVariationSupplemental2024}.
 The profile shapes appearing in the schedule are illustrated in \autoref{fig:plot_pass_sequence}.
 
@@ -14,7 +15,6 @@ The profile shapes appearing in the schedule are illustrated in \autoref{fig:plo
     \label{fig:plot_pass_sequence}
 \end{figure}
 
-
 \begin{table}
     \centering
     \caption{Principal Data of the Investigated Pass Sequence}
@@ -22,15 +22,25 @@ The profile shapes appearing in the schedule are illustrated in \autoref{fig:plo
     \input{tbl/process_conditions}
 \end{table}
 
+The focus of the current investigation lies in the analysis of the variational behaviour regarding profile shape and mean workpiece temperature.
+In industry, the former commonly underlies defined tolerances required by the customer, and the latter is crucial for the achieved mechanical material properties.
+Investigated influences on these properties are the geometry and mean temperature of the input workpiece, as well as the varying inter-stand pause durations due to manual handling.
+These were chosen to limit the complexity of the current study as a proof of principle.
+Examples for common other influences that were neglected here are:
+\begin{itemize}
+    \item chemical composition and microstructural state of the workpiece
+    \item deviation of roll geometry (fe. due to wear)
+    \item behaviour of plant control systems
+\end{itemize}
+These may be also included in a study of the type shown here, but one needs additional statistical data describing their distribution and respective models describing their effect on the regarded properties.
+
+\subsection{Experimental Procedure}\label{subsec:experimental-procedure}
+
 Online measurements of the process conditions and workpiece state are done regarding roll force and torque, as well as workpiece temperature.
 The latter is measured using pyrometers at several points in the plant: at entry and exit of the reversing stand and before, between and after the finishing stands.
 The sensor signals are collected as timelines, so that they can be automatically analysed afterwards as described in \autoref{subsec:data-acquisition}.
-
 To achieve statistical certainty, a number of 45 rolling trials were carried out.
 This enables an estimation of the variations appearing.
-A major source of variation in these trials is the manual feeding of the workpiece into the reversing passes.
-The duration of those is scheduled with about 6 seconds.
-The actual time needed has to be investigated in this work, see \autoref{subsec:data-acquisition} for details.
 
 \subsection{Monte-Carlo Approach}\label{subsec:monte-carlo-approach}
 
@@ -52,7 +62,7 @@ In contrast to classic Taylor series error propagation, the computational effort
 However, an increase in sample size can be necessary to achieve sufficient certainty.
 The key problem is to obtain data describing the variations of the input variables.
 The tracing back of result variations to the input can be done using classic correlation methods of descriptive statistics, however, with the same typical caveats.
-The main benefit of the approach is, that no information about the internals of the simulation procedure is needed for variational analysis, especially there is no need for derivatives of result values in dependence on the input.
+The main benefit of the approach is, that no special mathematical features are required for the application of the method, especially there is no need for steadiness or derivatives of result values in dependence on the input.
 The simulation procedure can generally be treated as black box with defined input and output interfaces.
 
 \subsection{Statistical Data Acquisition}\label{subsec:data-acquisition}
@@ -99,10 +109,9 @@ Generally, the shown approach can be used with every rolling simulation software
 A fast simulation approach, however, is favourable, since the simulation has to be done several, up to hundreds of, times.
 The models used here are of one-dimensional type, thus, they lack of resolution in other directions as the rolling direction and provide only limited accuracy, but at the benefit of high solution speed.
 They typically combine empirical approaches with simplified analytical solutions.
-The simulation was done with the basic configuration of PyRolL, which includes the empirical roll force and torque model of \textcite{Hensel1978}, an integral thermal model approach according to \textcite{Hensel1990}, contact area estimation according to \textcite{Zouhar1960} and roll flattening according to \textcite{Hitchcock1935}.
+The simulation was done with the basic configuration of PyRolL, which includes the empirical roll force and torque model of \textcite{Hensel1978}, an integral thermal model approach according to \textcite{Hensel1990} and contact area estimation according to \textcite{Zouhar1960}.
 Spreading was simulated using the equivalent flat pass according to \citeauthor*{Lendl1948}~\cite{Lendl1948, Lendl1948a, Lendl1949} in conjunction with the spreading equation of \textcite{Wusatowski1969}.
 Details of software construction and model equations are provided in the documentation of PyRolL~\cite{pyroll}.
-
 
 The models most important for the following elaborations will be discussed in brief.
 The temperature change of the workpiece was calculated by an integral heat balance as proposed by \textcite{Hensel1990} and given in \autoref{eq:heat-balance}.

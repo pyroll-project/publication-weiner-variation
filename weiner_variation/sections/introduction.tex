@@ -1,6 +1,8 @@
 All technical processes are subject to certain variations.
 Knowledge and control of these variations is crucial for process stability and product quality.
-Sources of variations in a process are the variations already present in the input workpiece and newly generated variations due to imperfections of the process itself.
+Sources of variations in a process are the variations already present in the input workpiece,
+like geometry, chemical composition, microstructural state and temperature distribution,
+as well as newly generated variations due to imperfections of the process itself.
 In the case of wire and bar hot rolling industry regarded here, not only the product geometry, but also the final material properties are highly sensitive to the process conditions.
 Especially the temperature evolution of the workpiece within the rolling train has high impact on the microstructural transformation processes happening before, during and after forming.
 The product's microstructural state determines the mechanical properties and therefore its behaviour in further processing and application.
@@ -34,11 +36,12 @@ The focus lies hereby on the estimation of the workpiece temperature evolution a
 The influence of variations in the initial workpiece and within the regarded process route is analysed and evaluated.
 Due to the need of a large number of function evaluations (simulation runs), the evaluation speed of the process model is crucial to the applicability of this approach.
 
-Rolling simulation is currently dominated by the use of finite element (FE) based models.
+Rolling simulation is currently dominated by the use of finite element (FE) based models (f.e.~\cite{Kim2005, Liu2002, Takashima2014}).
 These are offering high accuracy and high resolution results at the expense of high computational resource usage.
 So these methods are inconvenient for the current need.
-Therefore, one-dimensional approaches shall be used here.
-These offer less accuracy and limited resolution, but are computable within fractions of seconds on typical personal computer systems.
-The current work is based on the open-source rolling simulation framework PyRolL~\cite{pyroll_jors}, developed by the authors, which is a fast, open and flexible software package mainly aimed at groove rolling in elongation passes.
+Therefore, one-dimensional semi-analytical approaches shall be used here, as were common in former days, when computer power was not available or a rare resource (f.e.~acc.~to~\textcite{Hensel1978, Wusatowski1969, Lendl1948, Sims1954}).
+These offer less accuracy and limited resolution, but are nowadays computable within fractions of seconds on typical personal computer systems.
+So these models come to a new shine in enabling the use of numerical routines around the actual simulation core requiring a large number of evaluations, like in optimization or uncertainty analysis.
+The simulations are conducted using the open-source rolling simulation framework PyRolL~\cite{pyroll_jors}, developed by the authors, which is a fast, open and flexible software package mainly aimed at groove rolling in elongation passes.
 The models used for the different parts of the problem can be exchanged and extended with low effort to the users needs.
 
