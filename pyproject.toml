@@ -26,7 +26,7 @@ dependencies = [
   "tomli ~=2.0",
   "pyroll-core ~=2.1",
   "pyroll-basic ~=2.0",
-  "pyroll-jmak-recrystallization @ {root:uri}/pyroll_jmak_recrystallization-2.2.0.tar.gz"
+  "pyroll-jmak-recrystallization ~= 2.2"
 ]
 
 [tool.hatch.metadata]

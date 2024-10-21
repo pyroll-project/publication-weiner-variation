@@ -10,7 +10,7 @@
 # - papermill~=2.0
 # - pyroll-basic~=2.0
 # - pyroll-core~=2.1
-# - pyroll-jmak-recrystallization@ file:///home/maxwe/Git/pyroll/publication-weiner-variation/pyroll_jmak_recrystallization-2.2.0.tar.gz
+# - pyroll-jmak-recrystallization~=2.2
 # - pytask-latex
 # - pytask~=0.4
 # - schemdraw~=0.15.0
@@ -18,6 +18,8 @@
 # - tomli~=2.0
 # - tqdm~=4.0
 #
+
+--extra-index-url http://localhost:8080/simple/
 
 aiohttp==3.9.5
     # via papermill
@@ -373,7 +375,7 @@ pyroll-freiberg-flow-stress==2.0.0
     # via pyroll-basic
 pyroll-integral-thermal==2.1.0
     # via pyroll-basic
-pyroll-jmak-recrystallization @ file:///home/maxwe/Git/pyroll/publication-weiner-variation/pyroll_jmak_recrystallization-2.2.0.tar.gz
+pyroll-jmak-recrystallization==2.2.0
     # via hatch.envs.default
 pyroll-lendl-equivalent-method==2.0.2
     # via pyroll-basic
