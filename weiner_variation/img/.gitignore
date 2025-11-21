@@ -1,6 +1,8 @@
 plot_*.pdf
 plot_*.svg
 plot_*.png
+plot_*.tif
 chart_*.pdf
 chart_*.svg
 chart_*.png
+chart_*.tif

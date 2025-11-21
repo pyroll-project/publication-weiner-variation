@@ -14,7 +14,10 @@ for i in range(11):
         data=DATA_DIR / "duo_pauses.csv",
         dist=DATA_DIR / "duo_pauses_dist.csv",
         config=ROOT_DIR / "config.py",
-        produces=[IMG_DIR / f"plot_histogram_pauses{i}.{s}" for s in ["png", "pdf", "svg"]],
+        produces=[
+            IMG_DIR / f"plot_histogram_pauses{i}.{s}"
+            for s in ["png", "pdf", "svg", "tif"]
+        ],
         row_index=i,
     ):
         fig: plt.Figure = plt.figure(dpi=600, figsize=(6.4, 4.5), layout="constrained")
@@ -81,7 +84,9 @@ def task_plot_histogram_pauses_all(
     data=DATA_DIR / "duo_pauses.csv",
     dist=DATA_DIR / "duo_pauses_dist.csv",
     config=ROOT_DIR / "config.py",
-    produces=[IMG_DIR / f"plot_histogram_pauses_all.{s}" for s in ["png", "pdf", "svg"]],
+    produces=[
+        IMG_DIR / f"plot_histogram_pauses_all.{s}" for s in ["png", "pdf", "svg", "tif"]
+    ],
 ):
     fig: plt.Figure = plt.figure(dpi=600, figsize=(6.4, 4.5), layout="constrained")
     ax: list[plt.Axes] = fig.subplots(nrows=2, sharex="all")

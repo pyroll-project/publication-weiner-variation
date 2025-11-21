@@ -5,7 +5,7 @@ It consists of a two-high reversing roughing stand and four continuous finishing
 The pass schedule of the current work consists of 10 oval-round reversing passes followed by 4 oval-round continuous finishing passes.
 The workpiece is handled manually between the reversing passes and in the transfer to the continuous passes.
 A \qty{50}{\milli\meter} round workpiece made of C15 carbon steel is rolled down to \qty{8}{\milli\meter} diameter, starting at \qty{1150}{\celsius}, resp.\ \qty{1423.15}{\kelvin}.
-Details of the schedule are provided in \autoref{tab:process_conditions} and in the supplemental material~\cite{WeinerVariationSupplemental2024}.
+Details of the schedule are provided in \autoref{tab:process_conditions} and in the supplemental material~\cite{WeinerVariationSupplemental2025}.
 The profile shapes appearing in the schedule are illustrated in \autoref{fig:plot_pass_sequence}.
 
 \begin{figure}
@@ -22,7 +22,7 @@ The profile shapes appearing in the schedule are illustrated in \autoref{fig:plo
     \input{tbl/process_conditions}
 \end{table}
 
-The focus of the current investigation lies in the analysis of the variational behaviour regarding profile shape and mean workpiece temperature.
+The focus of the current investigation lies in the analysis of the variational behavior regarding profile shape and mean workpiece temperature.
 In industry, the former commonly underlies defined tolerances required by the customer, and the latter is crucial for the achieved mechanical material properties.
 Investigated influences on these properties are the geometry and mean temperature of the input workpiece, as well as the varying inter-stand pause durations due to manual handling.
 These were chosen to limit the complexity of the current study as a proof of principle.
@@ -38,7 +38,7 @@ These may be also included in a study of the type shown here, but one needs addi
 
 Online measurements of the process conditions and workpiece state are done regarding roll force and torque, as well as workpiece temperature.
 The latter is measured using pyrometers at several points in the plant: at entry and exit of the reversing stand and before, between and after the finishing stands.
-The sensor signals are collected as timelines, so that they can be automatically analysed afterwards as described in \autoref{subsec:data-acquisition}.
+The sensor signals are collected as timelines, so that they can be automatically analyzed afterwards as described in \autoref{subsec:data-acquisition}.
 To achieve statistical certainty, a number of 45 rolling trials were carried out.
 This enables an estimation of the variations appearing.
 
@@ -52,11 +52,11 @@ This enables an estimation of the variations appearing.
 \end{figure}
 
 The basic idea of the approach shown here is to simulate the rolling process several times with different input values, which are drawn by a random number generator according to predefined statistical distributions.
-Afterwards, the distribution of the results can be analysed by classic methods of descriptive statistics to obtain information about the process' variational behavior.
+Afterwards, the distribution of the results can be analyzed by classic methods of descriptive statistics to obtain information about the process' variational behavior.
 The principle is shown in \autoref{fig:chart_mc_principle}.
 
 This approach provides information about the overall variational behavior of the process.
-If a single source of variation is introduced in the input, the reaction of the process on this variable can be analysed.
+If a single source of variation is introduced in the input, the reaction of the process on this variable can be analyzed.
 The count of variation sources introduced is generally unbounded.
 In contrast to classic Taylor series error propagation, the computational effort does not directly increase remarkably with increasing count of investigated parameters.
 However, an increase in sample size can be necessary to achieve sufficient certainty.
@@ -76,7 +76,7 @@ The question of varying inter-pass durations is crucial for scientific experimen
 Mostly, only fixed durations between the reversing passes are included in the design calculations.
 Due to manual transport and feed of the workpiece to the following roll pass, the scheduled inter-pass durations are never realized in practice.
 Although, these deviations from the schedule influence the microstructure evolution of the sample, as well as the actual conditions in the roll passes.
-The current approach is aimed to help quantifying these deviations.
+The current approach is aimed to help quantify these deviations.
 
 To obtain the inter-pass durations $\Pause{\Duration}$ from the timeline data, the passes have to be identified automatically.
 This was done by analysing the roll torque signal as plotted in \autoref{fig:plot_timeline_pass_finding}.
@@ -106,18 +106,18 @@ The distribution function was fitted on the observed data using the least-square
 
 In the current work, the open-source rolling simulation framework PyRolL~\cite{pyroll_jors, pyroll2.1} was used to simulate the rolling process.
 Generally, the shown approach can be used with every rolling simulation software available, since the procedure does not depend on any internals of the simulation.
-A fast simulation approach, however, is favourable, since the simulation has to be done several, up to hundreds of, times.
+A fast simulation approach, however, is favorable, since the simulation has to be done several, up to hundreds of, times.
 The models used here are of one-dimensional type, thus, they lack of resolution in other directions as the rolling direction and provide only limited accuracy, but at the benefit of high solution speed.
 They typically combine empirical approaches with simplified analytical solutions.
 The simulation was done with the basic configuration of PyRolL, which includes the empirical roll force and torque model of \textcite{Hensel1978}, an integral thermal model approach according to \textcite{Hensel1990} and contact area estimation according to \textcite{Zouhar1960}.
 Spreading was simulated using the equivalent flat pass according to \citeauthor*{Lendl1948}~\cite{Lendl1948, Lendl1948a, Lendl1949} in conjunction with the spreading equation of \textcite{Wusatowski1969}.
-Details of software construction and model equations are provided in the documentation of PyRolL~\cite{pyroll}.
+Details of software construction and model equations are provided in the documentation of PyRolL~\cite{pyroll2.1}.
 
 The models most important for the following elaborations will be discussed in brief.
 The temperature change of the workpiece was calculated by an integral heat balance as proposed by \textcite{Hensel1990} and given in \autoref{eq:heat-balance}.
 
 \begin{equation}
-    \Delta\Temperature = \Convection{\Delta\Temperature} + \Contact{\Delta\Temperature} + \Delta\Temperature_\Deformation + \Radiation{\Delta\Temperature}
+    \Delta\Temperature = \Convection{\Delta\Temperature} + \Contact{\Delta\Temperature} + \Delta\Temperature_{\Deformation} + \Radiation{\Delta\Temperature}
     \label{eq:heat-balance}
 \end{equation}
 
@@ -209,4 +209,3 @@ The material data and model coefficients used above were taken for the following
     \label{tab:material_data}
     \input{tbl/material_data}
 \end{table}
-

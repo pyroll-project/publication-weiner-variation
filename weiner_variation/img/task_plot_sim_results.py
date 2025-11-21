@@ -107,7 +107,7 @@ for sim, color in zip(
     def task_plot_roll_force(
         produces=[
             IMG_DIR / f"plot_{sim}_roll_force.{suffix}"
-            for suffix in ["png", "pdf", "svg"]
+            for suffix in ["png", "pdf", "svg", "tif"]
         ],
         depends_on=dep_files,
         color=color,
@@ -145,7 +145,7 @@ for sim, color in zip(
     def task_plot_roll_torque(
         produces=[
             IMG_DIR / f"plot_{sim}_roll_torque.{suffix}"
-            for suffix in ["png", "pdf", "svg"]
+            for suffix in ["png", "pdf", "svg", "tif"]
         ],
         depends_on=dep_files,
         color=color,
@@ -185,7 +185,7 @@ for sim, color in zip(
     def task_plot_temperature(
         produces=[
             IMG_DIR / f"plot_{sim}_temperature.{suffix}"
-            for suffix in ["png", "pdf", "svg"]
+            for suffix in ["png", "pdf", "svg", "tif"]
         ],
         depends_on=dep_files,
         color=color,
@@ -276,7 +276,7 @@ for sim, color in zip(
     def task_plot_grain_size(
         produces=[
             IMG_DIR / f"plot_{sim}_grain_size.{suffix}"
-            for suffix in ["png", "pdf", "svg"]
+            for suffix in ["png", "pdf", "svg", "tif"]
         ],
         depends_on=dep_files,
         color=color,
@@ -294,7 +294,7 @@ for sim, color in zip(
                 widths=0.25,
                 **boxplot_props(color),
             )
-            
+
             sim_boxes = ax.boxplot(
                 df_sim.out_profile_grain_size * 1e6,
                 positions=UNIT_POSITIONS + 0.5,
@@ -341,7 +341,7 @@ for sim, color in zip(
     def task_plot_filling_ratio(
         produces=[
             IMG_DIR / f"plot_{sim}_filling_ratio.{suffix}"
-            for suffix in ["png", "pdf", "svg"]
+            for suffix in ["png", "pdf", "svg", "tif"]
         ],
         depends_on=dep_files,
         color=color,
@@ -381,7 +381,7 @@ for sim, color in zip(
     def task_plot_temperature_correlation(
         produces=[
             IMG_DIR / f"plot_{sim}_temperature_correlation.{suffix}"
-            for suffix in ["png", "pdf", "svg"]
+            for suffix in ["png", "pdf", "svg", "tif"]
         ],
         results=DATA_DIR / f"sim_{sim}_results.csv",
         config=ROOT_DIR / "config.py",
@@ -446,13 +446,14 @@ for sim, color in zip(
 
 
 def task_plot_temperature_std(
-        produces=[
-            IMG_DIR / f"plot_temperature_std.{suffix}" for suffix in ["png", "pdf", "svg"]
-        ],
-        input=DATA_DIR / "sim_input_results.csv",
-        durations=DATA_DIR / "sim_durations_results.csv",
-        exp=EXP_FILES,
-        config=ROOT_DIR / "config.py",
+    produces=[
+        IMG_DIR / f"plot_temperature_std.{suffix}"
+        for suffix in ["png", "pdf", "svg", "tif"]
+    ],
+    input=DATA_DIR / "sim_input_results.csv",
+    durations=DATA_DIR / "sim_durations_results.csv",
+    exp=EXP_FILES,
+    config=ROOT_DIR / "config.py",
 ):
     df_input = _load_sim_data(input)
     df_durations = _load_sim_data(durations)
@@ -486,12 +487,12 @@ def task_plot_temperature_std(
                 _reindex_in(
                     df_exp.in_temperature[
                         df_exp.in_temperature > df_exp.in_temperature.median() - 30
-                        ].std()
+                    ].std()
                 ),
                 _reindex_out(
                     df_exp.out_temperature[
                         df_exp.out_temperature > df_exp.out_temperature.median() - 30
-                        ].std()
+                    ].std()
                 ),
             ]
         ).sort_index()
@@ -512,7 +513,8 @@ def task_plot_temperature_std(
 
 def task_plot_temperature_stds(
     produces=[
-        IMG_DIR / f"plot_temperature_stds.{suffix}" for suffix in ["png", "pdf", "svg"]
+        IMG_DIR / f"plot_temperature_stds.{suffix}"
+        for suffix in ["png", "pdf", "svg", "tif"]
     ],
     depends_on={"exp": EXP_FILES, "config": ROOT_DIR / "config.py"}
     | {
@@ -547,7 +549,8 @@ def task_plot_temperature_stds(
 
 def task_plot_filling_stds(
     produces=[
-        IMG_DIR / f"plot_filling_stds.{suffix}" for suffix in ["png", "pdf", "svg"]
+        IMG_DIR / f"plot_filling_stds.{suffix}"
+        for suffix in ["png", "pdf", "svg", "tif"]
     ],
     depends_on={"exp": EXP_FILES}
     | {
@@ -577,7 +580,8 @@ def task_plot_filling_stds(
 
 def task_plot_roll_torque_std(
     produces=[
-        IMG_DIR / f"plot_roll_torque_std.{suffix}" for suffix in ["png", "pdf", "svg"]
+        IMG_DIR / f"plot_roll_torque_std.{suffix}"
+        for suffix in ["png", "pdf", "svg", "tif"]
     ],
     input=DATA_DIR / "sim_input_results.csv",
     durations=DATA_DIR / "sim_durations_results.csv",
@@ -617,12 +621,13 @@ def task_plot_roll_torque_std(
 
 
 def task_plot_grain_size_std(
-        produces=[
-            IMG_DIR / f"plot_grain_size_std.{suffix}" for suffix in ["png", "pdf", "svg"]
-        ],
-        input=DATA_DIR / "sim_input_results.csv",
-        durations=DATA_DIR / "sim_durations_results.csv",
-        config=ROOT_DIR / "config.py",
+    produces=[
+        IMG_DIR / f"plot_grain_size_std.{suffix}"
+        for suffix in ["png", "pdf", "svg", "tif"]
+    ],
+    input=DATA_DIR / "sim_input_results.csv",
+    durations=DATA_DIR / "sim_durations_results.csv",
+    config=ROOT_DIR / "config.py",
 ):
     df_input = _load_sim_data(input)
     df_durations = _load_sim_data(durations)

@@ -9,7 +9,7 @@ from weiner_variation.config import IMG_DIR, SIM_DIR
 from weiner_variation.sim.process import IN_PROFILE, PASS_SEQUENCE
 
 FILE_STEM = "plot_pass_sequence"
-FILE_TYPES = ["png", "svg", "pdf"]
+FILE_TYPES = ["png", "svg", "pdf", "tif"]
 
 
 def task_plot_pass_sequence(
